@@ -28,7 +28,7 @@
 
 /* Private typedef -----------------------------------------------------------*/
 /* USER CODE BEGIN TD */
- uint16_t adc; ///zzz
+ uint16_t adcData; ///zzz
  float adcVoltage;
  char buf[32];
  
@@ -209,13 +209,13 @@ void SysTick_Handler(void)
 void ADC_IRQHandler(void)
 {
   /* USER CODE BEGIN ADC_IRQn 0 */
-	adc = HAL_ADC_GetValue(&hadc1); ///zzz
+	adcData = HAL_ADC_GetValue(&hadc1); ///zzz
 	
 	  if(hadc1.Instance == ADC1)
   {
     //for (uint8_t i = 0; i < ADC_CHANNELS_NUM; i++)
     {
-      adcVoltage = adc * 3.3 / 4095;
+      adcVoltage = adcData * 3.3 / 4095;
 
 			sprintf(buf,"%.2f",adcVoltage);
 			

@@ -10,7 +10,7 @@
       <TargetName>tstADC</TargetName>
       <ToolsetNumber>0x4</ToolsetNumber>
       <ToolsetName>ARM-ADS</ToolsetName>
-      <pCCUsed>6190000::V6.19::ARMCLANG</pCCUsed>
+      <pCCUsed>6160000::V6.16::ARMCLANG</pCCUsed>
       <uAC6>1</uAC6>
       <TargetOption>
         <TargetCommonOption>
@@ -81,7 +81,7 @@
           </BeforeMake>
           <AfterMake>
             <RunUserProg1>0</RunUserProg1>
-            <RunUserProg2>1</RunUserProg2>
+            <RunUserProg2>0</RunUserProg2>
             <UserProg1Name></UserProg1Name>
             <UserProg2Name></UserProg2Name>
             <UserProg1Dos16Mode>0</UserProg1Dos16Mode>
@@ -137,7 +137,7 @@
             <DriverSelection>4101</DriverSelection>
           </Flash1>
           <bUseTDR>1</bUseTDR>
-          <Flash2>BIN\UL2V8M.DLL</Flash2>
+          <Flash2>BIN\UL2CM3.DLL</Flash2>
           <Flash3></Flash3>
           <Flash4></Flash4>
           <pFcarmOut></pFcarmOut>
@@ -186,7 +186,6 @@
             <RvdsVP>2</RvdsVP>
             <RvdsMve>0</RvdsMve>
             <RvdsCdeCp>0</RvdsCdeCp>
-            <nBranchProt>0</nBranchProt>
             <hadIRAM2>1</hadIRAM2>
             <hadIROM2>0</hadIROM2>
             <StupSel>8</StupSel>
@@ -340,7 +339,7 @@
               <MiscControls></MiscControls>
               <Define>USE_HAL_DRIVER,STM32F407xx</Define>
               <Undefine></Undefine>
-              <IncludePath>../Core/Inc;../Drivers/STM32F4xx_HAL_Driver/Inc;../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy;../Drivers/CMSIS/Device/ST/STM32F4xx/Include;../Drivers/CMSIS/Include</IncludePath>
+              <IncludePath>../Core/Inc;../Drivers/STM32F4xx_HAL_Driver/Inc;../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy;../Drivers/CMSIS/Device/ST/STM32F4xx/Include;../Drivers/CMSIS/Include;.\MyInc</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -513,6 +512,46 @@
               <FileName>system_stm32f4xx.c</FileName>
               <FileType>1</FileType>
               <FilePath>../Core/Src/system_stm32f4xx.c</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>MyApp</GroupName>
+          <Files>
+            <File>
+              <FileName>HEHAL.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\MyApp\HEHAL.c</FilePath>
+            </File>
+            <File>
+              <FileName>ADC.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\MyApp\ADC.c</FilePath>
+            </File>
+            <File>
+              <FileName>GPIO.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\MyApp\GPIO.c</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>MyInc</GroupName>
+          <Files>
+            <File>
+              <FileName>HEHAL.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\MyInc\HEHAL.h</FilePath>
+            </File>
+            <File>
+              <FileName>ADC.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\MyInc\ADC.h</FilePath>
+            </File>
+            <File>
+              <FileName>GPIO.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\MyInc\GPIO.h</FilePath>
             </File>
           </Files>
         </Group>
