@@ -6,6 +6,7 @@
 #include "stm32f4xx.h"
 #include "HEHAL.h"
 #include "GPIO.h"
+#include <stdio.h>
 
 /*defaines*/
 #define ADC_SOFTWARE_START             ((uint32_t)ADC_CR2_EXTSEL + 1U)
@@ -15,6 +16,34 @@
 //#define ADC_SQR1(_NbrOfConversion_) (((_NbrOfConversion_) - (uint8_t)1U) << 20U)
 //#define ADC_CR2_DMAContReq(_DMAContReq_MODE_) ((_DMAContReq_MODE_) << 9U)
 //#define ADC_CR2_EOCSelection(_EOCSelection_MODE_) ((_EOCSelection_MODE_) << 10U)
+
+/*Общие каналы АЦП*/ 
+#define ADC_CHANNEL_0           0x00000000U
+#define ADC_CHANNEL_1           ((uint32_t)ADC_CR1_AWDCH_0)
+#define ADC_CHANNEL_2           ((uint32_t)ADC_CR1_AWDCH_1)
+#define ADC_CHANNEL_3           ((uint32_t)(ADC_CR1_AWDCH_1 | ADC_CR1_AWDCH_0))
+#define ADC_CHANNEL_4           ((uint32_t)ADC_CR1_AWDCH_2)
+#define ADC_CHANNEL_5           ((uint32_t)(ADC_CR1_AWDCH_2 | ADC_CR1_AWDCH_0))
+#define ADC_CHANNEL_6           ((uint32_t)(ADC_CR1_AWDCH_2 | ADC_CR1_AWDCH_1))
+#define ADC_CHANNEL_7           ((uint32_t)(ADC_CR1_AWDCH_2 | ADC_CR1_AWDCH_1 | ADC_CR1_AWDCH_0))
+#define ADC_CHANNEL_8           ((uint32_t)ADC_CR1_AWDCH_3)
+#define ADC_CHANNEL_9           ((uint32_t)(ADC_CR1_AWDCH_3 | ADC_CR1_AWDCH_0))
+#define ADC_CHANNEL_10          ((uint32_t)(ADC_CR1_AWDCH_3 | ADC_CR1_AWDCH_1))
+#define ADC_CHANNEL_11          ((uint32_t)(ADC_CR1_AWDCH_3 | ADC_CR1_AWDCH_1 | ADC_CR1_AWDCH_0))
+#define ADC_CHANNEL_12          ((uint32_t)(ADC_CR1_AWDCH_3 | ADC_CR1_AWDCH_2))
+#define ADC_CHANNEL_13          ((uint32_t)(ADC_CR1_AWDCH_3 | ADC_CR1_AWDCH_2 | ADC_CR1_AWDCH_0))
+#define ADC_CHANNEL_14          ((uint32_t)(ADC_CR1_AWDCH_3 | ADC_CR1_AWDCH_2 | ADC_CR1_AWDCH_1))
+#define ADC_CHANNEL_15          ((uint32_t)(ADC_CR1_AWDCH_3 | ADC_CR1_AWDCH_2 | ADC_CR1_AWDCH_1 | ADC_CR1_AWDCH_0))
+#define ADC_CHANNEL_16          ((uint32_t)ADC_CR1_AWDCH_4)
+#define ADC_CHANNEL_17          ((uint32_t)(ADC_CR1_AWDCH_4 | ADC_CR1_AWDCH_0))
+#define ADC_CHANNEL_18          ((uint32_t)(ADC_CR1_AWDCH_4 | ADC_CR1_AWDCH_1))
+
+#define ADC_CHANNEL_VREFINT     ((uint32_t)ADC_CHANNEL_17)
+#define ADC_CHANNEL_VBAT        ((uint32_t)ADC_CHANNEL_18)
+
+/*Установите время выборки АЦП для каналов с номерами от 10 до 18._SAMPLETIME_ Параметр времени выборки._CHANNELNB_ Channel number.*/
+#define ADC_SMPR1(_SAMPLETIME_, _CHANNELNB_) ((_SAMPLETIME_) << (3U * (((uint32_t)((uint16_t)(_CHANNELNB_))) - 10U)))
+#define ADC_SMPR2(_SAMPLETIME_, _CHANNELNB_) ((_SAMPLETIME_) << (3U * ((uint32_t)((uint16_t)(_CHANNELNB_)))))
 
 /*structures*/
 typedef struct
@@ -79,9 +108,9 @@ typedef struct
 
   //HAL_LockTypeDef Lock; /*Объект блокировки АЦП */
 
-  uint32_t State; /*Состояние связи АЦП */
+//  uint32_t State; /*Состояние связи АЦП */
 
-  uint32_t ErrorCode; /*!< ADC Error code */
+//  uint32_t ErrorCode; /*!< ADC Error code */
   //
   uint32_t Channel;      /*Указывает канал для настройки в обычной группе АЦП.
                             Этот параметр может иметь значение @ref ADC_channels */
@@ -94,10 +123,11 @@ typedef struct
 /*var*/
 
 /*func*/
-Rezult_t ADC_Init(ADC_TypeDef* instance, ADC_HandleTypeDef* hadc1);
-Rezult_t ADC_SetStructure(ADC_Structure* adc, ADC_HandleTypeDef* hadc1);
+Rezult_t ADC_Init(ADC_TypeDef* instance);
+Rezult_t ADC_SetStructure(ADC_Structure* adc);
 Rezult_t ADC_MspInit(ADC_Structure* adc);
 Rezult_t ADC_SetReg(ADC_Structure* adc);
-HAL_StatusTypeDef HAL_ADC_ConfigChannelX(ADC_HandleTypeDef* hadc, ADC_ChannelConfTypeDef* sConfig);
+Rezult_t ADC_ConfigChannel(ADC_Structure* adc);
+Rezult_t ADC_Start_IT(ADC_Structure* adc);
 
 #endif

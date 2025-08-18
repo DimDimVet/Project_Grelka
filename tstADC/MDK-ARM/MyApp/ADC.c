@@ -2,8 +2,12 @@
 
 /*var*/
 ADC_Structure adc;
+//ADC_HandleTypeDef hadc1;
+ uint16_t adcData; ///zzz
+ float adcVoltage;
+ char buf[32];
 
-Rezult_t ADC_Init(ADC_TypeDef* instance,ADC_HandleTypeDef* hadc1)
+Rezult_t ADC_Init(ADC_TypeDef* instance)
 {
 	Rezult_t tmp_rezult=OK_;
 	
@@ -14,17 +18,17 @@ Rezult_t ADC_Init(ADC_TypeDef* instance,ADC_HandleTypeDef* hadc1)
 	else
 	{
 		adc.Instance = instance;
-		ADC_SetStructure(&adc, hadc1);
+		ADC_SetStructure(&adc);
 	}
+	
+	ADC_Start_IT(&adc); ///zzz
 	
 	return tmp_rezult;
 }
 
-Rezult_t ADC_SetStructure(ADC_Structure* adc, ADC_HandleTypeDef* hadc1)
+Rezult_t ADC_SetStructure(ADC_Structure* adc)
 {
 	Rezult_t tmp_rezult=OK_;
-
-  ADC_ChannelConfTypeDef sConfig = {0};//temp
 
   adc->Init.ClockPrescaler = 0;
   adc->Init.Resolution = 0;
@@ -42,31 +46,27 @@ Rezult_t ADC_SetStructure(ADC_Structure* adc, ADC_HandleTypeDef* hadc1)
   adc->Rank = 1;
   adc->SamplingTime = ADC_SMPR1_SMP10_1;//циклы подсчета
 
-	//мусор
-	sConfig.Channel = adc->Channel;
-  sConfig.Rank = adc->Rank;
-  sConfig.SamplingTime = adc->SamplingTime;
-	
-	hadc1->Instance = adc->Instance;
-  hadc1->Init.ClockPrescaler = adc->Init.ClockPrescaler;
-  hadc1->Init.Resolution = adc->Init.Resolution;
-  hadc1->Init.ScanConvMode = adc->Init.ScanConvMode;
-  hadc1->Init.ContinuousConvMode = adc->Init.ContinuousConvMode;
-  hadc1->Init.DiscontinuousConvMode = adc->Init.DiscontinuousConvMode;
-  hadc1->Init.ExternalTrigConvEdge = adc->Init.ExternalTrigConvEdge;
-  hadc1->Init.ExternalTrigConv = adc->Init.ExternalTrigConv;//0x0F000001
-  hadc1->Init.DataAlign = adc->Init.DataAlign;
-  hadc1->Init.NbrOfConversion = adc->Init.NbrOfConversion;
-  hadc1->Init.DMAContinuousRequests = adc->Init.DMAContinuousRequests;
-  hadc1->Init.EOCSelection = adc->Init.EOCSelection; ///измеряем все ацп которые используем
-	//мусор
+////	//мусор
+//	hadc1.Instance = adc->Instance;
+//  hadc1.Init.ClockPrescaler = adc->Init.ClockPrescaler;
+//  hadc1.Init.Resolution = adc->Init.Resolution;
+//  hadc1.Init.ScanConvMode = adc->Init.ScanConvMode;
+//  hadc1.Init.ContinuousConvMode = adc->Init.ContinuousConvMode;
+//  hadc1.Init.DiscontinuousConvMode = adc->Init.DiscontinuousConvMode;
+//  hadc1.Init.ExternalTrigConvEdge = adc->Init.ExternalTrigConvEdge;
+//  hadc1.Init.ExternalTrigConv = adc->Init.ExternalTrigConv;//0x0F000001
+//  hadc1.Init.DataAlign = adc->Init.DataAlign;
+//  hadc1.Init.NbrOfConversion = adc->Init.NbrOfConversion;
+//  hadc1.Init.DMAContinuousRequests = adc->Init.DMAContinuousRequests;
+//  hadc1.Init.EOCSelection = adc->Init.EOCSelection; ///измеряем все ацп которые используем
+////	//мусор
   
   ADC_MspInit(adc);
 	
 	ADC_SetReg(adc);
 
 
-  if (HAL_ADC_ConfigChannelX(hadc1, &sConfig) != HAL_OK)
+  if (ADC_ConfigChannel(adc) != OK_)
   {
     tmp_rezult=ERROR_;
   }
@@ -183,112 +183,161 @@ Rezult_t ADC_SetReg(ADC_Structure* adc)
 	return tmp_rezult;
 }
 
-HAL_StatusTypeDef HAL_ADC_ConfigChannelX(ADC_HandleTypeDef* hadc, ADC_ChannelConfTypeDef* sConfig)
+Rezult_t ADC_ConfigChannel(ADC_Structure* adc)
 {
-  __IO uint32_t counter = 0U;
+  Rezult_t tmp_rezult=OK_;
+	
   ADC_Common_TypeDef *tmpADC_Common;
-  
-  /* Check the parameters */
-  assert_param(IS_ADC_CHANNEL(sConfig->Channel));
-  assert_param(IS_ADC_REGULAR_RANK(sConfig->Rank));
-  assert_param(IS_ADC_SAMPLE_TIME(sConfig->SamplingTime));
-  
-  /* Process locked */
-  __HAL_LOCK(hadc);
-    
-  /* if ADC_Channel_10 ... ADC_Channel_18 is selected */
-  if (sConfig->Channel > ADC_CHANNEL_9)
+
+  /* если выбран ADC_Channel_10 ... ADC_Channel_18 */
+  if (adc->Channel > ADC_CHANNEL_9)
   {
-    /* Clear the old sample time */
-    hadc->Instance->SMPR1 &= ~ADC_SMPR1(ADC_SMPR1_SMP10, sConfig->Channel);
+    /* Очистить старое время выборки */
+    adc->Instance->SMPR1 &= ~ADC_SMPR1(ADC_SMPR1_SMP10, adc->Channel);
     
-    /* Set the new sample time */
-    hadc->Instance->SMPR1 |= ADC_SMPR1(sConfig->SamplingTime, sConfig->Channel);
+    /* Установите новое время выборки */
+    adc->Instance->SMPR1 |= ADC_SMPR1(adc->SamplingTime, adc->Channel);
   }
-  else /* ADC_Channel include in ADC_Channel_[0..9] */
+  else /* ADC_Channel включает в себя ADC_Channel_[0..9]*/
   {
-    /* Clear the old sample time */
-    hadc->Instance->SMPR2 &= ~ADC_SMPR2(ADC_SMPR2_SMP0, sConfig->Channel);
+    /* Очистить старое время выборки */
+    adc->Instance->SMPR2 &= ~ADC_SMPR2(ADC_SMPR2_SMP0, adc->Channel);
     
-    /* Set the new sample time */
-    hadc->Instance->SMPR2 |= ADC_SMPR2(sConfig->SamplingTime, sConfig->Channel);
+    /* Установите новое время выборки */
+    adc->Instance->SMPR2 |= ADC_SMPR2(adc->SamplingTime, adc->Channel);
   }
   
-  /* For Rank 1 to 6 */
-  if (sConfig->Rank < 7U)
+  /* Для рангов с 1 по 6*/
+  if (adc->Rank < 7U)
   {
-    /* Clear the old SQx bits for the selected rank */
-    hadc->Instance->SQR3 &= ~ADC_SQR3_RK(ADC_SQR3_SQ1, sConfig->Rank);
+    /* Очистить старые биты SQx для выбранного ранга */
+    adc->Instance->SQR3 &= ~ADC_SQR3_RK(ADC_SQR3_SQ1, adc->Rank);
     
-    /* Set the SQx bits for the selected rank */
-    hadc->Instance->SQR3 |= ADC_SQR3_RK(sConfig->Channel, sConfig->Rank);
+    /* Установите биты SQx для выбранного ранга */
+    adc->Instance->SQR3 |= ADC_SQR3_RK(adc->Channel, adc->Rank);
   }
-  /* For Rank 7 to 12 */
-  else if (sConfig->Rank < 13U)
+  /* Для рангов с 7 по 12 */
+  else if (adc->Rank < 13U)
   {
-    /* Clear the old SQx bits for the selected rank */
-    hadc->Instance->SQR2 &= ~ADC_SQR2_RK(ADC_SQR2_SQ7, sConfig->Rank);
+    /* Очистить старые биты SQx для выбранного ранга */
+    adc->Instance->SQR2 &= ~ADC_SQR2_RK(ADC_SQR2_SQ7, adc->Rank);
     
-    /* Set the SQx bits for the selected rank */
-    hadc->Instance->SQR2 |= ADC_SQR2_RK(sConfig->Channel, sConfig->Rank);
+    /* Установите биты SQx для выбранного ранга */
+    adc->Instance->SQR2 |= ADC_SQR2_RK(adc->Channel, adc->Rank);
   }
-  /* For Rank 13 to 16 */
+  /* Для рангов с 13 по 16 */
   else
   {
-    /* Clear the old SQx bits for the selected rank */
-    hadc->Instance->SQR1 &= ~ADC_SQR1_RK(ADC_SQR1_SQ13, sConfig->Rank);
+    /* Очистить старые биты SQx для выбранного ранга */
+    adc->Instance->SQR1 &= ~ADC_SQR1_RK(ADC_SQR1_SQ13, adc->Rank);
     
-    /* Set the SQx bits for the selected rank */
-    hadc->Instance->SQR1 |= ADC_SQR1_RK(sConfig->Channel, sConfig->Rank);
+    /* Установите биты SQx для выбранного ранга */
+    adc->Instance->SQR1 |= ADC_SQR1_RK(adc->Channel, adc->Rank);
   }
 
-    /* Pointer to the common control register to which is belonging hadc    */
-    /* (Depending on STM32F4 product, there may be up to 3 ADCs and 1 common */
-    /* control register)                                                    */
+    /* Указатель на общий регистр управления, к которому принадлежит adc   */
     tmpADC_Common = ADC_COMMON_REGISTER(hadc);
 
-  /* if ADC1 Channel_18 is selected for VBAT Channel ennable VBATE */
-  if ((hadc->Instance == ADC1) && (sConfig->Channel == ADC_CHANNEL_VBAT))
+  /* если выбран канал ADC1 Channel_18 для канала VBAT, можно включить VBATE */
+  if ((adc->Instance == ADC1) && (adc->Channel == ADC_CHANNEL_VBAT))
   {
-    /* Disable the TEMPSENSOR channel in case of using board with multiplixed ADC_CHANNEL_VBAT & ADC_CHANNEL_TEMPSENSOR*/    
+    /* Отключите канал TEMPSENSOR в случае использования платы с мультиплексированными ADC_CHANNEL_VBAT и ADC_CHANNEL_TEMPSENSOR*/    
     if ((uint16_t)ADC_CHANNEL_TEMPSENSOR == (uint16_t)ADC_CHANNEL_VBAT)
     {
       tmpADC_Common->CCR &= ~ADC_CCR_TSVREFE;
     }
-    /* Enable the VBAT channel*/
+    /* Включить канал VBAT*/
     tmpADC_Common->CCR |= ADC_CCR_VBATE;
   }
+  return tmp_rezult;
+}
+
+Rezult_t ADC_Start_IT(ADC_Structure* adc)
+{
+	Rezult_t tmp_rezult=OK_;
+	
+  uint32_t counter = 0U;
+  ADC_Common_TypeDef *tmpADC_Common;
   
-  /* if ADC1 Channel_16 or Channel_18 is selected for Temperature sensor or 
-     Channel_17 is selected for VREFINT enable TSVREFE */
-  if ((hadc->Instance == ADC1) && ((sConfig->Channel == ADC_CHANNEL_TEMPSENSOR) || (sConfig->Channel == ADC_CHANNEL_VREFINT)))
-  {
-    /* Disable the VBAT channel in case of using board with multiplixed ADC_CHANNEL_VBAT & ADC_CHANNEL_TEMPSENSOR*/
-    if ((uint16_t)ADC_CHANNEL_TEMPSENSOR == (uint16_t)ADC_CHANNEL_VBAT)
+  /* Enable the ADC peripheral */
+  /* Проверьте, отключено ли периферийное устройство АЦП, чтобы включить его, и подождите в течение времени Tstab, пока АЦП стабилизируется. */
+  if((adc->Instance->CR2 & ADC_CR2_ADON) != ADC_CR2_ADON)
+  {  
+    /* Включить периферийное устройство */
+    //__HAL_ADC_ENABLE(hadc);
+    ENABLE_BIT(adc->Instance->CR2,  ADC_CR2_ADON);
+    /* Задержка времени стабилизации АЦП */
+    counter = (ADC_STAB_DELAY_US * (SystemCoreClock / 1000000U));
+    while(counter != 0U)
     {
-      tmpADC_Common->CCR &= ~ADC_CCR_VBATE;
+      counter--;
     }
-    /* Enable the Temperature sensor and VREFINT channel*/
-    tmpADC_Common->CCR |= ADC_CCR_TSVREFE;
-    
-    if(sConfig->Channel == ADC_CHANNEL_TEMPSENSOR)
+  }
+  
+	/* Начать преобразование, если АЦП эффективно включен */
+	if(ENABLE_BIT(adc->Instance->CR2, ADC_CR2_ADON))
+  {
+    /* Установить состояние АЦП                                                          */
+
+    /* Указатель на общий регистр управления, к которому принадлежит hadc    */
+    /* (В зависимости от модели STM32F4 может быть до 3 АЦП и 1 общий */
+    /* регистр управления)                                                    */
+    tmpADC_Common = ADC_COMMON_REGISTER(hadc);
+
+    /* Очистить флаг преобразования обычной группы и флаг переполнения */
+    /* (Чтобы гарантировать отсутствие неизвестного состояния от возможных предыдущих операций АЦП) */
+    //__HAL_ADC_CLEAR_FLAG(hadc, ADC_FLAG_EOC | ADC_FLAG_OVR);
+    DISABLE_BIT(adc->Instance->SR, (ADC_FLAG_EOC | ADC_FLAG_OVR));
+		
+    /* Enable end of conversion interrupt for regular group */
+    //__HAL_ADC_ENABLE_IT(hadc, (ADC_IT_EOC | ADC_IT_OVR));
+    ENABLE_BIT(adc->Instance->CR1, (ADC_IT_EOC | ADC_IT_OVR));
+		
+    /* Проверьте, включен ли многомодовый режим */
+    if(DISABLE_BIT(tmpADC_Common->CCR, ADC_CCR_MULTI))
     {
-      /* Delay for temperature sensor stabilization time */
-      /* Compute number of CPU cycles to wait for */
-      counter = (ADC_TEMPSENSOR_DELAY_US * (SystemCoreClock / 1000000U));
-      while(counter != 0U)
+      if((adc->Instance == ADC1) || ((adc->Instance == ADC2) && ((ADC->CCR & ADC_CCR_MULTI_Msk) < ADC_CCR_MULTI_0)) \
+                                  || ((adc->Instance == ADC3) && ((ADC->CCR & ADC_CCR_MULTI_Msk) < ADC_CCR_MULTI_4)))
       {
-        counter--;
+        /* если внешний триггер отсутствует, включите программное преобразование обычных каналов */
+        if((adc->Instance->CR2 & ADC_CR2_EXTEN) == RESET) 
+        {
+          /* Включить выбранное программное преобразование АЦП для обычной группы */
+          adc->Instance->CR2 |= (uint32_t)ADC_CR2_SWSTART;
+        }
+      }
+    }
+    else
+    {
+      /* если экземпляр дескриптора соответствует АЦП1 и нет внешнего триггера, включите программное преобразование обычных каналов */
+      if((adc->Instance == ADC1) && ((adc->Instance->CR2 & ADC_CR2_EXTEN) == RESET))
+      {
+        /* Включить выбранное программное преобразование АЦП для обычной группы */
+          adc->Instance->CR2 |= (uint32_t)ADC_CR2_SWSTART;
       }
     }
   }
+  else
+  {
+		tmp_rezult = ERROR_;
+  }
   
-  /* Process unlocked */
-  __HAL_UNLOCK(hadc);
-  
-  /* Return function status */
-  return HAL_OK;
+	return tmp_rezult;
 }
 
+void ADC_IRQHandler(void)
+{
+	adcData = Read_REG(adc.Instance->DR);
+	
+	  if(adc.Instance == ADC1)
+		{
+    //for (uint8_t i = 0; i < ADC_CHANNELS_NUM; i++)
+			{
+				adcVoltage = adcData * 3.3 / 4095;
 
+				sprintf(buf,"%.2f",adcVoltage);
+				
+			}
+		}
 
+}

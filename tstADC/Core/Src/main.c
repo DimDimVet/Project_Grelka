@@ -39,7 +39,7 @@
 //
 
 
-ADC_HandleTypeDef hadc1;
+
 
 //ADC_Structure adc;
 
@@ -53,9 +53,9 @@ int main(void)
 //  ADC_GPIO_Init();//ok
 	
   //MX_ADC1_InitX();
-	ADC_Init(ADC1,&hadc1);
+	ADC_Init(ADC1);
 	
-	HAL_ADC_Start_IT(&hadc1); ///zzz
+	//HAL_ADC_Start_IT(&hadc1); ///zzz
 
   while (1)
   {
