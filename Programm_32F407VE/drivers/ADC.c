@@ -3,7 +3,6 @@
 /*var*/
 ADC_Structure adc;
 
-uint8_t ttemp=0;
  uint16_t adcData; ///zzz
  float adcVoltage;
  char buf[32];
@@ -23,10 +22,7 @@ Rezult_t ADC_Init(ADC_TypeDef* instance)
 	}
 	
 	ADC_Start_IT(&adc); ///zzz
-	
-	ttemp = ADC_EOC;
-	
-	
+
 	return tmp_rezult;
 }
 
@@ -36,7 +32,7 @@ Rezult_t ADC_SetStructure(ADC_Structure* adc)
 
   adc->Init.ClockPrescaler = 0;
   adc->Init.Resolution = 0;
-  adc->Init.ScanConvMode = 0;
+  adc->Init.ScanConvMode = ADC_MODE_SCAN;
   adc->Init.ContinuousConvMode = 1; ///запуск последовательности измерений
   adc->Init.DiscontinuousConvMode = 0;
   adc->Init.ExternalTrigConvEdge = 0;
@@ -46,9 +42,9 @@ Rezult_t ADC_SetStructure(ADC_Structure* adc)
   adc->Init.DMAContinuousRequests = 0;
   adc->Init.EOCSelection = 0; ///измеряем все ацп которые используем
   
-  adc->Channel = ADC_CR1_AWDCH_0;//канал 1
+  adc->Channel = ADC_CANNAL1;//канал 1
   adc->Rank = 1;
-  adc->SamplingTime = ADC_SMPR1_SMP10_1;//циклы подсчета
+  adc->SamplingTime = ADC_SAMPLETIME_28_CYCLE;//ADC_SMPR1_SMP10_1;//циклы подсчета
 
   ADC_MspInit(adc);
 	
@@ -109,8 +105,8 @@ Rezult_t ADC_SetReg(ADC_Structure* adc)
   tmpADC_Common->CCR |=  adc->Init.ClockPrescaler;
   
   /* Установить режим сканирования АЦП */
-  adc->Instance->CR1 &= ~(ADC_CR1_SCAN);
-  adc->Instance->CR1 |=  ADC_CR1_SCANCONV(adc->Init.ScanConvMode);
+  adc->Instance->CR1 &= ~(ADC_MODE_SCAN);
+  adc->Instance->CR1 |=  adc->Init.ScanConvMode;//ADC_CR1_SCANCONV(adc->Init.ScanConvMode);
   
   /* Установить разрешение АЦП */
   adc->Instance->CR1 &= ~(ADC_CR1_RES);
@@ -179,7 +175,7 @@ Rezult_t ADC_ConfigChannel(ADC_Structure* adc)
   ADC_Common_TypeDef *tmpADC_Common;
 
   /* если выбран ADC_Channel_10 ... ADC_Channel_18 */
-  if (adc->Channel > ADC_CHANNEL_9)
+  if (adc->Channel > ADC_CANNAL9)
   {
     /* Очистить старое время выборки */
     adc->Instance->SMPR1 &= ~ADC_SMPR1(ADC_SMPR1_SMP10, adc->Channel);
@@ -227,17 +223,17 @@ Rezult_t ADC_ConfigChannel(ADC_Structure* adc)
     /* Указатель на общий регистр управления, к которому принадлежит adc   */
     tmpADC_Common = ADC_COMMON_REGISTER(hadc);
 
-  /* если выбран канал ADC1 Channel_18 для канала VBAT, можно включить VBATE */
-  if ((adc->Instance == ADC1) && (adc->Channel == ADC_CHANNEL_VBAT))
-  {
-    /* Отключите канал TEMPSENSOR в случае использования платы с мультиплексированными ADC_CHANNEL_VBAT и ADC_CHANNEL_TEMPSENSOR*/    
-    if ((uint16_t)ADC_CHANNEL_TEMPSENSOR == (uint16_t)ADC_CHANNEL_VBAT)
-    {
-      tmpADC_Common->CCR &= ~ADC_CCR_TSVREFE;
-    }
-    /* Включить канал VBAT*/
-    tmpADC_Common->CCR |= ADC_CCR_VBATE;
-  }
+//  /* если выбран канал ADC1 Channel_18 для канала VBAT, можно включить VBATE */
+//  if ((adc->Instance == ADC1) && (adc->Channel == ADC_CHANNEL_VBAT))
+//  {
+//    /* Отключите канал TEMPSENSOR в случае использования платы с мультиплексированными ADC_CHANNEL_VBAT и ADC_CHANNEL_TEMPSENSOR*/    
+//    if ((uint16_t)ADC_CHANNEL_TEMPSENSOR == (uint16_t)ADC_CHANNEL_VBAT)
+//    {
+//      tmpADC_Common->CCR &= ~ADC_CCR_TSVREFE;
+//    }
+//    /* Включить канал VBAT*/
+//    tmpADC_Common->CCR |= ADC_CCR_VBATE;
+//  }
   return tmp_rezult;
 }
 
@@ -278,7 +274,7 @@ Rezult_t ADC_Start_IT(ADC_Structure* adc)
     DISABLE_BIT(adc->Instance->SR, (ADC_FLAG_EOC | ADC_FLAG_OVR));
 		
     /* Enable end of conversion interrupt for regular group */
-    ENABLE_BIT(adc->Instance->CR1, (ADC_IT_EOC | ADC_IT_OVR));
+    ENABLE_BIT(adc->Instance->CR1, (ADC_IT_EOCIE | ADC_IT_OVR));
 		
     /* Проверьте, включен ли многомодовый режим */
     if(DISABLE_BIT(tmpADC_Common->CCR, ADC_CCR_MULTI))
@@ -314,7 +310,8 @@ Rezult_t ADC_Start_IT(ADC_Structure* adc)
 
 void ADC_IRQHandler(void)
 {
-	adcData = Read_REG(adc.Instance->DR);
+	//adcData = Read_REG(adc.Instance->DR);
+	adcData = ADC_GET_DATA(adc.Instance);
 	
 	  if(adc.Instance == ADC1)
 		{

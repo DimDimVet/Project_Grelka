@@ -13,74 +13,147 @@
 /*RM0090 Reference manual STM32F405/415, STM32F407/417, STM32F427/437 and STM32F429/439*/
 /*13.13 ADC registers*/
 /*13.13.1 Регистр состояния АЦП (ADC_SR) Address offset: 0x00*/
-#define ADC_SR_Pos 0x00
-#define ADC_AWD (0x1 << 0) /*Читаем: Аналоговый флаг сторожевого таймера*/
-#define ADC_EOC (0x1 << 1) /*Читаем: Окончание преобразования обычного канала*/
-#define ADC_JEOC (0x1 << 2) /*Читаем: Этот бит устанавливается аппаратно в конце преобразования всех инжектированных каналов в группе*/
-#define ADC_JSTRT (0x1 << 3) /*Читаем: Этот бит устанавливается аппаратно при запуске преобразования инжектированной группы*/
-#define ADC_STRT (0x1 << 4) /*Читаем: Этот бит устанавливается аппаратно при запуске обычного преобразования каналов*/
-#define ADC_OVR (0x1 << 5) /*Читаем:  Переполнение*/
+#define ADC_SR_Pos 0x0
+#define ADC_FLAG_AWD (ADC_SR_AWD) /*(0x1 << 0)Читаем: Аналоговый флаг сторожевого таймера*/
+#define ADC_FLAG_EOC (ADC_SR_EOC) /*(0x1 << 1)Читаем: Окончание преобразования обычного канала*/
+#define ADC_FLAG_JEOC (ADC_SR_JEOC) /*(0x1 << 2)Читаем: Этот бит устанавливается аппаратно в конце преобразования всех инжектированных каналов в группе*/
+#define ADC_FLAG_JSTRT (ADC_SR_JSTRT) /*(0x1 << 3)Читаем: Этот бит устанавливается аппаратно при запуске преобразования инжектированной группы*/
+#define ADC_FLAG_STRT (ADC_SR_STRT) /*(0x1 << 4)Читаем: Этот бит устанавливается аппаратно при запуске обычного преобразования каналов*/
+#define ADC_FLAG_OVR (ADC_SR_OVR) /*(0x1 << 5)Читаем:  Переполнение*/
 
 /*13.13.2 Регистр управления 1 АЦП  (ADC_CR1) Address offset: 0x04*/
 #define ADC_CR1_Pos 0x04
-#define ADC_CR1_AWDCH0 (0x00000 << 0)/*Выбора канала аналогового сторожевого таймера*/
-#define ADC_CR1_AWDCH1 (0x00001 << 0)/*Выбора канала аналогового сторожевого таймера*/
-#define ADC_CR1_AWDCH2 (0x00010 << 0)/*Выбора канала аналогового сторожевого таймера*/
-#define ADC_CR1_AWDCH3 (0x00011 << 0)/*Выбора канала аналогового сторожевого таймера*/
-#define ADC_CR1_AWDCH4 (0x00100 << 0)/*Выбора канала аналогового сторожевого таймера*/
-#define ADC_CR1_AWDCH5 (0x00101 << 0)/*Выбора канала аналогового сторожевого таймера*/
-#define ADC_CR1_AWDCH6 (0x00110 << 0)/*Выбора канала аналогового сторожевого таймера*/
-#define ADC_CR1_AWDCH7 (0x00111 << 0)/*Выбора канала аналогового сторожевого таймера*/
-#define ADC_CR1_AWDCH8 (0x01000 << 0)/*Выбора канала аналогового сторожевого таймера*/
-#define ADC_CR1_AWDCH9 (0x01001 << 0)/*Выбора канала аналогового сторожевого таймера*/
-#define ADC_CR1_AWDCH10 (0x01010 << 0)/*Выбора канала аналогового сторожевого таймера*/
-#define ADC_CR1_AWDCH11 (0x01011 << 0)/*Выбора канала аналогового сторожевого таймера*/
-#define ADC_CR1_AWDCH12 (0x01100 << 0)/*Выбора канала аналогового сторожевого таймера*/
-#define ADC_CR1_AWDCH13 (0x01101 << 0)/*Выбора канала аналогового сторожевого таймера*/
-#define ADC_CR1_AWDCH14 (0x01110 << 0)/*Выбора канала аналогового сторожевого таймера*/
-#define ADC_CR1_AWDCH15 (0x01111 << 0)/*Выбора канала аналогового сторожевого таймера*/
-//#define ADC_CR1_EOCIE (0x1 << 5) /*Разрешение прерывания для EOC*/
-//#define ADC_CR1_AWDIE (0x1 << 6) /* Разрешение прерывания аналогового сторожевого таймера*/
-//#define ADC_CR1_JEOCIE (0x1 << 7) /*Разрешение прерывания для инжектированных каналов*/
-//#define ADC_CR1_SCAN (0x1 << 8) /* В режиме сканирования преобразуются входные сигналы, выбранные через регистры ADC_SQRx или ADC_JSQRx.*/
-//#define ADC_CR1_AWDSGL (0x1 << 9) /*Включение сторожевого таймера на одном канале в режиме сканирования*/
-//#define ADC_CR1_JAUTO (0x1 << 10) /* Автоматическое преобразование инжектированной группы*/
-//#define ADC_CR1_DISCEN (0x1 << 11) /* Прерывистый режим на обычных каналах*/
-//#define ADC_CR1_JDISCEN (0x1 << 12) /* Прерывистый режим на инжектированных каналах*/
-#define ADC_CR1_DISCNUM1 (0x000 << 13)/*Количество каналов в прерывистом режиме*/
-#define ADC_CR1_DISCNUM2 (0x001 << 13)/*Количество каналов в прерывистом режиме*/
-#define ADC_CR1_DISCNUM3 (0x010 << 13)/*Количество каналов в прерывистом режиме*/
-#define ADC_CR1_DISCNUM4 (0x011 << 13)/*Количество каналов в прерывистом режиме*/
-#define ADC_CR1_DISCNUM5 (0x100 << 13)/*Количество каналов в прерывистом режиме*/
-#define ADC_CR1_DISCNUM6 (0x101 << 13)/*Количество каналов в прерывистом режиме*/
-#define ADC_CR1_DISCNUM7 (0x110 << 13)/*Количество каналов в прерывистом режиме*/
-#define ADC_CR1_DISCNUM8 (0x111 << 13)/*Количество каналов в прерывистом режиме*/
-//#define ADC_CR1_JAWDEN (0x1 << 22) /*Включение аналогового сторожевого таймера на инжектированных каналах*/
-//#define ADC_CR1_AWDEN (0x1 << 23) /*Включение аналогового сторожевого таймера на обычных каналах*/
-#define ADC_CR1_RES_12bit (0x00 << 24)/*Разрешения преобразования, 15 циклов ADCCLK*/
-#define ADC_CR1_RES_10bit (0x01 << 24)/*Разрешения преобразования, 13 циклов ADCCLK*/
-#define ADC_CR1_RES_8bit (0x10 << 24)/*Разрешения преобразования, 11 циклов ADCCLK*/
-#define ADC_CR1_RES_6bit (0x11 << 24)/*Разрешения преобразования, 9 циклов ADCCLK*/
-//#define ADC_CR1_OVRIE (0x1 << 26) /*Разрешение прерывания переполнения*/
+#define ADC_CANNAL0 (0)/*(0x00000 << 0)Выбора канала аналогового сторожевого таймера*/
+#define ADC_CANNAL1 (ADC_CR1_AWDCH_0)/*(0x00001 << 0)Выбора канала аналогового сторожевого таймера*/
+#define ADC_CANNAL2 (ADC_CR1_AWDCH_1)/*(0x00010 << 0)Выбора канала аналогового сторожевого таймера*/
+#define ADC_CANNAL3 (ADC_CR1_AWDCH_1 | ADC_CR1_AWDCH_0)/*(0x00011 << 0)Выбора канала аналогового сторожевого таймера*/
+#define ADC_CANNAL4 (ADC_CR1_AWDCH_2)/*(0x00100 << 0)Выбора канала аналогового сторожевого таймера*/
+#define ADC_CANNAL5 (ADC_CR1_AWDCH_2 | ADC_CR1_AWDCH_0)/*(0x00101 << 0)Выбора канала аналогового сторожевого таймера*/
+#define ADC_CANNAL6 (ADC_CR1_AWDCH_2 | ADC_CR1_AWDCH_1)/*(0x00110 << 0)Выбора канала аналогового сторожевого таймера*/
+#define ADC_CANNAL7 (ADC_CR1_AWDCH_2 | ADC_CR1_AWDCH_1 | ADC_CR1_AWDCH_0)/*(0x00111 << 0)Выбора канала аналогового сторожевого таймера*/
+#define ADC_CANNAL8 (ADC_CR1_AWDCH_3)/*(0x01000 << 0)Выбора канала аналогового сторожевого таймера*/
+#define ADC_CANNAL9 (ADC_CR1_AWDCH_3 | ADC_CR1_AWDCH_0)/*(0x01001 << 0)Выбора канала аналогового сторожевого таймера*/
+#define ADC_CANNAL10 (ADC_CR1_AWDCH_3 | ADC_CR1_AWDCH_1)/*(0x01010 << 0)Выбора канала аналогового сторожевого таймера*/
+#define ADC_CANNAL11 (ADC_CR1_AWDCH_3 | ADC_CR1_AWDCH_1 | ADC_CR1_AWDCH_0)/*(0x01011 << 0)Выбора канала аналогового сторожевого таймера*/
+#define ADC_CANNAL12 (ADC_CR1_AWDCH_3 | ADC_CR1_AWDCH_2)/*(0x01100 << 0)Выбора канала аналогового сторожевого таймера*/
+#define ADC_CANNAL13 (ADC_CR1_AWDCH_3 | ADC_CR1_AWDCH_2 | ADC_CR1_AWDCH_0)/*(0x01101 << 0)Выбора канала аналогового сторожевого таймера*/
+#define ADC_CANNAL14 (ADC_CR1_AWDCH_3 | ADC_CR1_AWDCH_2 | ADC_CR1_AWDCH_1)/*(0x01110 << 0)Выбора канала аналогового сторожевого таймера*/
+#define ADC_CANNAL15 (ADC_CR1_AWDCH_3 | ADC_CR1_AWDCH_2 | ADC_CR1_AWDCH_1 | ADC_CR1_AWDCH_0)/*(0x01111 << 0)Выбора канала аналогового сторожевого таймера*/
+#define ADC_IT_EOCIE (ADC_CR1_EOCIE) /*(0x1 << 5)Разрешение прерывания для EOC*/
+#define ADC_IT_AWDIE (ADC_CR1_AWDIE) /*(0x1 << 6)Разрешение прерывания аналогового сторожевого таймера*/
+#define ADC_IT_JEOCIE (ADC_CR1_JEOCIE) /*(0x1 << 7)Разрешение прерывания для инжектированных каналов*/
+#define ADC_MODE_SCAN (0) /*(0 << 8)В режиме сканирования преобразуются входные сигналы, выбранные через регистры ADC_SQRx или ADC_JSQRx.*/
+#define ADC_MODE_SCAN_INJECT (ADC_CR1_SCAN) /*(0x1 << 8)В режиме сканирования преобразуются входные сигналы, выбранные через регистры ADC_SQRx или ADC_JSQRx.*/
+#define ADC_ENABLE_AWDSGL (ADC_CR1_AWDSGL) /*(0x1 << 9)Включение сторожевого таймера на одном канале в режиме сканирования*/
+#define ADC_INJECT_GRUP_JAUTO (ADC_CR1_JAUTO)/*(0x1 << 10)Автоматическое преобразование инжектированной группы*/
+#define ADC_MODE_DISCEN (ADC_CR1_DISCEN) /*(0x1 << 11)Прерывистый режим на обычных каналах*/
+#define ADC_MODE_JDISCEN (ADC_CR1_JDISCEN) /*(0x1 << 12)Прерывистый режим на инжектированных каналах*/
+#define ADC_CANNAL_COUNT1 (0)/*(0x000 << 13)Количество каналов в прерывистом режиме*/
+#define ADC_CANNAL_COUNT2 (ADC_CR1_DISCNUM_0)/*(0x001 << 13)Количество каналов в прерывистом режиме*/
+#define ADC_CANNAL_COUNT3 (ADC_CR1_DISCNUM_1)/*(0x010 << 13)Количество каналов в прерывистом режиме*/
+#define ADC_CANNAL_COUNT4 (ADC_CR1_DISCNUM_1 | ADC_CR1_DISCNUM_0)/*(0x011 << 13)Количество каналов в прерывистом режиме*/
+#define ADC_CANNAL_COUNT5 (ADC_CR1_DISCNUM_2)/*(0x100 << 13)Количество каналов в прерывистом режиме*/
+#define ADC_CANNAL_COUNT6 (ADC_CR1_DISCNUM_2 | ADC_CR1_DISCNUM_0)/*(0x101 << 13)Количество каналов в прерывистом режиме*/
+#define ADC_CANNAL_COUNT7 (ADC_CR1_DISCNUM_2 | ADC_CR1_DISCNUM_1)/*(0x110 << 13)Количество каналов в прерывистом режиме*/
+#define ADC_CANNAL_COUNT8 (ADC_CR1_DISCNUM_2 | ADC_CR1_DISCNUM_1 | ADC_CR1_DISCNUM_0)/*(0x111 << 13)Количество каналов в прерывистом режиме*/
+#define ADC_ENABLE_JAWDEN  (ADC_CR1_JAWDEN)/*(0x1 << 22)Включение аналогового сторожевого таймера на инжектированных каналах*/
+#define ADC_ENABLE_AWDEN  (ADC_CR1_AWDEN)/*(0x1 << 23)Включение аналогового сторожевого таймера на обычных каналах*/
+#define ADC_12bit (0)/*(0x00 << 24)Разрешения преобразования, 15 циклов ADCCLK*/
+#define ADC_10bit (ADC_CR1_RES_0)/*(0x01 << 24)Разрешения преобразования, 13 циклов ADCCLK*/
+#define ADC_8bit (ADC_CR1_RES_1)/*(0x10 << 24)Разрешения преобразования, 11 циклов ADCCLK*/
+#define ADC_6bit (ADC_CR1_RES_1 | ADC_CR1_RES_0)/*(0x11 << 24)Разрешения преобразования, 9 циклов ADCCLK*/
+#define ADC_IT_OVR (ADC_CR1_OVRIE) /*(0x1 << 26)Разрешение прерывания переполнения*/
 
 /*13.13.3 Регистр управления 2 АЦП  (ADC_CR2) Address offset: 0x08*/
 #define ADC_CR2_Pos 0x08
-//#define ADC_CR2_ADON (0x1 << 0) /*АЦП ВКЛ/ВЫКЛ*/
-//#define ADC_CR2_CONT (0x1 << 1) /*Непрерывное преобразование*/
-//#define ADC_CR2_DMA (0x1 << 8) /*режим прямого доступа к памяти (для режима одного АЦП)*/
-//#define ADC_CR2_DDS (0x1 << 9) /*Запросы DMA выдаются, пока данные преобразуются (для режима одного АЦП)*/
-//#define ADC_CR2_EOCS (0x1 << 10) /*Выбор конца преобразования, Бит EOC устанавливается в конце каждого обычного преобразования*/
-//#define ADC_CR2_ALIGN (0x1 << 11) /*выравнивание данных, 0: Выравнивание по правому краю , 1: Выравнивание по левому краю*/
+#define ADC_ENABLE (ADC_CR2_ADON)  /*(0x1 << 0)АЦП ВКЛ/ВЫКЛ*/
+#define ADC_ENABLE_CONTINUOUS (ADC_CR2_CONT)  /*(0x1 << 1)Непрерывное преобразование*/
+#define ADC_ENABLE_DMA (ADC_CR2_DMA)  /*(0x1 << 8)режим прямого доступа к памяти (для режима одного АЦП)*/
+#define ADC_ENABLE_DMA_EVENT(ADC_CR2_DDS)  /*(0x1 << 9)Запросы DMA выдаются, пока данные преобразуются (для режима одного АЦП)*/
+#define ADC_FLAG_END_CONVERSION(ADC_CR2_EOCS)  /*(0x1 << 10)Выбор конца преобразования, Бит EOC устанавливается в конце каждого обычного преобразования*/
+#define ADC_DATA_ALIGNMENT (ADC_CR2_ALIGN)  /*(0x1 << 11)выравнивание данных, 0: Выравнивание по правому краю , 1: Выравнивание по левому краю*/
+#define ADC_EVENT_INJECT_TIMER1_CC4 (0) /*0000: Событие таймера 1 CC4 */
+#define ADC_EVENT_INJECT_TIMER1_TRGO (ADC_CR2_JEXTSEL_0) /*0001: Событие таймера 1 TRGO*/
+#define ADC_EVENT_INJECT_TIMER2_CC1 (ADC_CR2_JEXTSEL_1) /*0010: Событие таймера 2 CC1*/
+#define ADC_EVENT_INJECT_TIMER2_TRGO (ADC_CR2_JEXTSEL_1|ADC_CR2_JEXTSEL_0) /*0011: Событие таймера 2 TRGO*/
+#define ADC_EVENT_INJECT_TIMER3_CC2 (ADC_CR2_JEXTSEL_2) /*0100: Событие таймера 3 CC2*/
+#define ADC_EVENT_INJECT_TIMER3_CC4 (ADC_CR2_JEXTSEL_2|ADC_CR2_JEXTSEL_0) /*0101: Событие таймера 3 CC4*/
+#define ADC_EVENT_INJECT_TIMER4_CC1 (ADC_CR2_JEXTSEL_2|ADC_CR2_JEXTSEL_1) /*0110: Событие таймера 4 CC1*/
+#define ADC_EVENT_INJECT_TIMER4_CC2 (ADC_CR2_JEXTSEL_2|ADC_CR2_JEXTSEL_1|ADC_CR2_JEXTSEL_0) /*0111: Событие таймера 4 CC2*/
+#define ADC_EVENT_INJECT_TIMER4_CC3 (ADC_CR2_JEXTSEL_3) /*1000: Событие таймера 4 CC3*/
+#define ADC_EVENT_INJECT_TIMER4_TRGO (ADC_CR2_JEXTSEL_3|ADC_CR2_JEXTSEL_0) /*1001: Событие таймера 4 TRGO*/
+#define ADC_EVENT_INJECT_TIMER5_CC4 (ADC_CR2_JEXTSEL_3|ADC_CR2_JEXTSEL_1) /*1010: Событие таймера 5 CC4*/
+#define ADC_EVENT_INJECT_TIMER5_TRGO (ADC_CR2_JEXTSEL_3|ADC_CR2_JEXTSEL_1|ADC_CR2_JEXTSEL_0) /*1011: Событие таймера 5 TRGO*/
+#define ADC_EVENT_INJECT_TIMER8_CC2 (ADC_CR2_JEXTSEL_3|ADC_CR2_JEXTSEL_2) /*1100: Событие таймера 8 CC2*/
+#define ADC_EVENT_INJECT_TIMER8_CC3 (ADC_CR2_JEXTSEL_3|ADC_CR2_JEXTSEL_2|ADC_CR2_JEXTSEL_0) /*1101: Событие таймера 8 CC3*/
+#define ADC_EVENT_INJECT_TIMER8_CC4 (ADC_CR2_JEXTSEL_3|ADC_CR2_JEXTSEL_2|ADC_CR2_JEXTSEL_1) /*1110: Событие таймера 8 CC4*/
+#define ADC_EVENT_INJECT_EXTI (ADC_CR2_JEXTSEL_3|ADC_CR2_JEXTSEL_2|ADC_CR2_JEXTSEL_1|ADC_CR2_JEXTSEL_0) /*1111: Линия EXTI15*/
+#define ADC_NO_TRIGER_INJECT (0) /*0000: Обнаружение триггера отключено*/
+#define ADC_TRIGER_INJECT_RISING (ADC_CR2_JEXTEN_0) /*0001: Обнаружение триггера по переднему фронту*/
+#define ADC_TRIGER_INJECT_FALLING (ADC_CR2_JEXTEN_1) /*0010: Обнаружение триггера по заднему фронту*/
+#define ADC_TRIGER_INJECT_ENABLE (ADC_CR2_JEXTEN_1|ADC_CR2_JEXTEN_0) /*0011: Обнаружение триггера как по переднему, так и по заднему фронту*/
+#define ADC_ENABLE_INJECT_CANNAL (ADC_CR2_JSWSTART) /*Запуск преобразования инжектированных каналов*/
+#define ADC_EVENT_TIMER1_CC1 (0) /*0000: Событие таймера 1 CC1 */
+#define ADC_EVENT_TIMER1_CC2 (ADC_CR2_EXTSEL_0) /*0001: Событие таймера 1 CC2*/
+#define ADC_EVENT_TIMER1_CC3 (ADC_CR2_EXTSEL_1) /*0010: Событие таймера 1 CC3*/
+#define ADC_EVENT_TIMER2_CC2 (ADC_CR2_EXTSEL_1|ADC_CR2_EXTSEL_0) /*0011: Событие таймера 2 CC2*/
+#define ADC_EVENT_TIMER2_CC3 (ADC_CR2_EXTSEL_2) /*0100: Событие таймера 2 CC3*/
+#define ADC_EVENT_TIMER2_CC4 (ADC_CR2_EXTSEL_2|ADC_CR2_EXTSEL_0) /*0101: Событие таймера 2 CC4*/
+#define ADC_EVENT_TIMER2_TRGO (ADC_CR2_EXTSEL_2|ADC_CR2_EXTSEL_1) /*0110: Событие таймера 2 TRGO*/
+#define ADC_EVENT_TIMER3_CC1 (ADC_CR2_EXTSEL_2|ADC_CR2_EXTSEL_1|ADC_CR2_EXTSEL_0) /*0111: Событие таймера 3 CC1*/
+#define ADC_EVENT_TIMER3_TRGO (ADC_CR2_EXTSEL_3) /*1000: Событие таймера 3 TRGO*/
+#define ADC_EVENT_TIMER4_CC4 (ADC_CR2_EXTSEL_3|ADC_CR2_EXTSEL_0) /*1001: Событие таймера 4 CC4*/
+#define ADC_EVENT_TIMER5_CC1 (ADC_CR2_EXTSEL_3|ADC_CR2_EXTSEL_1) /*1010: Событие таймера 5 CC1*/
+#define ADC_EVENT_TIMER5_CC2 (ADC_CR2_EXTSEL_3|ADC_CR2_EXTSEL_1|ADC_CR2_EXTSEL_0) /*1011: Событие таймера 5 CC2*/
+#define ADC_EVENT_TIMER5_CC3 (ADC_CR2_EXTSEL_3|ADC_CR2_EXTSEL_2) /*1100: Событие таймера 5 CC3*/
+#define ADC_EVENT_TIMER8_CC1 (ADC_CR2_EXTSEL_3|ADC_CR2_EXTSEL_2|ADC_CR2_EXTSEL_0) /*1101: Событие таймера 8 CC1*/
+#define ADC_EVENT_TIMER8_TRGO (ADC_CR2_EXTSEL_3|ADC_CR2_EXTSEL_2|ADC_CR2_EXTSEL_1) /*1110: Событие таймера 8 TRGO*/
+#define ADC_EVENT_EXTI (ADC_CR2_EXTSEL_3|ADC_CR2_EXTSEL_2|ADC_CR2_EXTSEL_1|ADC_CR2_EXTSEL_0) /*1111: Линия EXTI15*/
+#define ADC_NO_TRIGER (0) /*0000: Обнаружение триггера отключено*/
+#define ADC_TRIGER_RISING (ADC_CR2_EXTEN_0) /*0001: Обнаружение триггера по переднему фронту*/
+#define ADC_TRIGER_FALLING (ADC_CR2_EXTEN_1) /*0010: Обнаружение триггера по заднему фронту*/
+#define ADC_TRIGER_ENABLE (ADC_CR2_EXTEN_1|ADC_CR2_EXTEN_0) /*0011: Обнаружение триггера как по переднему, так и по заднему фронту*/
+#define ADC_ENABLE_CANNAL (AADC_CR2_SWSTART) /*Запуск преобразования обычного каналов*/
 
+/*13.13.4 Регистр 1 времени выборки АЦП (ADC_SMPR1) Address offset: 0x0C*/
+#define ADC_SMPR1_Pos 0x0C
+#define ADC_SMPR1(SAMPLETIME, CANNALx) ((SAMPLETIME) << (3U * (CANNALx - 10U)))/*: Выбор времени выборки канала 10-18*/
 
+/*13.13.5 Регистр 2 времени выборки АЦП (ADC_SMPR2) Address offset: 0x10*/
+#define ADC_SMPR2_Pos 0x10
+#define ADC_SMPR2(SAMPLETIME, CANNALx) ((SAMPLETIME) << (3U * (CANNALx)))/*: Выбор времени выборки канала 0-9*/
 
+#define ADC_SAMPLETIME_3_CYCLE_ (0x000) 
+#define ADC_SAMPLETIME_15_CYCLE (0x001)
+#define ADC_SAMPLETIME_28_CYCLE (0x010)
+#define ADC_SAMPLETIME_56_CYCLE (0x011)
+#define ADC_SAMPLETIME_84_CYCLE (0x100)
+#define ADC_SAMPLETIME_112_CYCLE (0x101)
+#define ADC_SAMPLETIME_144_CYCLE (0x110)
+#define ADC_SAMPLETIME_480_CYCLE (0x111)
+
+/*13.13.9 Регистр 1 последовательности (регулярной АЦП)(ADC_SQR1) Address offset: 0x2C*/
+#define ADC_SQR1_Pos 0x2C
+#define ADC_SQR1_RK(CANNALx, RANKNB) (((uint32_t)((uint16_t)(CANNALx))) << (5 * ((RANKNB) - 13)))/* Установите ранг обычного канала в диапазоне от 13 до 16.*/
+
+/*13.13.10 Регистр 2 последовательности (регулярной АЦП)(ADC_SQR2) Address offset: 0x30*/
+#define ADC_SQR2_Pos 0x30
+#define ADC_SQR2_RK(CANNALx, RANKNB) (((uint32_t)((uint16_t)(CANNALx))) << (5 * ((RANKNB) - 7)))/* Установите ранг обычного канала в диапазоне от 7 до 12.*/
+
+/*13.13.11 Регистр 3 последовательности (регулярной АЦП)(ADC_SQR3) Address offset: 0x34*/
+#define ADC_SQR3_Pos 0x30
+#define ADC_SQR3_RK(CANNALx, RANKNB) (((uint32_t)((uint16_t)(CANNALx))) << (5 * ((RANKNB) - 1)))/* Установите ранг обычного канала в диапазоне от 7 до 12.*/
+
+/*13.13.14 Регистр данных АЦП(ADC_DR) Address offset: 0x4C*/
+#define ADC_DR_Pos 0x4C
+#define ADC_GET_DATA(INSTANCE) ((INSTANCE->DR))
+
+///мусор
 #define ADC_SOFTWARE_START             ((uint32_t)ADC_CR2_EXTSEL + 1U)
 #define ADC_COMMON_REGISTER(__HANDLE__)                ADC123_COMMON
 #define ADC_STAB_DELAY_US               3U /* Задержка времени стабилизации АЦП*/
-#define ADC_SQR3_RK(_CHANNELNB_, _RANKNB_) (((uint32_t)((uint16_t)(_CHANNELNB_))) << (5U * ((_RANKNB_) - 1U)))/* Установите выбранный обычный ранг канала в диапазоне от 1 до 6.*/
-#define ADC_SQR2_RK(_CHANNELNB_, _RANKNB_) (((uint32_t)((uint16_t)(_CHANNELNB_))) << (5U * ((_RANKNB_) - 7U)))/* Установите выбранный обычный ранг канала в диапазоне от 7 до 12.*/
-#define ADC_SQR1_RK(_CHANNELNB_, _RANKNB_) (((uint32_t)((uint16_t)(_CHANNELNB_))) << (5U * ((_RANKNB_) - 13U)))/* Установите выбранный обычный ранг канала в диапазоне от 13 и 16.*/
-#define ADC_CR1_SCANCONV(_SCANCONV_MODE_) ((_SCANCONV_MODE_) << 8U)/*Включить режим сканирования АЦП*/
+
+//#define ADC_CR1_SCANCONV(_SCANCONV_MODE_) ((_SCANCONV_MODE_) << 8U)/*Включить режим сканирования АЦП*/
 #define ADC_CR2_CONTINUOUS(_CONTINUOUS_MODE_) ((_CONTINUOUS_MODE_) << 1U)/*Включить режим непрерывного преобразования АЦП*/
 #define ADC_CR1_DISCONTINUOUS(_NBR_DISCONTINUOUSCONV_) (((_NBR_DISCONTINUOUSCONV_) - 1U) << ADC_CR1_DISCNUM_Pos)/*Настраивает количество прерывистых преобразований для обычных групповых каналов.*/
 #define ADC_CR2_DMAContReq(_DMAContReq_MODE_) ((_DMAContReq_MODE_) << 9U)/*Включить непрерывный запрос ADC DMA.*/
@@ -88,47 +161,6 @@
 #define ADC_CHANNEL_TEMPSENSOR  ((uint32_t)ADC_CHANNEL_16)/*Каналы для АЦП*/
 #define ADC_SQR1(_NbrOfConversion_) (((_NbrOfConversion_) - (uint8_t)1U) << 20U)
 
-/*Общие каналы АЦП*/ 
-#define ADC_CHANNEL_0           0x00000000U
-#define ADC_CHANNEL_1           ((uint32_t)ADC_CR1_AWDCH_0)
-#define ADC_CHANNEL_2           ((uint32_t)ADC_CR1_AWDCH_1)
-#define ADC_CHANNEL_3           ((uint32_t)(ADC_CR1_AWDCH_1 | ADC_CR1_AWDCH_0))
-#define ADC_CHANNEL_4           ((uint32_t)ADC_CR1_AWDCH_2)
-#define ADC_CHANNEL_5           ((uint32_t)(ADC_CR1_AWDCH_2 | ADC_CR1_AWDCH_0))
-#define ADC_CHANNEL_6           ((uint32_t)(ADC_CR1_AWDCH_2 | ADC_CR1_AWDCH_1))
-#define ADC_CHANNEL_7           ((uint32_t)(ADC_CR1_AWDCH_2 | ADC_CR1_AWDCH_1 | ADC_CR1_AWDCH_0))
-#define ADC_CHANNEL_8           ((uint32_t)ADC_CR1_AWDCH_3)
-#define ADC_CHANNEL_9           ((uint32_t)(ADC_CR1_AWDCH_3 | ADC_CR1_AWDCH_0))
-#define ADC_CHANNEL_10          ((uint32_t)(ADC_CR1_AWDCH_3 | ADC_CR1_AWDCH_1))
-#define ADC_CHANNEL_11          ((uint32_t)(ADC_CR1_AWDCH_3 | ADC_CR1_AWDCH_1 | ADC_CR1_AWDCH_0))
-#define ADC_CHANNEL_12          ((uint32_t)(ADC_CR1_AWDCH_3 | ADC_CR1_AWDCH_2))
-#define ADC_CHANNEL_13          ((uint32_t)(ADC_CR1_AWDCH_3 | ADC_CR1_AWDCH_2 | ADC_CR1_AWDCH_0))
-#define ADC_CHANNEL_14          ((uint32_t)(ADC_CR1_AWDCH_3 | ADC_CR1_AWDCH_2 | ADC_CR1_AWDCH_1))
-#define ADC_CHANNEL_15          ((uint32_t)(ADC_CR1_AWDCH_3 | ADC_CR1_AWDCH_2 | ADC_CR1_AWDCH_1 | ADC_CR1_AWDCH_0))
-#define ADC_CHANNEL_16          ((uint32_t)ADC_CR1_AWDCH_4)
-#define ADC_CHANNEL_17          ((uint32_t)(ADC_CR1_AWDCH_4 | ADC_CR1_AWDCH_0))
-#define ADC_CHANNEL_18          ((uint32_t)(ADC_CR1_AWDCH_4 | ADC_CR1_AWDCH_1))
-
-#define ADC_CHANNEL_VREFINT     ((uint32_t)ADC_CHANNEL_17)
-#define ADC_CHANNEL_VBAT        ((uint32_t)ADC_CHANNEL_18)
-
-/*Установите время выборки АЦП для каналов с номерами от 10 до 18._SAMPLETIME_ Параметр времени выборки._CHANNELNB_ Channel number.*/
-#define ADC_SMPR1(_SAMPLETIME_, _CHANNELNB_) ((_SAMPLETIME_) << (3U * (((uint32_t)((uint16_t)(_CHANNELNB_))) - 10U)))
-#define ADC_SMPR2(_SAMPLETIME_, _CHANNELNB_) ((_SAMPLETIME_) << (3U * ((uint32_t)((uint16_t)(_CHANNELNB_)))))
-
-/*Определение флагов АЦП*/
-#define ADC_FLAG_AWD    ((uint32_t)ADC_SR_AWD)
-#define ADC_FLAG_EOC    ((uint32_t)ADC_SR_EOC)
-#define ADC_FLAG_JEOC   ((uint32_t)ADC_SR_JEOC)
-#define ADC_FLAG_JSTRT  ((uint32_t)ADC_SR_JSTRT)
-#define ADC_FLAG_STRT   ((uint32_t)ADC_SR_STRT)
-#define ADC_FLAG_OVR    ((uint32_t)ADC_SR_OVR)
-
-/*Определение прерываний АЦП*/
-#define ADC_IT_EOC      ((uint32_t)ADC_CR1_EOCIE)
-#define ADC_IT_AWD      ((uint32_t)ADC_CR1_AWDIE)
-#define ADC_IT_JEOC     ((uint32_t)ADC_CR1_JEOCIE)
-#define ADC_IT_OVR      ((uint32_t)ADC_CR1_OVRIE)
 
 /*structures*/
 typedef struct
