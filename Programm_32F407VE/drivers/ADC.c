@@ -10,7 +10,7 @@ Rezult_t ADC_Init(ADC_TypeDef* instance)
 {
 	Rezult_t tmp_rezult=OK_;
 	
-	if (instance == NULL)
+	if (instance == 0)//придумать вместо NULL
 	{
 		tmp_rezult = ERROR_;
 	}
@@ -105,7 +105,7 @@ Rezult_t ADC_SetReg(ADC_Structure* adc)
   
   /* Установить режим сканирования АЦП */
   adc->Instance->CR1 &= ~(ADC_MODE_SCAN);
-  adc->Instance->CR1 |=  adc->Init.ScanConvMode;//ADC_CR1_SCANCONV(adc->Init.ScanConvMode);
+  adc->Instance->CR1 |=  adc->Init.ScanConvMode;;
   
   /* Установить разрешение АЦП */
   adc->Instance->CR1 &= ~(ADC_CR1_RES);
@@ -135,7 +135,7 @@ Rezult_t ADC_SetReg(ADC_Structure* adc)
   
   /* Включить или отключить режим непрерывного преобразования АЦП */
   adc->Instance->CR2 &= ~(ADC_CR2_CONT);
-  adc->Instance->CR2 |= adc->Init.ContinuousConvMode;//ADC_CR2_CONTINUOUS((uint32_t)adc->Init.ContinuousConvMode);
+  adc->Instance->CR2 |= adc->Init.ContinuousConvMode;
   
   if(adc->Init.DiscontinuousConvMode != DISABLE)
   {
@@ -144,7 +144,7 @@ Rezult_t ADC_SetReg(ADC_Structure* adc)
     
     /* Установите количество каналов для преобразования в прерывистом режиме. */
     adc->Instance->CR1 &= ~(ADC_CR1_DISCNUM);
-    adc->Instance->CR1 |=  adc->Init.NbrOfDiscConversion;//ADC_CR1_DISCONTINUOUS(adc->Init.NbrOfDiscConversion);
+    adc->Instance->CR1 |=  adc->Init.NbrOfDiscConversion;
   }
   else
   {
@@ -233,11 +233,9 @@ Rezult_t ADC_Start_IT(ADC_Structure* adc)
   ADC_Common_TypeDef *tmpADC_Common;
   
   /* Enable the ADC peripheral */
-  /* Проверьте, отключено ли периферийное устройство АЦП, чтобы включить его, и подождите в течение времени Tstab, пока АЦП стабилизируется. */
   if((adc->Instance->CR2 & ADC_CR2_ADON) != ADC_CR2_ADON)
   {  
     /* Включить периферийное устройство */
-    //__HAL_ADC_ENABLE(hadc);
     ENABLE_BIT(adc->Instance->CR2,  ADC_CR2_ADON);
     /* Задержка времени стабилизации АЦП */
     counter = (ADC_STAB_DELAY_US * (SystemCoreClock / 1000000U));
@@ -247,21 +245,18 @@ Rezult_t ADC_Start_IT(ADC_Structure* adc)
     }
   }
   
-	/* Начать преобразование, если АЦП эффективно включен */
+	/* Начать преобразование, если АЦП включен */
 	if(ENABLE_BIT(adc->Instance->CR2, ADC_CR2_ADON))
   {
-    /* Установить состояние АЦП                                                          */
+    /* Установить состояние АЦП */
 
-    /* Указатель на общий регистр управления, к которому принадлежит hadc    */
-    /* (В зависимости от модели STM32F4 может быть до 3 АЦП и 1 общий */
-    /* регистр управления)                                                    */
+    /* Указатель на общий регистр управления, к которому принадлежит adc    */
     tmpADC_Common = ADC123_COMMON;
 
     /* Очистить флаг преобразования обычной группы и флаг переполнения */
-    /* (Чтобы гарантировать отсутствие неизвестного состояния от возможных предыдущих операций АЦП) */
     DISABLE_BIT(adc->Instance->SR, (ADC_FLAG_EOC | ADC_FLAG_OVR));
 		
-    /* Enable end of conversion interrupt for regular group */
+    /* Включить прерывание конверсии для обычной группы */
     ENABLE_BIT(adc->Instance->CR1, (ADC_IT_EOCIE | ADC_IT_OVR));
 		
     /* Проверьте, включен ли многомодовый режим */
@@ -298,7 +293,6 @@ Rezult_t ADC_Start_IT(ADC_Structure* adc)
 
 void ADC_IRQHandler(void)
 {
-	//adcData = Read_REG(adc.Instance->DR);
 	adcData = ADC_GET_DATA(adc.Instance);
 	
 	  if(adc.Instance == ADC1)

@@ -5,6 +5,7 @@
 #include "HEHAL.h"
 #include "ADC.h"
 #include "GPIO.h"
+#include "PWR.h"
 /*defaines*/
 
 /*structures*/

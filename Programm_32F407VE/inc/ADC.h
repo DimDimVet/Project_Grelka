@@ -151,10 +151,7 @@
 #define ADC_DR_Pos 0x4C
 #define ADC_GET_DATA(INSTANCE) ((INSTANCE->DR))
 
-///мусор
-//#define ADC_SOFTWARE_START             (ADC_EVENT_EXTI + 1U)
-//#define ADC_COMMON_REGISTER(__HANDLE__)                ADC123_COMMON
-#define ADC_STAB_DELAY_US               3U /* Задержка времени стабилизации АЦП*/
+#define ADC_STAB_DELAY_US (3) /* Задержка времени стабилизации АЦП*/
 
 /*structures*/
 typedef struct

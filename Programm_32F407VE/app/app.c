@@ -5,10 +5,11 @@
 
 int main()
 {
-
+		EXE_TASK4();//PWR
     /*------------*/
 		ADC_Init(ADC1);
     /*------------*/
+		
 
     while (1)
     {
