@@ -69,8 +69,9 @@
 #define ADC_ENABLE (ADC_CR2_ADON)  /*(0x1 << 0)АЦП ВКЛ/ВЫКЛ*/
 #define ADC_ENABLE_CONTINUOUS (ADC_CR2_CONT)  /*(0x1 << 1)Непрерывное преобразование*/
 #define ADC_ENABLE_DMA (ADC_CR2_DMA)  /*(0x1 << 8)режим прямого доступа к памяти (для режима одного АЦП)*/
-#define ADC_ENABLE_DMA_EVENT(ADC_CR2_DDS)  /*(0x1 << 9)Запросы DMA выдаются, пока данные преобразуются (для режима одного АЦП)*/
-#define ADC_FLAG_END_CONVERSION(ADC_CR2_EOCS)  /*(0x1 << 10)Выбор конца преобразования, Бит EOC устанавливается в конце каждого обычного преобразования*/
+#define ADC_ENABLE_DMAContReq(DMAContReq_MODE) ((DMAContReq_MODE) << 9U)/*Включить непрерывный запрос ADC DMA.*/
+#define ADC_END_CONVERSION (ADC_CR2_EOCS)  /*(0x1 << 10)Выбор конца преобразования, Бит EOC устанавливается в конце каждого обычного преобразования*/
+#define ADC_DISABLE_END_CONVERSION (0)  /*Отключить Выбор конца преобразования*/
 #define ADC_DATA_ALIGNMENT (ADC_CR2_ALIGN)  /*(0x1 << 11)выравнивание данных, 0: Выравнивание по правому краю , 1: Выравнивание по левому краю*/
 #define ADC_EVENT_INJECT_TIMER1_CC4 (0) /*0000: Событие таймера 1 CC4 */
 #define ADC_EVENT_INJECT_TIMER1_TRGO (ADC_CR2_JEXTSEL_0) /*0001: Событие таймера 1 TRGO*/
@@ -109,6 +110,7 @@
 #define ADC_EVENT_TIMER8_CC1 (ADC_CR2_EXTSEL_3|ADC_CR2_EXTSEL_2|ADC_CR2_EXTSEL_0) /*1101: Событие таймера 8 CC1*/
 #define ADC_EVENT_TIMER8_TRGO (ADC_CR2_EXTSEL_3|ADC_CR2_EXTSEL_2|ADC_CR2_EXTSEL_1) /*1110: Событие таймера 8 TRGO*/
 #define ADC_EVENT_EXTI (ADC_CR2_EXTSEL_3|ADC_CR2_EXTSEL_2|ADC_CR2_EXTSEL_1|ADC_CR2_EXTSEL_0) /*1111: Линия EXTI15*/
+#define ADC_SOFTWARE_START (ADC_EVENT_EXTI + 1U) /*если не используем внешнее событие*/
 #define ADC_NO_TRIGER (0) /*0000: Обнаружение триггера отключено*/
 #define ADC_TRIGER_RISING (ADC_CR2_EXTEN_0) /*0001: Обнаружение триггера по переднему фронту*/
 #define ADC_TRIGER_FALLING (ADC_CR2_EXTEN_1) /*0010: Обнаружение триггера по заднему фронту*/
@@ -135,6 +137,7 @@
 /*13.13.9 Регистр 1 последовательности (регулярной АЦП)(ADC_SQR1) Address offset: 0x2C*/
 #define ADC_SQR1_Pos 0x2C
 #define ADC_SQR1_RK(CANNALx, RANKNB) (((uint32_t)((uint16_t)(CANNALx))) << (5 * ((RANKNB) - 13)))/* Установите ранг обычного канала в диапазоне от 13 до 16.*/
+#define ADC_SQR1(NbrOfConversion) ((NbrOfConversion - 1U) << 20U) /*Min_Data = 1 до Max_Data = 8, Задаёт количество дискретных преобразований, на которые будет разделена основная последовательность*/
 
 /*13.13.10 Регистр 2 последовательности (регулярной АЦП)(ADC_SQR2) Address offset: 0x30*/
 #define ADC_SQR2_Pos 0x30
@@ -149,18 +152,9 @@
 #define ADC_GET_DATA(INSTANCE) ((INSTANCE->DR))
 
 ///мусор
-#define ADC_SOFTWARE_START             ((uint32_t)ADC_CR2_EXTSEL + 1U)
-#define ADC_COMMON_REGISTER(__HANDLE__)                ADC123_COMMON
+//#define ADC_SOFTWARE_START             (ADC_EVENT_EXTI + 1U)
+//#define ADC_COMMON_REGISTER(__HANDLE__)                ADC123_COMMON
 #define ADC_STAB_DELAY_US               3U /* Задержка времени стабилизации АЦП*/
-
-//#define ADC_CR1_SCANCONV(_SCANCONV_MODE_) ((_SCANCONV_MODE_) << 8U)/*Включить режим сканирования АЦП*/
-#define ADC_CR2_CONTINUOUS(_CONTINUOUS_MODE_) ((_CONTINUOUS_MODE_) << 1U)/*Включить режим непрерывного преобразования АЦП*/
-#define ADC_CR1_DISCONTINUOUS(_NBR_DISCONTINUOUSCONV_) (((_NBR_DISCONTINUOUSCONV_) - 1U) << ADC_CR1_DISCNUM_Pos)/*Настраивает количество прерывистых преобразований для обычных групповых каналов.*/
-#define ADC_CR2_DMAContReq(_DMAContReq_MODE_) ((_DMAContReq_MODE_) << 9U)/*Включить непрерывный запрос ADC DMA.*/
-#define ADC_CR2_EOCSelection(_EOCSelection_MODE_) ((_EOCSelection_MODE_) << 10U)/*Включить выбор конца преобразования АЦП.*/
-#define ADC_CHANNEL_TEMPSENSOR  ((uint32_t)ADC_CHANNEL_16)/*Каналы для АЦП*/
-#define ADC_SQR1(_NbrOfConversion_) (((_NbrOfConversion_) - (uint8_t)1U) << 20U)
-
 
 /*structures*/
 typedef struct

@@ -2,7 +2,6 @@
 
 /*var*/
 ADC_Structure adc;
-
  uint16_t adcData; ///zzz
  float adcVoltage;
  char buf[32];
@@ -33,14 +32,14 @@ Rezult_t ADC_SetStructure(ADC_Structure* adc)
   adc->Init.ClockPrescaler = 0;
   adc->Init.Resolution = 0;
   adc->Init.ScanConvMode = ADC_MODE_SCAN;
-  adc->Init.ContinuousConvMode = 1; ///запуск последовательности измерений
-  adc->Init.DiscontinuousConvMode = 0;
+  adc->Init.ContinuousConvMode = ADC_ENABLE_CONTINUOUS; ///запуск последовательности измерений
+  adc->Init.DiscontinuousConvMode = ADC_CANNAL_COUNT1;
   adc->Init.ExternalTrigConvEdge = 0;
   adc->Init.ExternalTrigConv = ADC_SOFTWARE_START;//0x0F000001
   adc->Init.DataAlign = 0;
   adc->Init.NbrOfConversion = 1;
   adc->Init.DMAContinuousRequests = 0;
-  adc->Init.EOCSelection = 0; ///измеряем все ацп которые используем
+  adc->Init.EOCSelection = ADC_DISABLE_END_CONVERSION; ///измеряем все ацп которые используем
   
   adc->Channel = ADC_CANNAL1;//канал 1
   adc->Rank = 1;
@@ -98,7 +97,7 @@ Rezult_t ADC_SetReg(ADC_Structure* adc)
   ADC_Common_TypeDef *tmpADC_Common;
   
   /* Указатель на общий регистр управления, к которому принадлежит adc */                                                  
-  tmpADC_Common = ADC_COMMON_REGISTER(adc);
+  tmpADC_Common = ADC123_COMMON;
   
   /* Установите предделитель тактовой частоты АЦП */
   tmpADC_Common->CCR &= ~(ADC_CCR_ADCPRE);
@@ -136,7 +135,7 @@ Rezult_t ADC_SetReg(ADC_Structure* adc)
   
   /* Включить или отключить режим непрерывного преобразования АЦП */
   adc->Instance->CR2 &= ~(ADC_CR2_CONT);
-  adc->Instance->CR2 |= ADC_CR2_CONTINUOUS((uint32_t)adc->Init.ContinuousConvMode);
+  adc->Instance->CR2 |= adc->Init.ContinuousConvMode;//ADC_CR2_CONTINUOUS((uint32_t)adc->Init.ContinuousConvMode);
   
   if(adc->Init.DiscontinuousConvMode != DISABLE)
   {
@@ -145,7 +144,7 @@ Rezult_t ADC_SetReg(ADC_Structure* adc)
     
     /* Установите количество каналов для преобразования в прерывистом режиме. */
     adc->Instance->CR1 &= ~(ADC_CR1_DISCNUM);
-    adc->Instance->CR1 |=  ADC_CR1_DISCONTINUOUS(adc->Init.NbrOfDiscConversion);
+    adc->Instance->CR1 |=  adc->Init.NbrOfDiscConversion;//ADC_CR1_DISCONTINUOUS(adc->Init.NbrOfDiscConversion);
   }
   else
   {
@@ -159,11 +158,11 @@ Rezult_t ADC_SetReg(ADC_Structure* adc)
   
   /* Включить или отключить непрерывный запрос ADC DMA */
   adc->Instance->CR2 &= ~(ADC_CR2_DDS);
-  adc->Instance->CR2 |= ADC_CR2_DMAContReq((uint32_t)adc->Init.DMAContinuousRequests);
+  adc->Instance->CR2 |= ADC_ENABLE_DMAContReq(adc->Init.DMAContinuousRequests);
   
   /* Включить или отключить выбор конца преобразования АЦП */
   adc->Instance->CR2 &= ~(ADC_CR2_EOCS);
-  adc->Instance->CR2 |= ADC_CR2_EOCSelection(adc->Init.EOCSelection);
+  adc->Instance->CR2 |= adc->Init.EOCSelection;//ADC_CR2_EOCSelection(adc->Init.EOCSelection);
 	
 	return tmp_rezult;
 }
@@ -221,19 +220,8 @@ Rezult_t ADC_ConfigChannel(ADC_Structure* adc)
   }
 
     /* Указатель на общий регистр управления, к которому принадлежит adc   */
-    tmpADC_Common = ADC_COMMON_REGISTER(hadc);
+    tmpADC_Common = ADC123_COMMON;
 
-//  /* если выбран канал ADC1 Channel_18 для канала VBAT, можно включить VBATE */
-//  if ((adc->Instance == ADC1) && (adc->Channel == ADC_CHANNEL_VBAT))
-//  {
-//    /* Отключите канал TEMPSENSOR в случае использования платы с мультиплексированными ADC_CHANNEL_VBAT и ADC_CHANNEL_TEMPSENSOR*/    
-//    if ((uint16_t)ADC_CHANNEL_TEMPSENSOR == (uint16_t)ADC_CHANNEL_VBAT)
-//    {
-//      tmpADC_Common->CCR &= ~ADC_CCR_TSVREFE;
-//    }
-//    /* Включить канал VBAT*/
-//    tmpADC_Common->CCR |= ADC_CCR_VBATE;
-//  }
   return tmp_rezult;
 }
 
@@ -267,7 +255,7 @@ Rezult_t ADC_Start_IT(ADC_Structure* adc)
     /* Указатель на общий регистр управления, к которому принадлежит hadc    */
     /* (В зависимости от модели STM32F4 может быть до 3 АЦП и 1 общий */
     /* регистр управления)                                                    */
-    tmpADC_Common = ADC_COMMON_REGISTER(hadc);
+    tmpADC_Common = ADC123_COMMON;
 
     /* Очистить флаг преобразования обычной группы и флаг переполнения */
     /* (Чтобы гарантировать отсутствие неизвестного состояния от возможных предыдущих операций АЦП) */
