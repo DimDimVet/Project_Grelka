@@ -5,6 +5,7 @@
 #include "stm32f407xx.h"
 #include "stm32f4xx.h"
 #include "RCC.h"
+#include "GPIO.h"
 /*defaines*/
 
 /*structures*/
@@ -16,10 +17,6 @@ void EXE_TASK4(void);
 
 void INIT_EXTI(void);
 void INIT_TIM_PWR(int fillFactor);
-
-//void APB2_INIT_PERIPHERY(int RCC_PERIPHERY);
-//void APB1_INIT_PERIPHERY(int RCC_PERIPHERY);
-//void AHB1_INIT_PERIPHERY(int RCC_PERIPHERY);
 
 void GPIO_InitX(void);
 //

@@ -23,7 +23,10 @@ typedef enum
 }Rezult_t;
 
 /*func*/
-	
+void Сonverter_Int_Str(char *str, int val);
+void Sprintf_M(char *buff, const char *prefix, int val);
+void Sprintf_str_to_str(int size_buf,char *buff, char *str1, char *str2, char *str3,char *str4,char *str5,char *str6);
+
 #endif
 
 

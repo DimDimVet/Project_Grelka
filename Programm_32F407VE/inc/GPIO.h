@@ -9,23 +9,6 @@
 /*defaines*/
 
 /*номера пинов*/
-//#define PIN0                 ((uint16_t)0x0001)  
-//#define PIN1                 ((uint16_t)0x0002)  
-//#define PIN2                 ((uint16_t)0x0004)  
-//#define PIN3                 ((uint16_t)0x0008)  
-//#define PIN4                 ((uint16_t)0x0010)  
-//#define PIN5                 ((uint16_t)0x0020)  
-//#define PIN6                 ((uint16_t)0x0040)  
-//#define PIN7                 ((uint16_t)0x0080)  
-//#define PIN8                 ((uint16_t)0x0100)  
-//#define PIN9                 ((uint16_t)0x0200)  
-//#define PIN10                ((uint16_t)0x0400)  
-//#define PIN11                ((uint16_t)0x0800)  
-//#define PIN12                ((uint16_t)0x1000)  
-//#define PIN13                ((uint16_t)0x2000)  
-//#define PIN14                ((uint16_t)0x4000)  
-//#define PIN15                ((uint16_t)0x8000)  
-
 #define PIN0                 0  
 #define PIN1                 1  
 #define PIN2                 2  
@@ -46,30 +29,28 @@
 /*RM0090 Reference manual STM32F405/415, STM32F407/417, STM32F427/437 and STM32F429/439*/
 /*8.4 GPIO registers*/
 /*8.4.1 Регистр режимов (GPIOx_MODER) (x = A..I/J/K) Address offset: 0x00*/
-#define GPIO_MODE_Pos 0x00
-#define GPIO_MODE_INPUT (0x0 << GPIO_MODE_Pos) /*Input (reset state)*/
-#define GPIO_MODE_OUTPUT (0x1 << GPIO_MODE_Pos) /*General purpose output mode*/
-#define GPIO_MODE_AF (0x2 << GPIO_MODE_Pos) /*Alternate function mode*/
-#define GPIO_MODE_ANALOG (0x3 << GPIO_MODE_Pos) /*Analog mode*/
+#define GPIO_MODE_INPUT (0) /*Input (reset state)*/
+#define GPIO_MODE_OUTPUT (1) /*General purpose output mode*/
+#define GPIO_MODE_AF (2) /*Alternate function mode*/
+#define GPIO_MODE_ANALOG (3) /*Analog mode*/
 
 /*8.4.2 Регистр типа выхода порта GPIO (GPIOx_OTYPER)(x = A..I/J/K) Address offset: 0x04*/
 #define GPIO_OUTPUT_TYPE_Pos 0x04
-#define GPIO_OUTPUT_PP (0x0 << GPIO_OUTPUT_TYPE_Pos) /*Output push-pull (reset state)*/
-#define GPIO_OUTPUT_OD (0x1 << GPIO_OUTPUT_TYPE_Pos) /*Output open-drain*/
-#define GPIO_OUTPUT_TYPE                             (0x1UL << GPIO_OUTPUT_TYPE_Pos)//temp
+#define GPIO_OUTPUT_PP (0) /*Output push-pull (reset state)*/
+#define GPIO_OUTPUT_OD (1) /*Output open-drain*/
+#define GPIO_OUTPUT_TYPE (0x1UL << GPIO_OUTPUT_TYPE_Pos)//temp
 
 /*8.4.3 GPIO port output speed register (GPIOx_OSPEEDR)(x = A..I/J/K) Address offset: 0x08*/
 #define GPIO_SPEED_Pos 0x08
-#define GPIO_SPEED_LOW (0x0 << GPIO_SPEED_Pos) /* Low speed*/
-#define GPIO_SPEED_MEDIUM (0x1 << GPIO_SPEED_Pos) /*Medium speed*/
-#define GPIO_SPEED_HIGH (0x2 << GPIO_SPEED_Pos) /*High speed*/
-#define GPIO_SPEED_VERY_HIGH (0x3 << GPIO_SPEED_Pos) /*AVery high speed*/
+#define GPIO_SPEED_LOW (0) /* Low speed*/
+#define GPIO_SPEED_MEDIUM (1) /*Medium speed*/
+#define GPIO_SPEED_HIGH (2) /*High speed*/
+#define GPIO_SPEED_VERY_HIGH (3) /*AVery high speed*/
 
 /*8.4.4 Регистр подтягивания(pull-up)/опускания(pull-down) порта GPIO (GPIOx_PUPDR)(x = A..I/J/K) Address offset: 0x0C*/
-#define GPIO_PUPDR_Pos 0x0C
-#define GPIO_NOPULL (0x0 << GPIO_PUPDR_Pos) /* No pull-up, pull-down*/
-#define GPIO_PULLUP (0x1 << GPIO_PUPDR_Pos) /*Pull-up*/
-#define GPIO_PULLDOWN (0x2 << GPIO_PUPDR_Pos) /*Pull-down*/
+#define GPIO_NOPULL (0) /* No pull-up, pull-down*/
+#define GPIO_PULLUP (1) /*Pull-up*/
+#define GPIO_PULLDOWN (2) /*Pull-down*/
 
 /*8.4.5 Регистр входных данных порта GPIO (GPIOx_IDR) (x = A..I/J/K) Address offset: 0x10*/
 /*Эти биты доступны только для чтения и доступны только в режиме слова. Они содержат входное значение соответствующего порта ввода/вывода.*/
@@ -135,11 +116,15 @@
 /*structures*/
 typedef struct
 {
+	GPIO_TypeDef* GPIOx;       /*Указывает настраиваемые порт GPIO GPIO_TypeDef*/
+	
   uint32_t Pin;       /*Указывает настраиваемые контакты GPIO */
 
   uint32_t Mode;      /*Задает режим работы для выбранных контактов */
 
   uint32_t Pull;      /*Задает активацию подтягивания вверх(Pull-up) или опускания(Pull-Down) вниз для выбранных контактов.*/
+	
+	uint32_t Otyper;    /*Задать выход или открытый коллектор*/
 
   uint32_t Speed;     /*Задает скорость для выбранных контактов */
 
@@ -148,6 +133,6 @@ typedef struct
 }GPIO_Structure;
 
 /*func*/
-void GPIO_Init(GPIO_TypeDef  *GPIOx, GPIO_Structure *GPIO_Str);
-	
+void GPIO_Init(GPIO_Structure *GPIO_Str);
+
 #endif

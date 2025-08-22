@@ -13,5 +13,6 @@
 /*var*/
 
 /*func*/
+void Start_PWR(void);
 
 #endif

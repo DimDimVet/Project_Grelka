@@ -6,7 +6,7 @@
 #include "stm32f4xx.h"
 #include "HEHAL.h"
 #include "GPIO.h"
-#include <stdio.h>
+//#include <stdio.h>
 
 /*defaines*/
 

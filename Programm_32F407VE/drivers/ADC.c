@@ -5,6 +5,7 @@ ADC_Structure adc;
  uint16_t adcData; ///zzz
  float adcVoltage;
  char buf[32];
+ char buff_str_temp[20];
 
 Rezult_t ADC_Init(ADC_TypeDef* instance)
 {
@@ -71,11 +72,12 @@ Rezult_t ADC_MspInit(ADC_Structure* adc)
 
 		ENABLE_BIT(RCC->AHB1ENR, RCC_AHB1ENR_GPIOAEN);
 		
+		GPIO_InitStruct.GPIOx = GPIOA;
 		GPIO_InitStruct.Pin = PIN1;
     GPIO_InitStruct.Mode = GPIO_MODE_ANALOG;
     GPIO_InitStruct.Pull = GPIO_NOPULL;
 		
-    GPIO_Init(GPIOA, &GPIO_InitStruct);
+    GPIO_Init(&GPIO_InitStruct);
   }
 	else
 	{
@@ -300,8 +302,8 @@ void ADC_IRQHandler(void)
     //for (uint8_t i = 0; i < ADC_CHANNELS_NUM; i++)
 			{
 				adcVoltage = adcData * 3.3 / 4095;
-
-				sprintf(buf,"%.2f",adcVoltage);
+				Sprintf_M(buff_str_temp,"Volt",adcVoltage);
+				//sprintf(buf,"%.2f",adcVoltage);
 				
 			}
 		}

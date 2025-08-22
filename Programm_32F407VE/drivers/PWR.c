@@ -3,33 +3,12 @@
 int countFillFactor=0;
 
 
-//void AHB1_INIT_PERIPHERY(int RCC_PERIPHERY)
-//{
-//    RCC->AHB1ENR |=RCC_PERIPHERY;
-//}
-
-//void APB1_INIT_PERIPHERY(int RCC_PERIPHERY)
-//{
-//    RCC->APB1ENR |=RCC_PERIPHERY;
-//}
-
-//void APB2_INIT_PERIPHERY(int RCC_PERIPHERY)
-//{
-//    RCC->APB2ENR |= RCC_PERIPHERY;
-//}
-
 void EXE_TASK4()
 {
-    RCC_INIT();
-
-    APB2_INIT_PERIPHERY(RCC_APB2ENR_SYSCFGEN);
-
-    APB1_INIT_PERIPHERY(RCC_APB1ENR_TIM3EN);
-    AHB1_INIT_PERIPHERY(RCC_AHB1ENR_GPIOAEN);
-    AHB1_INIT_PERIPHERY(RCC_AHB1ENR_GPIOEEN);
 
     GPIO_InitX();
-		OdrGPIOA_Or(GPIO_ODR_OD7);
+	
+		//OdrGPIOA_Or(GPIO_ODR_OD6);
 		
     AFRL_GPIOA(GPIO_MODER_MODER6,GPIO_MODER_MODER6_1, 2, 6);
     //INIT_TIM_PWR();
@@ -40,7 +19,7 @@ void EXE_TASK4()
 void INIT_TIM_PWR(int fillFactor)
 {
     // Устанавливаем предделитель и авто-перезагрузку
-    TIM3->PSC = 8400 - 1; // делитель
+    TIM3->PSC = 8400 - 1; // делитель TIM prescaler
     TIM3->ARR = 100 - 1; // автосброс
 
     //ШИМ TIM3_CH1 PA6
@@ -70,8 +49,8 @@ if (EXTI->PR & EXTI_PR_PR4)   // проверим флаг irq
     {
         EXTI->PR |= EXTI_PR_PR4; // reset флага
 
-        //OdrGPIOA_Xor(GPIO_ODR_OD7);
-        countFillFactor+=2;
+        OdrGPIOA_Xor(GPIO_ODR_OD7);
+        countFillFactor+=25;
         if(countFillFactor<=100)
         {
             INIT_TIM_PWR(countFillFactor);
@@ -99,10 +78,16 @@ void InPin()
 
 //Key0 PE4 3pin
 //Key1 PE3 2pin
+uint32_t tt;
+uint32_t tt2;
+uint32_t tt3;
 void KeyConfigInPin()
 {
-	GPIOE->MODER &= ~ (GPIO_MODER_MODER3|GPIO_MODER_MODER4); // сброс режима входа-выхода 
-	GPIOE->PUPDR |= (GPIO_PUPDR_PUPD3_0|GPIO_PUPDR_PUPD4_0); // установка подтяжки к 0 
+	GPIO_Structure key_PE3 = {.GPIOx = GPIOE,.Pin = PIN3,.Mode = GPIO_MODE_INPUT,.Pull = GPIO_PULLUP};
+	GPIO_Init(&key_PE3);
+	GPIO_Structure key_PE4 = {.GPIOx = GPIOE,.Pin = PIN4,.Mode = GPIO_MODE_INPUT,.Pull = GPIO_PULLUP};
+	GPIO_Init(&key_PE4);
+
 }
 //Out
 void OutPin()
@@ -114,14 +99,9 @@ void OutPin()
 // LED3 PA7 32pin
 void LedConfigOutPin()
 {
-    GPIOA->MODER &= ~ (GPIO_MODER_MODER6|GPIO_MODER_MODER7); // сброс
-    GPIOA->MODER |= (GPIO_MODER_MODER6_0|GPIO_MODER_MODER7_0);//режим на выход
-    GPIOA->OSPEEDR &= ~(GPIO_OSPEEDR_OSPEED6|GPIO_OSPEEDR_OSPEED7); // сброс скорости
-    GPIOA->OSPEEDR |= (GPIO_OSPEEDR_OSPEED6_0|GPIO_OSPEEDR_OSPEED7_0); // установка средней скорости
-    GPIOA->PUPDR &= ~(GPIO_PUPDR_PUPD6|GPIO_PUPDR_PUPD7); // сброс режим подтяжки
-    GPIOA->PUPDR |= (GPIO_PUPDR_PUPD6_0|GPIO_PUPDR_PUPD7_0); // установка подтяжки к + (1)  РА0
-    GPIOA->OTYPER &= ~ (GPIO_OTYPER_OT6|GPIO_OTYPER_OT7); // сброс режима нагрузки
-    GPIOA->OTYPER |= (GPIO_OTYPER_OT6|GPIO_OTYPER_OT7); // установка в режим с открытым коллектором
+	GPIO_Structure LED_7 = {.GPIOx = GPIOA,.Pin = PIN7,.Mode = GPIO_MODE_OUTPUT,.Speed = GPIO_SPEED_LOW,.Pull = GPIO_PULLUP};
+	GPIO_Init(&LED_7);
+
 }
 
 
