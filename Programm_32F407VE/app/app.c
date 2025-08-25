@@ -1,5 +1,6 @@
 #include "app.h"
 
+ssd1306_t str_SSD1306;
 RCC_Structure rcc_str = {.mDivider_PLLM = 8,.nMultiplier_PLLN = 192,.pDivider_PLLP = 6}; /*структура для RCC*/
 /*main*/
 
@@ -7,8 +8,21 @@ int main()
 {
 		RCC_Init(&rcc_str);
 		Start_PWR();
-	
-
+		
+		Init_I2C(I2C1);
+		str_SSD1306.adress_I2C = SSD1306_I2C_ADDR;
+    str_SSD1306.instance = I2C1;
+		SSD1306_Init(&str_SSD1306);
+		
+		SSD1306_Fill(SSD1306_COLOR_WHITE);
+    /* */
+    SSD1306_GotoXY(&str_SSD1306, 20, 0);
+    SSD1306_Puts(&str_SSD1306, "DZ", &Font_11x18, 1);
+    SSD1306_GotoXY(&str_SSD1306, 10, 30);
+    SSD1306_Puts(&str_SSD1306, "xxx", &Font_16x26, 1);
+    SSD1306_UpdateScreen(&str_SSD1306);
+    //SSD1306_Clear(&str_SSD1306);
+		
     /*------------*/
 		ADC_Init(ADC1);
     /*------------*/
