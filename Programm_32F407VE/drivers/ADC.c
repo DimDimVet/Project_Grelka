@@ -64,18 +64,13 @@ Rezult_t ADC_MspInit(ADC_Structure* adc)
 {
 	Rezult_t tmp_rezult=OK_;
 	
-  GPIO_Structure GPIO_InitStruct = {0};
+  GPIO_Structure GPIO_InitStruct = {.GPIOx = GPIOA,.Pin = PIN1,.Mode = GPIO_MODE_ANALOG,.Pull = GPIO_PUPDR_NOPULL};
 	
   if(adc->Instance==ADC1) /*ADC1 GPIO Configuration PA1 --> ADC1_IN1 */
   {
 		ENABLE_BIT(RCC->APB2ENR, RCC_APB2ENR_ADC1EN);
 
 		ENABLE_BIT(RCC->AHB1ENR, RCC_AHB1ENR_GPIOAEN);
-		
-		GPIO_InitStruct.GPIOx = GPIOA;
-		GPIO_InitStruct.Pin = PIN1;
-    GPIO_InitStruct.Mode = GPIO_MODE_ANALOG;
-    GPIO_InitStruct.Pull = GPIO_NOPULL;
 		
     GPIO_Init(&GPIO_InitStruct);
   }
@@ -271,7 +266,7 @@ Rezult_t ADC_Start_IT(ADC_Structure* adc)
         if((adc->Instance->CR2 & ADC_CR2_EXTEN) == RESET) 
         {
           /* Включить выбранное программное преобразование АЦП для обычной группы */
-          adc->Instance->CR2 |= (uint32_t)ADC_CR2_SWSTART;
+					ENABLE_BIT(adc->Instance->CR2,ADC_CR2_SWSTART);
         }
       }
     }
@@ -281,7 +276,7 @@ Rezult_t ADC_Start_IT(ADC_Structure* adc)
       if((adc->Instance == ADC1) && ((adc->Instance->CR2 & ADC_CR2_EXTEN) == RESET))
       {
         /* Включить выбранное программное преобразование АЦП для обычной группы */
-          adc->Instance->CR2 |= (uint32_t)ADC_CR2_SWSTART;
+          ENABLE_BIT(adc->Instance->CR2,ADC_CR2_SWSTART);
       }
     }
   }

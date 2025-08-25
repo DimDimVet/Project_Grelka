@@ -8,7 +8,7 @@ int main()
 		RCC_Init(&rcc_str);
 		Start_PWR();
 	
-		EXE_TASK4();//PWR
+
     /*------------*/
 		ADC_Init(ADC1);
     /*------------*/
@@ -29,6 +29,7 @@ void Start_PWR()
 	
     AHB1_ENABLE_PERIPHERY(RCC_AHB1ENR_GPIOAEN);/*выход PWR*/
     AHB1_ENABLE_PERIPHERY(RCC_AHB1ENR_GPIOEEN);/*выход LED*/
-	
+		
+		EXE_TASK4();//PWR
 	
 }
