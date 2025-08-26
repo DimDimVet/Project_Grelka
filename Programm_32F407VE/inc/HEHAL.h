@@ -6,14 +6,18 @@
 #include "stm32f4xx.h"
 
 /*defaines*/
+/*Битовые операции*/
 #define ENABLE_BIT(reg, bit) ((reg) |= (uint32_t)(bit)) 
 #define DISABLE_BIT(reg, bit) ((reg) &= ~(uint32_t)(bit)) 
 #define Read_BIT(reg, bit)    ((reg) & (bit)) 
-
+/*Регистовые операции*/
 #define Write_REG(REG, VAL)   ((REG) = (VAL))
 #define Read_REG(REG)         ((REG))
 #define Clear_REG(REG)        ((REG) = (0x0))	
-
+/*Вкл. периферии*/
+#define AHB1_ENABLE_PERIPHERY(_RCC_PERIPHERY_) (RCC->AHB1ENR |= _RCC_PERIPHERY_)/*вкл что то по AHB1*/
+#define APB1_ENABLE_PERIPHERY(_RCC_PERIPHERY_) (RCC->APB1ENR |= _RCC_PERIPHERY_)/*вкл что то по APB1*/
+#define APB2_ENABLE_PERIPHERY(_RCC_PERIPHERY_) (RCC->APB2ENR |= _RCC_PERIPHERY_)/*вкл что то по APB2*/
 /*var*/
 
 /*structures*/

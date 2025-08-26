@@ -347,12 +347,6 @@ void SSD1306_DrawLine(ssd1306_t *structure, uint16_t x0, uint16_t y0, uint16_t x
         err = -dy / 2;
     }
 
-    // dx = (x0 < x1) ? (x1 - x0) : (x0 - x1);
-    // dy = (y0 < y1) ? (y1 - y0) : (y0 - y1);
-    // sx = (x0 < x1) ? 1 : -1;
-    // sy = (y0 < y1) ? 1 : -1;
-    // err = ((dx > dy) ? dx : -dy) / 2;
-
     if (dx == 0)
     {
         if (y1 < y0)
@@ -660,7 +654,7 @@ void ssd1306_I2C_WriteMulti(uint8_t address, uint8_t reg, uint8_t *data, uint16_
     uint8_t i;
     for (i = 0; i < count; i++)
         dt[i + 1] = data[i];
-    // HAL_I2C_Master_Transmit(&hi2c1, address, dt, count+1, 10);
+
     I2C_Master_Transmit(I2C1, address, dt, count + 1, 10);
 }
 
@@ -669,6 +663,6 @@ void ssd1306_I2C_Write(uint8_t address, uint8_t reg, uint8_t data)
     uint8_t dt[2];
     dt[0] = reg;
     dt[1] = data;
-    //	HAL_I2C_Master_Transmit(&hi2c1, address, dt, 2, 10);
+
     I2C_Master_Transmit(I2C1, address, dt, 2, 10);
 }

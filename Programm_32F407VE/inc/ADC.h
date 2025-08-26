@@ -6,7 +6,8 @@
 #include "stm32f4xx.h"
 #include "HEHAL.h"
 #include "GPIO.h"
-//#include <stdio.h>
+#include <stdio.h>
+//#include "PWR.h" //temp
 
 /*defaines*/
 
@@ -231,5 +232,7 @@ Rezult_t ADC_MspInit(ADC_Structure* adc);
 Rezult_t ADC_SetReg(ADC_Structure* adc);
 Rezult_t ADC_ConfigChannel(ADC_Structure* adc);
 Rezult_t ADC_Start_IT(ADC_Structure* adc);
+void WorkADC(char* buff_str_temp);
+
 
 #endif

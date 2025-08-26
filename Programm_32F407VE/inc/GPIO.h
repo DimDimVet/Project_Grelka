@@ -4,7 +4,7 @@
 /*includes*/
 #include "stm32f407xx.h"
 #include "stm32f4xx.h"
-#include "HEHAL.h"
+//#include "HEHAL.h"
 
 /*defaines*/
 

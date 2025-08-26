@@ -18,19 +18,14 @@ void Enable_RCC_I2C()
 
 void Config_GPIO_I2C()
 {
-	/* PB6 (SCL), PB7 (SDA) */
-  GPIOB->MODER |= 0 << GPIO_MODER_MODE6_Pos;       // Очистка режима для PB6
-  GPIOB->MODER |= 2 << GPIO_MODER_MODE6_Pos;       // Альтернативная функция для PB6 (SCL)
-  GPIOB->OTYPER |= 1 << GPIO_OTYPER_OT6_Pos;       // открытый коллектор
-  GPIOB->OSPEEDR |= 3 << GPIO_OSPEEDR_OSPEED6_Pos; // скорость
-
-  GPIOB->MODER |= 0 << GPIO_MODER_MODE7_Pos;       // Очистка режима для PB7
-  GPIOB->MODER |= 2 << GPIO_MODER_MODE7_Pos;       // Альтернативная функция для PB7 (SDA)
-  GPIOB->OTYPER |= 1 << GPIO_OTYPER_OT7_Pos;       // открытый коллектор
-  GPIOB->OSPEEDR |= 3 << GPIO_OSPEEDR_OSPEED7_Pos; // скорость
-
-  GPIOB->AFR[0] |= 4 << GPIO_AFRL_AFSEL6_Pos; // AF4 для I2C PB6 (SCL)
-  GPIOB->AFR[0] |= 4 << GPIO_AFRL_AFSEL7_Pos; // AF4 для I2C PB7 (SDA)
+	/* PB6 (SCL), PB7 (SDA)
+		AF4 для I2C PB6 (SCL),AF4 для I2C PB7 (SDA)
+		GPIO_SPEED_LOW, GPIO_OTYPER_OPENDRAIN*/
+	GPIO_Structure PB6_SCL = {.GPIOx = GPIOB,.Pin = PIN6,.Mode = GPIO_MODE_AF,.Otyper = GPIO_OTYPER_OPENDRAIN,.Speed = GPIO_SPEED_LOW,.Alternate = GPIO_AF4};
+	GPIO_Init(&PB6_SCL);
+	
+	GPIO_Structure PB7_SDA = {.GPIOx = GPIOB,.Pin = PIN7,.Mode = GPIO_MODE_AF,.Otyper = GPIO_OTYPER_OPENDRAIN,.Speed = GPIO_SPEED_LOW,.Alternate = GPIO_AF4};
+	GPIO_Init(&PB7_SDA);
 }
 
 void Config_I2C(I2C_TypeDef *instance)
@@ -38,33 +33,33 @@ void Config_I2C(I2C_TypeDef *instance)
   uint32_t freqrange;
   uint32_t pclk1;
 
-  /*Reset I2C*/
+  /*Сброс I2C*/
   ENABLE_BIT(instance->CR1, I2C_CR1_SWRST);
   DISABLE_BIT(instance->CR1, I2C_CR1_SWRST);
 
-  /* Get PCLK1 frequency */
+  /* Получить частоту PCLK1 */
   pclk1 = RCC_GetPCLK1Freq();
   freqrange = pclk1 / 1000000;
 
-  /* Configure I2Cx: Frequency range */
+  /* Настройка I2Cx: диапазон частот */
   ENABLE_BIT(instance->CR2, (freqrange << I2C_CR2_FREQ_Pos));
 
-  /* Configure I2Cx: Rise Time */
+  /* Настройка I2Cx: время нарастания */
   ENABLE_BIT(instance->TRISE, (I2C_Rise_Time(freqrange, CLOCK_SPEED) << I2C_TRISE_TRISE_Pos));
 
-  /* Configure I2Cx: Speed */
+  /* Настройка I2Cx: скорость */
   ENABLE_BIT(instance->CCR, I2C_Speed(pclk1, CLOCK_SPEED, 0));
 
-  /* Configure I2Cx: Generalcall and NoStretch mode */
+  /* Настройка I2Cx: режим Generalcall и NoStretch */
   ENABLE_BIT(instance->CR1, ((0 | 0) << (I2C_CR1_ENGC_Pos | I2C_CR1_NOSTRETCH_Pos)));
 
-  /* Configure I2Cx: Own Address1 and addressing mode */
+  /* Настройте I2Cx: собственный адрес1 и режим адресации */
   ENABLE_BIT(instance->OAR1, ((I2C_ADDRESSINGMODE_7BIT | 0) << (I2C_OAR1_ADDMODE_Pos | I2C_OAR1_ADD0_Pos)));
 
-  /* Configure I2Cx: Dual mode and Own Address2 */
+  /* Настройка I2Cx: двойной режим и собственный адрес2 */
   ENABLE_BIT(instance->OAR2, ((0 | 0) << (I2C_OAR2_ENDUAL_Pos | I2C_OAR2_ADD2_Pos)));
 
-  /* Enable the selected I2C peripheral */
+  /* Включить выбранное периферийное устройство I2C */
 	ENABLE_BIT(instance->CR1,I2C_CR1_PE);
 
   NVIC_EnableIRQ(I2C1_EV_IRQn);
@@ -126,10 +121,7 @@ uint8_t I2C_WaitOnFlagUntilTimeout(I2C_TypeDef *instance, uint32_t flag, FlagSta
   return 0;
 }
 
-/**
- * @brief Эта функция обрабатывает тайм-аут связи I2C для определенного использования флага TXE.
- * @retval
- */
+/*Эта функция обрабатывает тайм-аут связи I2C для определенного использования флага TXE.*/
 uint8_t I2C_WaitOnTXEFlagUntilTimeout(I2C_TypeDef *instance)
 {
   while (!(Read_BIT(instance->SR1, I2C_SR1_TXE)))
@@ -148,14 +140,7 @@ uint8_t I2C_WaitOnRXNEFlagUntilTimeout(I2C_TypeDef *instance)
   return 0;
 }
 
-/**
- * @brief  This function handles I2C Communication Timeout for specific usage of BTF flag.
- * @param  hi2c Pointer to a I2C_HandleTypeDef structure that contains
- *                the configuration information for the specified I2C.
- * @param  Timeout Timeout duration
- * @param  Tickstart Tick start value
- * @retval HAL status
- */
+/*Эта функция обрабатывает тайм-аут связи I2C для конкретного использования флага BTF.*/
 uint8_t I2C_WaitOnBTFFlagUntilTimeout(I2C_TypeDef *instance, uint32_t Timeout)
 {
   while (I2C_GET_FLAG(instance, I2C_FLAG_BTF) == RESET)
@@ -175,10 +160,7 @@ uint8_t I2C_WaitOnBTFFlagUntilTimeout(I2C_TypeDef *instance, uint32_t Timeout)
   return 0;
 }
 
-/**
- * @brief Эта функция обрабатывает тайм-аут связи I2C для фазы адресации мастера.
- * @retval
- */
+/*Эта функция обрабатывает тайм-аут связи I2C для фазы адресации мастера.*/
 
 uint8_t I2C_WaitOnMasterAddressFlagUntilTimeout(I2C_TypeDef *instance, uint32_t Flag, uint32_t Timeout)
 {
@@ -195,28 +177,17 @@ uint8_t I2C_WaitOnMasterAddressFlagUntilTimeout(I2C_TypeDef *instance, uint32_t 
   return 0;
 }
 
-/**
- * @brief  Master sends target device address followed by internal memory address for read request.
- * @param  hi2c Pointer to a I2C_HandleTypeDef structure that contains
- *         the configuration information for I2C module
- * @param  DevAddress Target device address: The device 7 bits address value
- *         in datasheet must be shifted to the left before calling the interface
- * @param  MemAddress Internal memory address
- * @param  MemAddSize Size of internal memory address
- * @param  Timeout Timeout duration
- * @param  Tickstart Tick start value
- * @retval HAL status
- */
+/*Мастер отправляет адрес целевого устройства, а затем адрес внутренней памяти для запроса на чтение.*/
 
 uint8_t I2C_RequestMemoryRead(I2C_TypeDef *instance, uint16_t DevAddress, uint16_t MemAddress, uint16_t MemAddSize, uint32_t Timeout)
 {
-  /* Enable Acknowledge */
+  /* Включить подтверждение */
   ENABLE_BIT(instance->CR1, I2C_CR1_ACK);
 
-  /* Generate Start */
+  /* Генерировать Пуск */
   ENABLE_BIT(instance->CR1, I2C_CR1_START);
 
-  /* Wait until SB flag is set */
+  /* Ждем пока не будет установлен флаг SB */
   if (I2C_WaitOnFlagUntilTimeout(instance, I2C_FLAG_SB, RESET, Timeout) != 0)
   {
     if (Read_BIT(instance->CR1, I2C_CR1_START) == I2C_CR1_START)
@@ -229,10 +200,9 @@ uint8_t I2C_RequestMemoryRead(I2C_TypeDef *instance, uint16_t DevAddress, uint16
   /* Send slave address */
   instance->DR = I2C_7BIT_ADD_Write(DevAddress);
 
-  /* Wait until ADDR flag is set */
+  /* Ждем пока не будет установлен флаг ADDR */
   if (I2C_WaitOnMasterAddressFlagUntilTimeout(instance, I2C_SR1_ADDR, Timeout) != 0)
   {
-    //    return HAL_ERROR;
     return 1;
   }
 

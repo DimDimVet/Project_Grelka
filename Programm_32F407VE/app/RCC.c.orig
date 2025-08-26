@@ -13,8 +13,8 @@
 void RCC_Init(RCC_Structure* rcc)
 {
     int countStartHSE;
-
-    ENABLE_BIT(RCC->CR,RCC_CR_HSEON);/*запуск HSE*/
+	
+		ENABLE_BIT(RCC->CR,RCC_CR_HSEON);/*запуск HSE*/
 
     for (countStartHSE = 0;; countStartHSE++)
     {
@@ -25,7 +25,7 @@ void RCC_Init(RCC_Structure* rcc)
 
             if(Read_BIT(RCC->CR,RCC_CR_PLLRDY))/*опросим RCC_CR_PLLRDY,проверяем готовность PLL*/
             {
-                ENABLE_BIT(RCC->CFGR,RCC_CFGR_SW_PLL);/*Установить свитч в PLL как системный такт*/
+                ENABLE_BIT(RCC->CFGR,RCC_CFGR_SW_PLL);/*Установить свитч в PLL как системный такт*/ 
 
                 if(Read_BIT(RCC->CFGR,RCC_CFGR_SWS_PLL))/*опросим RCC_CFGR_SWS_PLL,Проверяем свитч в PLL*/
                 {
@@ -33,7 +33,7 @@ void RCC_Init(RCC_Structure* rcc)
                 }
             }
         }
-        /*переполнение счетчика countStartHSE*/
+				/*переполнение счетчика countStartHSE*/
         if (countStartHSE > 0x1000)/*возврат на HSI*/
         {
             DISABLE_BIT(RCC->CR,RCC_CR_HSEON);/*Останавливаем HSE*/

@@ -9,8 +9,8 @@ void EXE_TASK4()
     KeyConfigInPin();
 		LedConfigOutPin();
 
-		GPIO_Structure _6 = {.GPIOx = GPIOA,.Pin = PIN6,.Mode = GPIO_MODE_AF,.Speed = GPIO_SPEED_LOW,.Alternate = GPIO_AF2};
-	  GPIO_Init(&_6);
+		GPIO_Structure pwr_6 = {.GPIOx = GPIOA,.Pin = PIN6,.Mode = GPIO_MODE_AF,.Speed = GPIO_SPEED_LOW,.Alternate = GPIO_AF2};
+	  GPIO_Init(&pwr_6);
 
     INIT_EXTI();
 
@@ -35,14 +35,14 @@ void INIT_TIM_PWR(int fillFactor)
 
 void INIT_EXTI()
 {
-    ENABLE_BIT(SYSCFG->EXTICR[1],SYSCFG_EXTICR2_EXTI4_PE); // cвязка PE4 с EXTI
-    ENABLE_BIT(EXTI->IMR,EXTI_IMR_MR4); // Разрешение irq
-    ENABLE_BIT(EXTI->FTSR,EXTI_FTSR_TR4); // Прерывание на спад
+    SYSCFG->EXTICR[1] |= SYSCFG_EXTICR2_EXTI4_PE; // cвязка PE4 с EXTI
+    EXTI->IMR |= EXTI_IMR_MR4; // Разрешение irq
+    EXTI->FTSR |= EXTI_FTSR_TR4; // Прерывание на спад
 		
-    ENABLE_BIT(SYSCFG->EXTICR[0],SYSCFG_EXTICR1_EXTI3_PE); // cвязка PE4 с EXTI
-    ENABLE_BIT(EXTI->IMR,EXTI_IMR_MR3); // Разрешение irq
-    ENABLE_BIT(EXTI->FTSR,EXTI_FTSR_TR3); // Прерывание на спад
-	
+    SYSCFG->EXTICR[0] |= SYSCFG_EXTICR1_EXTI3_PE; // cвязка PE4 с EXTI
+    EXTI->IMR |= EXTI_IMR_MR3; // Разрешение irq
+    EXTI->FTSR |= EXTI_FTSR_TR3; // Прерывание на спад
+ 
     NVIC_EnableIRQ(EXTI4_IRQn);
 		NVIC_EnableIRQ(EXTI3_IRQn);
 }
@@ -76,7 +76,7 @@ if (EXTI->PR & EXTI_PR_PR3)   // проверим флаг irq
         EXTI->PR |= EXTI_PR_PR3; // reset флага
 
         ODR_Xor(&LED_7);
-        countFillFactor+=25;
+        countFillFactor+=10;
         if(countFillFactor<=100)
         {
             INIT_TIM_PWR(countFillFactor);
@@ -91,9 +91,6 @@ if (EXTI->PR & EXTI_PR_PR3)   // проверим флаг irq
 
 //Key0 PE4 3pin
 //Key1 PE3 2pin
-uint32_t tt;
-uint32_t tt2;
-uint32_t tt3;
 void KeyConfigInPin()
 {
 	GPIO_Structure key_PE3 = {.GPIOx = GPIOE,.Pin = PIN3,.Mode = GPIO_MODE_INPUT,.Pull = GPIO_PUPDR_PULLUP};

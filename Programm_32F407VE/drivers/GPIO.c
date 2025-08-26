@@ -34,17 +34,17 @@ void GPIO_Init(GPIO_Structure *GPIO_Str)
 	if (GPIO_Str->Mode == GPIO_MODE_AF)
   {
 		/* Активируйте подтягивающий или понижающий резистор для текущего ввода-вывода */
-		GPIO_Str->GPIOx->PUPDR &= ~(0x3 << (GPIO_Str->Pin * 2U));
-    GPIO_Str->GPIOx->PUPDR |= ((GPIO_Str->Pull) << (GPIO_Str->Pin * 2U));
+		GPIO_Str->GPIOx->PUPDR &= ~(0x3 << (GPIO_Str->Pin * 2));
+    GPIO_Str->GPIOx->PUPDR |= ((GPIO_Str->Pull) << (GPIO_Str->Pin * 2));
 		/* Настройте скорость ввода-вывода */
-    GPIO_Str->GPIOx->OSPEEDR &= ~(0x3 << (GPIO_Str->Pin * 2U));
-    GPIO_Str->GPIOx->OSPEEDR |= (GPIO_Str->Speed << (GPIO_Str->Pin * 2U));
+    GPIO_Str->GPIOx->OSPEEDR &= ~(0x3 << (GPIO_Str->Pin * 2));
+    GPIO_Str->GPIOx->OSPEEDR |= (GPIO_Str->Speed << (GPIO_Str->Pin * 2));
 		/* Настройте тип вывода ввода-вывода */
     GPIO_Str->GPIOx->OTYPER &= ~(0x1 << GPIO_Str->Pin);
     GPIO_Str->GPIOx->OTYPER |= (GPIO_Str->Otyper << GPIO_Str->Pin);
     /* Настроить альтернативную функцию, сопоставленную с текущим вводом-выводом */
-    GPIO_Str->GPIOx->AFR[GPIO_Str->Pin >> 3U] &= ~(0xFU << ((GPIO_Str->Pin & 0x07U) * 4U));
-    GPIO_Str->GPIOx->AFR[GPIO_Str->Pin >> 3U] |= ((GPIO_Str->Alternate) << ((GPIO_Str->Pin & 0x07U) * 4U));
+    GPIO_Str->GPIOx->AFR[GPIO_Str->Pin >> 3] &= ~(0xF << ((GPIO_Str->Pin & 0x07U) * 4));
+    GPIO_Str->GPIOx->AFR[GPIO_Str->Pin >> 3] |= ((GPIO_Str->Alternate) << ((GPIO_Str->Pin & 0x07) * 4));
   }
 	
 	/* В случае выбора режима входа/выхода(аналог)*/
