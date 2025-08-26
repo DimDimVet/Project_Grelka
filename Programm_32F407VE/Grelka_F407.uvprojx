@@ -10,7 +10,7 @@
       <TargetName>Grelka_F407</TargetName>
       <ToolsetNumber>0x4</ToolsetNumber>
       <ToolsetName>ARM-ADS</ToolsetName>
-      <pCCUsed>6190000::V6.19::ARMCLANG</pCCUsed>
+      <pCCUsed>6160000::V6.16::ARMCLANG</pCCUsed>
       <uAC6>1</uAC6>
       <TargetOption>
         <TargetCommonOption>
@@ -186,7 +186,6 @@
             <RvdsVP>2</RvdsVP>
             <RvdsMve>0</RvdsMve>
             <RvdsCdeCp>0</RvdsCdeCp>
-            <nBranchProt>0</nBranchProt>
             <hadIRAM2>1</hadIRAM2>
             <hadIROM2>0</hadIROM2>
             <StupSel>8</StupSel>
@@ -464,6 +463,11 @@
               <FileType>5</FileType>
               <FilePath>.\inc\delay.h</FilePath>
             </File>
+            <File>
+              <FileName>Buttons.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\inc\Buttons.h</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -493,6 +497,11 @@
               <FileName>ssd1306.c</FileName>
               <FileType>1</FileType>
               <FilePath>.\drivers\ssd1306.c</FilePath>
+            </File>
+            <File>
+              <FileName>Buttons.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\drivers\Buttons.c</FilePath>
             </File>
           </Files>
         </Group>

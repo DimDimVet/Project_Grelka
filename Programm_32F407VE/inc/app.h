@@ -3,9 +3,11 @@
 
 /*includes*/
 #include "HEHAL.h"
-#include "ADC.h"
+#include "RCC.h"
 #include "GPIO.h"
 #include "PWR.h"
+#include "Buttons.h"
+#include "ADC.h"
 #include "I2C.h"
 #include "ssd1306.h"
 /*defaines*/
@@ -17,6 +19,6 @@
 /*var*/
 
 /*func*/
-void Start_PWR(void);
+void Init_PWR(void);
 
 #endif

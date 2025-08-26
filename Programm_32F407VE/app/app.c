@@ -1,17 +1,21 @@
 #include "app.h"
 
+int countFillFactor=0;
 ssd1306_t str_SSD1306;
 RCC_Structure rcc_str = {.mDivider_PLLM = 8,.nMultiplier_PLLN = 192,.pDivider_PLLP = 6}; /*структура для RCC*/
+PWR_Structure pwr_str = {.TIMx = TIM3,.fill_Factor = 50,.rcc_TIMEN = RCC_APB1ENR_TIM3EN};
 /*main*/
 
 int main()
 {
     RCC_Init(&rcc_str);
+		Init_Tim_PWR(&pwr_str);
     /**/
-		Init_I2C(I2C1);
-    Start_PWR();
-    
 
+		Init_EXTI();
+		
+		Init_I2C(I2C1);
+    
 
     str_SSD1306.adress_I2C = SSD1306_I2C_ADDR;
     str_SSD1306.instance = I2C1;
@@ -40,17 +44,34 @@ int main()
     return 0;
 }
 
-void Start_PWR()
+void Handler_Key0(void)
 {
-    /*RCC*/
-    APB2_ENABLE_PERIPHERY(RCC_APB2ENR_SYSCFGEN);
-    APB1_ENABLE_PERIPHERY(RCC_APB1ENR_TIM3EN);
+				//ODR_Xor(&LED_7);
+        pwr_str.fill_Factor+=10;
+        if((pwr_str.fill_Factor)<=100)
+        {
+            Replace_Fill_Factor(&pwr_str);
+        }
+        else
+        {
+            pwr_str.fill_Factor=0;
+            Replace_Fill_Factor(&pwr_str);
+        }
+}
 
-    AHB1_ENABLE_PERIPHERY(RCC_AHB1ENR_GPIOAEN);/*выход PWR*/
-    AHB1_ENABLE_PERIPHERY(RCC_AHB1ENR_GPIOEEN);/*выход LED*/
-
-    EXE_TASK4();//PWR
-
+void Handler_Key1(void)
+{
+				//ODR_Xor(&LED_7);
+        pwr_str.fill_Factor-=10;
+        if((pwr_str.fill_Factor)>=0)
+        {
+            Replace_Fill_Factor(&pwr_str);
+        }
+        else
+        {
+            pwr_str.fill_Factor=0;
+            Replace_Fill_Factor(&pwr_str);
+        }
 }
 
 char buff_str_temp1[20];

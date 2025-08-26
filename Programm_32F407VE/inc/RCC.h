@@ -16,6 +16,7 @@ typedef struct
 	uint16_t pDivider_PLLP; /*значение PLLP = 6*/
 
 } RCC_Structure;
+
 /*var*/
 
 /*func*/
