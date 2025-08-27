@@ -2,6 +2,7 @@
 
 int countFillFactor=0;
 ssd1306_t str_SSD1306;
+
 RCC_Structure rcc_str = {.mDivider_PLLM = 8,.nMultiplier_PLLN = 192,.pDivider_PLLP = 6}; /*структура для RCC*/
 PWR_Structure pwr_str = {.TIMx = TIM3,.fill_Factor = 50,.rcc_TIMEN = RCC_APB1ENR_TIM3EN};
 /*main*/
@@ -12,7 +13,7 @@ int main()
 		Init_Tim_PWR(&pwr_str);
     /**/
 
-		Init_EXTI();
+		Init_Buttons();
 		
 		Init_I2C(I2C1);
     

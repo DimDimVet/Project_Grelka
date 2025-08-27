@@ -1,6 +1,6 @@
 #include "Buttons.h"
 
-void Init_EXTI()
+void Init_Buttons()
 {
 		AHB1_ENABLE_PERIPHERY(RCC_AHB1ENR_GPIOEEN);/*выход LED*/
 		APB2_ENABLE_PERIPHERY(RCC_APB2ENR_SYSCFGEN);

@@ -8,7 +8,7 @@
 #include "GPIO.h"
 
 /*defaines*/
-#define TIM_PRESCALE (840 - 1)/*делитель TIM prescaler*/8400 - 1 = 38Гц, 840 - 1=380Гц
+#define TIM_PRESCALE (840 - 1)/*делитель TIM prescaler 8400 - 1 = 38Гц, 840 - 1=380Гц*/
 #define COUNT_RESET (100 - 1)/*автосброс*/
 #define TIM_MODE_PWR1 (TIM_CCMR1_OC1M_2 | TIM_CCMR1_OC1M_1)/*TIM1 and TIM8 capture/compare mode register 1 (TIMx_CCMR1)*/
 /*structures*/

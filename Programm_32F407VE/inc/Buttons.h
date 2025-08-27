@@ -15,7 +15,7 @@
 /*var*/
 
 /*func*/
-void Init_EXTI(void);
+void Init_Buttons(void);
 void KeyConfigInPin(void);
 void LedConfigOutPin(void);
 void Handler_Key0(void);
