@@ -4,81 +4,84 @@ int countFillFactor=0;
 ssd1306_t str_SSD1306;
 
 RCC_Structure rcc_str = {.mDivider_PLLM = 8,.nMultiplier_PLLN = 192,.pDivider_PLLP = 6}; /*структура для RCC*/
-PWR_Structure pwr_str = {.TIMx = TIM3,.fill_Factor = 50,.rcc_TIMEN = RCC_APB1ENR_TIM3EN};
+PWR_Structure pwr_str = {.TIMx = TIM3,.fill_Factor = 50}; /*структура для ШИМ*/
+/*Настройки I2C*/
+I2C_Structure i2c_str = {.I2Cx = I2C1};
+
 /*main*/
 
 int main()
 {
-    RCC_Init(&rcc_str);
-		Init_Tim_PWR(&pwr_str);
-    /**/
+  RCC_Init(&rcc_str);
+  Init_Tim_PWR(&pwr_str);
+	Init_App_Pin();
+  /**/
 
-		Init_Buttons();
-		
-		Init_I2C(I2C1);
-    
+  Init_I2C(&i2c_str);
 
-    str_SSD1306.adress_I2C = SSD1306_I2C_ADDR;
-    str_SSD1306.instance = I2C1;
-    SSD1306_Init(&str_SSD1306);
+  str_SSD1306.adress_I2C = SSD1306_I2C_ADDR;
+  str_SSD1306.instance = I2C1;
+  SSD1306_Init(&str_SSD1306);
 
-    SSD1306_Fill(SSD1306_COLOR_WHITE);
-    /* */
-    SSD1306_GotoXY(&str_SSD1306, 20, 0);
-    SSD1306_Puts(&str_SSD1306, "XZXZXZXZ", &Font_11x18, 0.9);
-    SSD1306_GotoXY(&str_SSD1306, 10, 30);
-    SSD1306_Puts(&str_SSD1306, "xxx", &Font_16x26, 1);
-    SSD1306_UpdateScreen(&str_SSD1306);
-    delay_s(1);
-    SSD1306_Clear(&str_SSD1306);
+  SSD1306_Fill(SSD1306_COLOR_WHITE);
+  /* */
+  SSD1306_GotoXY(&str_SSD1306, 20, 0);
+  SSD1306_Puts(&str_SSD1306, "XZXZXZXZ", &Font_11x18, 0.9);
+  SSD1306_GotoXY(&str_SSD1306, 10, 30);
+  SSD1306_Puts(&str_SSD1306, "xxx", &Font_16x26, 1);
+  SSD1306_UpdateScreen(&str_SSD1306);
+  delay_s(1);
+  SSD1306_Clear(&str_SSD1306);
 
-    /*------------*/
-    ADC_Init(ADC1);
-    /*------------*/
+  /*------------*/
+  ADC_Init(ADC1);
+  /*------------*/
 
 
-    while (1)
+  while (1)
     {
 
     }
 
-    return 0;
+  return 0;
 }
 
 void Handler_Key0(void)
 {
-				//ODR_Xor(&LED_7);
-        pwr_str.fill_Factor+=10;
-        if((pwr_str.fill_Factor)<=100)
-        {
-            Replace_Fill_Factor(&pwr_str);
-        }
-        else
-        {
-            pwr_str.fill_Factor=0;
-            Replace_Fill_Factor(&pwr_str);
-        }
+  Handler_LED7();
+  pwr_str.fill_Factor+=10;
+	
+  if((pwr_str.fill_Factor)<=100)
+    {
+      Replace_Fill_Factor(&pwr_str);
+    }
+  else
+    {
+      pwr_str.fill_Factor=0;
+      Replace_Fill_Factor(&pwr_str);
+    }
 }
 
 void Handler_Key1(void)
 {
-				//ODR_Xor(&LED_7);
-        pwr_str.fill_Factor-=10;
-        if((pwr_str.fill_Factor)>=0)
-        {
-            Replace_Fill_Factor(&pwr_str);
-        }
-        else
-        {
-            pwr_str.fill_Factor=0;
-            Replace_Fill_Factor(&pwr_str);
-        }
+  Handler_LED7();
+  pwr_str.fill_Factor-=10;
+	
+  if((pwr_str.fill_Factor)>=0)
+    {
+      Replace_Fill_Factor(&pwr_str);
+    }
+  else
+    {
+      pwr_str.fill_Factor=0;
+      Replace_Fill_Factor(&pwr_str);
+    }
 }
 
 char buff_str_temp1[20];
 void WorkADC(char* buff_str_temp1)
 {
-    SSD1306_GotoXY(&str_SSD1306, 0, 20);
-    SSD1306_Puts(&str_SSD1306, buff_str_temp1, &Font_7x10, 1);
-    SSD1306_UpdateScreen(&str_SSD1306);
+  SSD1306_GotoXY(&str_SSD1306, 0, 20);
+  SSD1306_Puts(&str_SSD1306, buff_str_temp1, &Font_7x10, 1);
+  SSD1306_UpdateScreen(&str_SSD1306);
 }

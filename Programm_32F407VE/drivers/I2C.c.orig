@@ -11,76 +11,76 @@ void Init_I2C(I2C_Structure* i2c_str)
 
 void Enable_RCC_I2C(I2C_Structure* i2c_str)
 {
-  /*RM0090 Reference manual на STM32F407/417*/
-
-  if((i2c_str->I2Cx) == I2C1)
-    {
-      ENABLE_BIT(RCC->APB1ENR,RCC_APB1ENR_I2C1EN); /*PB6 — I2C1 SCL, PB7 — I2C1 SDA*/
-      ENABLE_BIT(RCC->AHB1ENR,RCC_AHB1ENR_GPIOBEN);
-    }
-
-  if((i2c_str->I2Cx) == I2C2)
-    {
-      ENABLE_BIT(RCC->APB1ENR,RCC_APB1ENR_I2C2EN); /*PB10 — I2C2 SCL, PB11 — I2C2 SDA*/
-      ENABLE_BIT(RCC->AHB1ENR,RCC_AHB1ENR_GPIOBEN);
-    }
-
-  if((i2c_str->I2Cx) == I2C3)
-    {
-      ENABLE_BIT(RCC->APB1ENR,RCC_APB1ENR_I2C3EN); /*PA8  — I2C3 SCL, PC9  — I2C3 SDA*/
-      ENABLE_BIT(RCC->AHB1ENR,RCC_AHB1ENR_GPIOCEN);
-      ENABLE_BIT(RCC->AHB1ENR,RCC_AHB1ENR_GPIOAEN);
-    }
+	/*RM0090 Reference manual на STM32F407/417*/
+	
+	if((i2c_str->I2Cx) == I2C1)
+	{
+		ENABLE_BIT(RCC->APB1ENR,RCC_APB1ENR_I2C1EN); /*PB6 — I2C1 SCL, PB7 — I2C1 SDA*/
+		ENABLE_BIT(RCC->AHB1ENR,RCC_AHB1ENR_GPIOBEN);
+	}
+	
+	if((i2c_str->I2Cx) == I2C2)
+	{
+		ENABLE_BIT(RCC->APB1ENR,RCC_APB1ENR_I2C2EN); /*PB10 — I2C2 SCL, PB11 — I2C2 SDA*/
+		ENABLE_BIT(RCC->AHB1ENR,RCC_AHB1ENR_GPIOBEN);
+	}
+	
+	if((i2c_str->I2Cx) == I2C3)
+	{
+		ENABLE_BIT(RCC->APB1ENR,RCC_APB1ENR_I2C3EN); /*PA8  — I2C3 SCL, PC9  — I2C3 SDA*/
+		ENABLE_BIT(RCC->AHB1ENR,RCC_AHB1ENR_GPIOCEN);
+		ENABLE_BIT(RCC->AHB1ENR,RCC_AHB1ENR_GPIOAEN);
+	}
 
   //ENABLE_BIT(RCC->AHB1ENR,RCC_AHB1ENR_DMA1EN); /*aaa*/
 }
 
 void Config_GPIO_I2C(I2C_Structure* i2c_str)
 {
-  GPIO_Structure PIN_SCL;
-  GPIO_Structure PIN_SDA;
-
-  if((i2c_str->I2Cx) == I2C1)
-    {
-      /* PB6 (SCL), PB7 (SDA), AF4 для I2C,GPIO_SPEED_LOW, GPIO_OTYPER_OPENDRAIN*/
-      PIN_SCL.GPIOx = GPIOB;
-      PIN_SCL.Pin = PIN6;
-
-      PIN_SDA.GPIOx = GPIOB;
-      PIN_SDA.Pin = PIN7;
-    }
-
-  if((i2c_str->I2Cx) == I2C2)
-    {
-      /* PB10 (SCL), PB11 (SDA), AF4 для I2C, GPIO_SPEED_LOW, GPIO_OTYPER_OPENDRAIN*/
-      PIN_SCL.GPIOx = GPIOB;
-      PIN_SCL.Pin = PIN10;
-
-      PIN_SDA.GPIOx = GPIOB;
-      PIN_SDA.Pin = PIN11;
-    }
-
-  if((i2c_str->I2Cx) == I2C3)
-    {
-      /* PA8 (SCL), PC9 (SDA), AF4 для I2C, GPIO_SPEED_LOW, GPIO_OTYPER_OPENDRAIN*/
-      PIN_SCL.GPIOx = GPIOA;
-      PIN_SCL.Pin = PIN8;
-
-      PIN_SDA.GPIOx = GPIOC;
-      PIN_SDA.Pin = PIN9;
-    }
-
-  PIN_SCL.Mode = GPIO_MODE_AF;
-  PIN_SCL.Otyper = GPIO_OTYPER_OPENDRAIN;
-  PIN_SCL.Speed = GPIO_SPEED_LOW;
-  PIN_SCL.Alternate = GPIO_AF4;
-
-  PIN_SDA.Mode = GPIO_MODE_AF;
-  PIN_SDA.Otyper = GPIO_OTYPER_OPENDRAIN;
-  PIN_SDA.Speed = GPIO_SPEED_LOW;
-  PIN_SDA.Alternate = GPIO_AF4;
-
-  GPIO_Init(&PIN_SCL);
+		GPIO_Structure PIN_SCL;
+		GPIO_Structure PIN_SDA;
+		
+		if((i2c_str->I2Cx) == I2C1)
+	{
+	/* PB6 (SCL), PB7 (SDA), AF4 для I2C,GPIO_SPEED_LOW, GPIO_OTYPER_OPENDRAIN*/
+	PIN_SCL.GPIOx = GPIOB;
+	PIN_SCL.Pin = PIN6;
+	
+	PIN_SDA.GPIOx = GPIOB;
+	PIN_SDA.Pin = PIN7;
+	}
+	
+	if((i2c_str->I2Cx) == I2C2)
+	{
+	/* PB10 (SCL), PB11 (SDA), AF4 для I2C, GPIO_SPEED_LOW, GPIO_OTYPER_OPENDRAIN*/
+	PIN_SCL.GPIOx = GPIOB;
+	PIN_SCL.Pin = PIN10;
+	
+	PIN_SDA.GPIOx = GPIOB;
+	PIN_SDA.Pin = PIN11;
+	}
+	
+	if((i2c_str->I2Cx) == I2C3)
+	{
+	/* PA8 (SCL), PC9 (SDA), AF4 для I2C, GPIO_SPEED_LOW, GPIO_OTYPER_OPENDRAIN*/
+	PIN_SCL.GPIOx = GPIOA;
+	PIN_SCL.Pin = PIN8;
+	
+	PIN_SDA.GPIOx = GPIOC;
+	PIN_SDA.Pin = PIN9;
+	}
+	
+	PIN_SCL.Mode = GPIO_MODE_AF;
+	PIN_SCL.Otyper = GPIO_OTYPER_OPENDRAIN;
+	PIN_SCL.Speed = GPIO_SPEED_LOW;
+	PIN_SCL.Alternate = GPIO_AF4;
+	
+	PIN_SDA.Mode = GPIO_MODE_AF;
+	PIN_SDA.Otyper = GPIO_OTYPER_OPENDRAIN;
+	PIN_SDA.Speed = GPIO_SPEED_LOW;
+	PIN_SDA.Alternate = GPIO_AF4;
+	
+	GPIO_Init(&PIN_SCL);
   GPIO_Init(&PIN_SDA);
 }
 

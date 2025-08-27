@@ -54,11 +54,16 @@
 /*var*/
 
 /*structures*/
-
+typedef struct
+{
+	I2C_TypeDef* I2Cx;  /*Указывает настраиваемые I2C*/
+	uint8_t fill_Factor; /*значение Коэффициента заполнения*/
+	
+} I2C_Structure;
 /*func*/
-void Init_I2C(I2C_TypeDef *instance);
-void Enable_RCC_I2C(void);
-void Config_GPIO_I2C(void);
+void Init_I2C(I2C_Structure* i2c_str);
+void Enable_RCC_I2C(I2C_Structure* i2c_str);
+void Config_GPIO_I2C(I2C_Structure* i2c_str);
 void Config_I2C(I2C_TypeDef *instance);
 
 uint32_t RCC_GetPCLK1Freq(void);

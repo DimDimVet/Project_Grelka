@@ -15,7 +15,6 @@
 typedef struct
 {
 	TIM_TypeDef* TIMx;  /*Указывает настраиваемые таймер TIM_TypeDef*/
-	uint32_t rcc_TIMEN; /*ссылка на периферию*/
 	uint8_t fill_Factor; /*значение Коэффициента заполнения*/
 	
 } PWR_Structure;
