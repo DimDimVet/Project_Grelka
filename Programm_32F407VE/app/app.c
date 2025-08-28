@@ -15,9 +15,9 @@ int main()
   RCC_Init(&rcc_str);
   Init_Tim_PWR(&pwr_str);
 	Init_App_Pin();
+	Init_I2C(&i2c_str);
   /**/
-
-  Init_I2C(&i2c_str);
+  
 
   str_SSD1306.adress_I2C = SSD1306_I2C_ADDR;
   str_SSD1306.instance = I2C1;

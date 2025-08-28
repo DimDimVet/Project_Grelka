@@ -8,7 +8,7 @@
 
 /*defaines*/
 
-#define MAX_DELAY      0xFFFFFFFF
+//#define MAX_DELAY      0xFFFFFFFF
 #define assert_param(expr) ((void)0U)
 
 #define BUFFER_SIZE_I2C 10
@@ -61,6 +61,8 @@ typedef struct
 	
 } I2C_Structure;
 /*func*/
+
+/*Функции запуска*/
 void Init_I2C(I2C_Structure* i2c_str);
 void Enable_RCC_I2C(I2C_Structure* i2c_str);
 void Config_GPIO_I2C(I2C_Structure* i2c_str);
@@ -69,47 +71,32 @@ void Config_I2C(I2C_TypeDef *I2Cx);
 uint32_t RCC_GetPCLK1Freq(void);
 uint32_t I2C_Speed(uint32_t pclk, uint32_t speed, uint32_t dutyCycle);
 uint32_t I2C_Rise_Time(uint32_t freqrange, uint32_t clockSpeed);
-
+/*--------------------------*/
+/*Внешние функции*/
 RezultError I2C_Master_Transmit(I2C_TypeDef *I2Cx,uint16_t SlaveAddress, uint8_t *pData, uint16_t Size,uint32_t Timeout);
-RezultError I2C_Master_Receive(I2C_TypeDef *I2Cx,uint16_t DevAddress, uint8_t *pData, uint16_t Size,uint32_t Timeout);
-
-
-
+RezultError I2C_Master_Receive(I2C_TypeDef *I2Cx,uint16_t SlaveAddress, uint8_t *pData, uint16_t Size,uint32_t Timeout);
+RezultError I2C_Mem_Write(I2C_TypeDef *I2Cx, uint16_t SlaveAddress, uint16_t MemAddress, uint16_t MemAddSize, uint8_t *pData, uint16_t Size, uint32_t Timeout);
+RezultError I2C_Mem_Read(I2C_TypeDef *I2Cx,uint16_t SlaveAddress, uint16_t MemAddress, uint16_t MemAddSize, uint8_t *pData, uint16_t Size,uint32_t Timeout);
+/*--------------------------*/
+/*Служебные функции*/
 FlagStatus I2C_Get_Flag(I2C_TypeDef *I2Cx, uint32_t flag);
 RezultError I2C_WaitOnFlagUntilTimeout(I2C_TypeDef *I2Cx, uint32_t Flag, FlagStatus Status, uint32_t Timeout);
-RezultError I2C_MasterRequestWrite(I2C_TypeDef *I2Cx, uint16_t DevAddress,uint32_t Timeout);
-
+RezultError I2C_WaitOnBTFFlagUntilTimeout(I2C_TypeDef *I2Cx, uint32_t Timeout);
 void I2C_WaitOnMasterAddressFlagUntilTimeout(I2C_TypeDef *I2Cx, uint32_t Flag);
 void I2C_WaitOnTXEFlagUntilTimeout(I2C_TypeDef *I2Cx);
 void I2C_WaitOnRXNEFlagUntilTimeout(I2C_TypeDef *I2Cx);
 
-RezultError I2C_IsAcknowledgeFailed(I2C_TypeDef *I2Cx);
+RezultError I2C_MasterRequestWrite(I2C_TypeDef *I2Cx, uint16_t SlaveAddress,uint32_t Timeout);
+RezultError I2C_MasterRequestRead(I2C_TypeDef *I2Cx,uint16_t SlaveAddress,uint32_t Timeout);
+RezultError I2C_RequestMemoryRead(I2C_TypeDef *I2Cx,uint16_t SlaveAddress, uint16_t MemAddress, uint16_t MemAddSize, uint32_t Timeout);
+RezultError I2C_RequestMemoryWrite(I2C_TypeDef *I2Cx, uint16_t SlaveAddress, uint16_t MemAddress, uint16_t MemAddSize, uint32_t Timeout);
 
-
-
-
-
-uint8_t I2C_WaitOnBTFFlagUntilTimeout(I2C_TypeDef *I2Cx, uint32_t Timeout);
-
-
-uint8_t I2C_RequestMemoryRead(I2C_TypeDef *I2Cx,uint16_t DevAddress, uint16_t MemAddress, uint16_t MemAddSize, uint32_t Timeout);
-uint8_t I2C_RequestMemoryWrite(I2C_TypeDef *I2Cx, uint16_t DevAddress, uint16_t MemAddress, uint16_t MemAddSize, uint32_t Timeout);
-
-uint8_t I2C_IsDeviceReady(I2C_TypeDef *I2Cx, uint16_t DevAddress, uint32_t Trials, uint32_t Timeout);
-//
-uint8_t I2C_MasterRequestRead(I2C_TypeDef *I2Cx,uint16_t DevAddress,uint32_t Timeout);
-
-
-
-void I2C_CLEAR_STATUS_FLAG(I2C_TypeDef *I2Cx);
+void I2C_Clear_Status_Reg(I2C_TypeDef *I2Cx);
 void I2C_Clear_Flag(I2C_TypeDef *I2Cx, uint32_t flag);
+RezultError I2C_IsAcknowledgeFailed(I2C_TypeDef *I2Cx);
 uint8_t I2C_7BIT_ADD_Write(uint8_t DevAddress);
-
-
-
-uint8_t I2C_Mem_Write(I2C_TypeDef *I2Cx, uint16_t DevAddress, uint16_t MemAddress, uint16_t MemAddSize, uint8_t *pData, uint16_t Size, uint32_t Timeout);
-uint8_t I2C_Mem_Read(I2C_TypeDef *I2Cx,uint16_t DevAddress, uint16_t MemAddress, uint16_t MemAddSize, uint8_t *pData, uint16_t Size,uint32_t Timeout);
+uint8_t I2C_IsDeviceReady(I2C_TypeDef *I2Cx, uint16_t DevAddress, uint32_t Trials, uint32_t Timeout);
 
 void Error_Handler(void);
-
+/*--------------------------*/
 #endif

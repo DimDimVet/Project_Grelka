@@ -2,6 +2,7 @@
 int tt;
 uint32_t dataBufRx[1];
 
+/*-----------------------------Функции запуска-----------------------------*/
 void Init_I2C(I2C_Structure* i2c_str)
 {
     Enable_RCC_I2C(i2c_str);
@@ -160,6 +161,9 @@ uint32_t I2C_Rise_Time(uint32_t freqrange, uint32_t clockSpeed)
     }
     return freqrange;
 }
+/*-------------------------------------------------------------------------*/
+
+/*-----------------------------Внешние функции-----------------------------*/
 
 RezultError I2C_Master_Transmit(I2C_TypeDef *I2Cx, uint16_t SlaveAddress, uint8_t *pData, uint16_t Size, uint32_t Timeout)
 {
@@ -176,7 +180,7 @@ RezultError I2C_Master_Transmit(I2C_TypeDef *I2Cx, uint16_t SlaveAddress, uint8_
     }
 
     /* сброс флагов*/
-    I2C_CLEAR_STATUS_FLAG(I2Cx);
+    I2C_Clear_Status_Reg(I2Cx);
 
     while (Size > 0U) /* количество проходов в соответ. с длинной массива pData */
     {
@@ -194,393 +198,6 @@ RezultError I2C_Master_Transmit(I2C_TypeDef *I2Cx, uint16_t SlaveAddress, uint8_
     ENABLE_BIT(I2Cx->CR1, I2C_CR1_STOP);
     return _OK;
 }
-
-/*Запрос от мастера*/
-RezultError I2C_MasterRequestWrite(I2C_TypeDef *I2Cx, uint16_t SlaveAddress, uint32_t Timeout)
-{
-    ENABLE_BIT(I2Cx->CR1, I2C_CR1_START);
-
-    if (I2C_WaitOnFlagUntilTimeout(I2Cx, I2C_FLAG_SB, RESET, Timeout) != _OK)
-    {
-        return _ERROR_TIMEOUT;
-    }
-
-    Write_REG(I2Cx->DR, (uint8_t)(SlaveAddress & (~I2C_OAR1_ADD0)));
-
-    /*I2C_ Ожидание флага главного адреса до истечения времени ожидания*/
-    I2C_WaitOnMasterAddressFlagUntilTimeout(I2Cx, I2C_SR1_ADDR);
-
-    return _OK;
-}
-
-/*I2C_ Ожидание флага до истечения времени Timeout*/
-RezultError I2C_WaitOnFlagUntilTimeout(I2C_TypeDef *I2Cx, uint32_t flag, FlagStatus Status, uint32_t Timeout)
-{
-    while (I2C_Get_Flag(I2Cx, flag) == Status)
-    {
-        if (Timeout-- == 0)
-        {
-            return _ERROR_TIMEOUT;
-        }
-    }
-    return _OK;
-}
-
-/*очистим статусные регистры чтением*/
-void I2C_CLEAR_STATUS_FLAG(I2C_TypeDef *I2Cx)
-{
-    I2Cx->SR1;
-    I2Cx->SR2;
-}
-
-/*Опрос регистра на флаг*/
-FlagStatus I2C_Get_Flag(I2C_TypeDef *I2Cx, uint32_t flag)
-{
-    uint32_t rezult_flag = flag & I2C_FLAG_MASK; /*получим флаг*/
-
-    if ((flag >> 16) == 1)/*SR1*/
-    {
-        if (Read_BIT(I2Cx->SR1,rezult_flag) == rezult_flag)
-        {
-            return SET;
-        }
-        else
-        {
-            return RESET;
-        }
-    }
-    else /*SR2*/
-    {
-        if (Read_BIT(I2Cx->SR2,rezult_flag) == rezult_flag)
-        {
-            return SET;
-        }
-        else
-        {
-            return RESET;
-        }
-    }
-}
-
-/*I2C_ Ожидание флага главного адреса до истечения времени ожидания*/
-void I2C_WaitOnMasterAddressFlagUntilTimeout(I2C_TypeDef *I2Cx, uint32_t Flag)
-{
-    while (!(Read_BIT(I2Cx->SR1, Flag)))
-    {
-    }
-}
-
-/*Эта функция обрабатывает тайм-аут связи I2C для определенного использования флага TXE.*/
-void I2C_WaitOnTXEFlagUntilTimeout(I2C_TypeDef *I2Cx)
-{
-    while (!(Read_BIT(I2Cx->SR1, I2C_SR1_TXE)))
-    {
-    }
-}
-
-/*Эта функция обрабатывает тайм-аут связи I2C для определенного использования флага RXE.*/
-void I2C_WaitOnRXNEFlagUntilTimeout(I2C_TypeDef *I2Cx)
-{
-    while (!(Read_BIT(I2Cx->SR1,I2C_SR1_RXNE)))
-    {
-    }
-}
-
-/*I2c_ является подтверждением отказа флага I2C_FLAG_AF*/
-RezultError I2C_IsAcknowledgeFailed(I2C_TypeDef *I2Cx)
-{
-    if (I2C_Get_Flag(I2Cx, I2C_FLAG_AF) == SET)
-    {
-        /* очистка флага в регистре SR1*/
-        I2C_Clear_Flag(I2Cx, I2C_FLAG_AF);
-
-        return _ERROR;
-    }
-    return _OK;
-}
-
-/* очистка флага в регистре SR1*/
-void I2C_Clear_Flag(I2C_TypeDef *I2Cx, uint32_t flag)
-{
-    I2Cx->SR1 = ~(flag & I2C_FLAG_MASK);
-}
-
-uint8_t I2C_7BIT_ADD_Write(uint8_t SlaveAddress)
-{
-    return (uint8_t)(SlaveAddress & (~I2C_OAR1_ADD0));
-}
-
-/*Эта функция обрабатывает тайм-аут связи I2C для конкретного использования флага BTF.*/
-RezultError I2C_WaitOnBTFFlagUntilTimeout(I2C_TypeDef *I2Cx, uint32_t Timeout)
-{
-    while (I2C_Get_Flag(I2Cx, I2C_FLAG_BTF) == _ERROR)
-    {
-        if (I2C_IsAcknowledgeFailed(I2Cx) != _OK)
-        {
-            return _ERROR;
-        }
-
-        if (Timeout-- == 0)
-        {
-            return _ERROR_TIMEOUT;
-        }
-    }
-    return _OK;
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-/*Мастер отправляет адрес целевого устройства, а затем адрес внутренней памяти для запроса на чтение.*/
-
-uint8_t I2C_RequestMemoryRead(I2C_TypeDef *I2Cx, uint16_t DevAddress, uint16_t MemAddress, uint16_t MemAddSize, uint32_t Timeout)
-{
-    /* Включить подтверждение */
-    ENABLE_BIT(I2Cx->CR1, I2C_CR1_ACK);
-
-    /* Генерировать Пуск */
-    ENABLE_BIT(I2Cx->CR1, I2C_CR1_START);
-
-    /* Ждем пока не будет установлен флаг SB */
-    if (I2C_WaitOnFlagUntilTimeout(I2Cx, I2C_FLAG_SB, RESET, Timeout) != 0)
-    {
-        return _ERROR_TIMEOUT;
-    }
-
-    /* Send slave address */
-    I2Cx->DR = I2C_7BIT_ADD_Write(DevAddress);
-
-    /*I2C_ Ожидание флага главного адреса до истечения времени ожидания*/
-    I2C_WaitOnMasterAddressFlagUntilTimeout(I2Cx, I2C_SR1_ADDR);
-
-    /* Clear ADDR flag */
-    I2C_CLEAR_STATUS_FLAG(I2Cx);
-
-    /* Ждем флаг не использования TXE */
-    I2C_WaitOnTXEFlagUntilTimeout(I2Cx);
-
-    /* If Memory address size is 8Bit */
-    if (MemAddSize == I2C_MEMADD_SIZE_8BIT)
-    {
-        /* Send Memory Address */
-        Write_REG(I2Cx->DR, I2C_MEM_ADD_LSB(MemAddress));
-    }
-    /* If Memory address size is 16Bit */
-    else
-    {
-        /* Send MSB of Memory Address */
-        Write_REG(I2Cx->DR, I2C_MEM_ADD_MSB(MemAddress));
-
-        /* Ждем флаг не использования TXE */
-        I2C_WaitOnTXEFlagUntilTimeout(I2Cx);
-
-        /* Send LSB of Memory Address */
-        Write_REG(I2Cx->DR, I2C_MEM_ADD_LSB(MemAddress));
-    }
-
-    /* Ждем флаг не использования TXE */
-    I2C_WaitOnTXEFlagUntilTimeout(I2Cx);
-
-    /* Generate Restart */
-    ENABLE_BIT(I2Cx->CR1, I2C_CR1_START);
-
-    /* Wait until SB flag is set */
-    if (I2C_WaitOnFlagUntilTimeout(I2Cx, I2C_FLAG_SB, RESET, Timeout) != 0)
-    {
-//        if (Read_BIT(I2Cx->CR1, I2C_CR1_START) == I2C_CR1_START)
-//        {
-//        }
-//        // return HAL_TIMEOUT;
-        return _ERROR_TIMEOUT;
-    }
-
-    /* Send slave address */
-    Write_REG(I2Cx->DR, (uint8_t)(DevAddress | I2C_OAR1_ADD0));
-
-    /*I2C_ Ожидание флага главного адреса до истечения времени ожидания*/
-    I2C_WaitOnMasterAddressFlagUntilTimeout(I2Cx, I2C_SR1_ADDR);
-
-    return 0;
-}
-
-/**
- * @brief  Master sends target device address followed by internal memory address for write request.
- * @param  hi2c Pointer to a I2C_HandleTypeDef structure that contains
- *         the configuration information for I2C module
- * @param  DevAddress Target device address: The device 7 bits address value
- *         in datasheet must be shifted to the left before calling the interface
- * @param  MemAddress Internal memory address
- * @param  MemAddSize Size of internal memory address
- * @param  Timeout Timeout duration
- * @param  Tickstart Tick start value
- * @retval HAL status
- */
-
-uint8_t I2C_RequestMemoryWrite(I2C_TypeDef *I2Cx, uint16_t DevAddress, uint16_t MemAddress, uint16_t MemAddSize, uint32_t Timeout)
-{
-    /* Generate Start */
-    ENABLE_BIT(I2Cx->CR1, I2C_CR1_START);
-
-    /* Wait until SB flag is set */
-    if (I2C_WaitOnFlagUntilTimeout(I2Cx, I2C_FLAG_SB, RESET, Timeout) != 0)
-    {
-//        if (Read_BIT(I2Cx->CR1, I2C_CR1_START) == I2C_CR1_START)
-//        {
-
-//        }
-        return _ERROR_TIMEOUT;
-    }
-
-    /* Send slave address */
-    I2Cx->DR = I2C_7BIT_ADD_Write(DevAddress);
-
-    /*I2C_ Ожидание флага главного адреса до истечения времени ожидания*/
-    I2C_WaitOnMasterAddressFlagUntilTimeout(I2Cx, I2C_SR1_ADDR);
-
-    /* Clear ADDR flag */
-    I2C_CLEAR_STATUS_FLAG(I2Cx);
-
-    /* Ждем флаг не использования TXE */
-    I2C_WaitOnTXEFlagUntilTimeout(I2Cx);
-
-    /* If Memory address size is 8Bit */
-    if (MemAddSize == I2C_MEMADD_SIZE_8BIT)
-    {
-        /* Send Memory Address */
-        Write_REG(I2Cx->DR, I2C_MEM_ADD_LSB(MemAddress));
-    }
-    /* If Memory address size is 16Bit */
-    else
-    {
-        /* Send MSB of Memory Address */
-        Write_REG(I2Cx->DR, I2C_MEM_ADD_MSB(MemAddress));
-
-        /* Ждем флаг не использования TXE */
-        I2C_WaitOnTXEFlagUntilTimeout(I2Cx);
-
-        /* Send LSB of Memory Address */
-        Write_REG(I2Cx->DR, I2C_MEM_ADD_LSB(MemAddress));
-    }
-
-    return 0;
-}
-
-
-
-uint8_t I2C_IsDeviceReady(I2C_TypeDef *I2Cx, uint16_t DevAddress, uint32_t Trials, uint32_t Timeout)
-{
-    uint32_t I2C_Trials = 0;
-    FlagStatus tmp1;
-    FlagStatus tmp2;
-
-    /* Wait until BUSY flag is reset */
-    if (I2C_WaitOnFlagUntilTimeout(I2Cx, I2C_FLAG_BUSY, SET, I2C_TIMEOUT_BUSY_FLAG) != 0)
-    {
-        // return HAL_BUSY;
-        return _ERROR_BUSY;
-    }
-    ENABLE_BIT(I2Cx->CR1,I2C_CR1_PE);
-
-    /* Disable Pos */
-    DISABLE_BIT(I2Cx->CR1, I2C_CR1_POS);
-
-    do
-    {
-        /* Generate Start */
-        ENABLE_BIT(I2Cx->CR1, I2C_CR1_START);
-
-        /* Wait until SB flag is set */
-        if (I2C_WaitOnFlagUntilTimeout(I2Cx, I2C_FLAG_SB, RESET, Timeout) != 0)
-        {
-            return _ERROR_TIMEOUT;
-        }
-
-        /* Send slave address */
-        I2Cx->DR = I2C_7BIT_ADD_Write(DevAddress);
-
-        tmp1 = I2C_Get_Flag(I2Cx, I2C_FLAG_ADDR);
-        tmp2 = I2C_Get_Flag(I2Cx, I2C_FLAG_AF);
-
-        while ((tmp1 == RESET) && (tmp2 == RESET))
-        {
-            tmp1 = I2C_Get_Flag(I2Cx, I2C_FLAG_ADDR);
-            tmp2 = I2C_Get_Flag(I2Cx, I2C_FLAG_AF);
-        }
-
-        /* Check if the ADDR flag has been set */
-        if (I2C_Get_Flag(I2Cx, I2C_FLAG_ADDR) == SET)
-        {
-            /* Generate Stop */
-            ENABLE_BIT(I2Cx->CR1, I2C_CR1_STOP);
-
-            /* Clear ADDR Flag */
-            I2C_CLEAR_STATUS_FLAG(I2Cx);
-
-            /* Wait until BUSY flag is reset */
-            if (I2C_WaitOnFlagUntilTimeout(I2Cx, I2C_FLAG_BUSY, SET, I2C_TIMEOUT_BUSY_FLAG) != 0)
-            {
-                // return HAL_ERROR;
-                return _ERROR;
-            }
-
-            // return HAL_OK;
-            return 0;
-        }
-        else
-        {
-            /* Generate Stop */
-            ENABLE_BIT(I2Cx->CR1, I2C_CR1_STOP);
-
-            /* очистка флага в регистре SR1*/
-            I2C_Clear_Flag(I2Cx, I2C_FLAG_AF);
-
-            /* Wait until BUSY flag is reset */
-            if (I2C_WaitOnFlagUntilTimeout(I2Cx, I2C_FLAG_BUSY, SET, I2C_TIMEOUT_BUSY_FLAG) != 0)
-            {
-                return _ERROR;
-            }
-        }
-
-        /* Increment Trials */
-        I2C_Trials++;
-    }
-    while (I2C_Trials < Trials);
-
-    return 1;
-}
-
-uint8_t I2C_MasterRequestRead(I2C_TypeDef *I2Cx, uint16_t DevAddress, uint32_t Timeout)
-{
-    ENABLE_BIT(I2Cx->CR1, I2C_CR1_ACK);
-
-    ENABLE_BIT(I2Cx->CR1, I2C_CR1_START);
-
-    // I2C_StartBit_SetTime();
-    if (I2C_WaitOnFlagUntilTimeout(I2Cx, I2C_FLAG_SB, RESET, Timeout) != 0)
-    {
-        // return HAL_TIMEOUT;
-        return _ERROR_TIMEOUT;
-    }
-
-    Write_REG(I2Cx->DR, (uint8_t)(DevAddress | I2C_OAR1_ADD0));
-
-    /*I2C_ Ожидание флага главного адреса до истечения времени ожидания*/
-    I2C_WaitOnMasterAddressFlagUntilTimeout(I2Cx, I2C_SR1_ADDR);
-
-    return 0;
-}
-
-
 
 uint8_t I2C_Master_Receive(I2C_TypeDef *I2Cx, uint16_t DevAddress, uint8_t *pData, uint16_t Size, uint32_t Timeout)
 {
@@ -601,7 +218,7 @@ uint8_t I2C_Master_Receive(I2C_TypeDef *I2Cx, uint16_t DevAddress, uint8_t *pDat
 
     if (Size == 0U)
     {
-        I2C_CLEAR_STATUS_FLAG(I2Cx);
+        I2C_Clear_Status_Reg(I2Cx);
 
         /* Generate Stop */
         ENABLE_BIT(I2Cx->CR1, I2C_CR1_STOP);
@@ -611,7 +228,7 @@ uint8_t I2C_Master_Receive(I2C_TypeDef *I2Cx, uint16_t DevAddress, uint8_t *pDat
         // откл проверку адреса
         DISABLE_BIT(I2Cx->CR1, I2C_CR1_ACK);
 
-        I2C_CLEAR_STATUS_FLAG(I2Cx);
+        I2C_Clear_Status_Reg(I2Cx);
 
         /* Generate Stop */
         ENABLE_BIT(I2Cx->CR1, I2C_CR1_STOP);
@@ -624,7 +241,7 @@ uint8_t I2C_Master_Receive(I2C_TypeDef *I2Cx, uint16_t DevAddress, uint8_t *pDat
         /* Enable Pos */
         ENABLE_BIT(I2Cx->CR1, I2C_CR1_POS);
 
-        I2C_CLEAR_STATUS_FLAG(I2Cx);
+        I2C_Clear_Status_Reg(I2Cx);
     }
     else
     {
@@ -632,7 +249,7 @@ uint8_t I2C_Master_Receive(I2C_TypeDef *I2Cx, uint16_t DevAddress, uint8_t *pDat
         // вкл проверку адреса
         ENABLE_BIT(I2Cx->CR1, I2C_CR1_ACK);
 
-        I2C_CLEAR_STATUS_FLAG(I2Cx);
+        I2C_Clear_Status_Reg(I2Cx);
     }
 
     while (Size > 0U)
@@ -731,22 +348,6 @@ uint8_t I2C_Master_Receive(I2C_TypeDef *I2Cx, uint16_t DevAddress, uint8_t *pDat
     return 0;
 }
 
-
-
-/**
- * @brief  Write an amount of data in blocking mode to a specific memory address
- * @param  hi2c Pointer to a I2C_HandleTypeDef structure that contains
- *                the configuration information for the specified I2C.
- * @param  DevAddress Target device address: The device 7 bits address value
- *         in datasheet must be shifted to the left before calling the interface
- * @param  MemAddress Internal memory address
- * @param  MemAddSize Size of internal memory address
- * @param  pData Pointer to data buffer
- * @param  Size Amount of data to be sent
- * @param  Timeout Timeout duration
- * @retval HAL status
- */
-
 uint8_t I2C_Mem_Write(I2C_TypeDef *I2Cx, uint16_t DevAddress, uint16_t MemAddress, uint16_t MemAddSize, uint8_t *pData, uint16_t Size, uint32_t Timeout)
 {
     /* Check the parameters */
@@ -805,22 +406,6 @@ uint8_t I2C_Mem_Write(I2C_TypeDef *I2Cx, uint16_t DevAddress, uint16_t MemAddres
 
     return 0;
 }
-
-/*---------------------------------------------*/
-/**
- * @brief  Read an amount of data in blocking mode from a specific memory address
- * @param  hi2c Pointer to a I2C_HandleTypeDef structure that contains
- *                the configuration information for the specified I2C.
- * @param  DevAddress Target device address: The device 7 bits address value
- *         in datasheet must be shifted to the left before calling the interface
- * @param  MemAddress Internal memory address
- * @param  MemAddSize Size of internal memory address
- * @param  pData Pointer to data buffer
- * @param  Size Amount of data to be sent
- * @param  Timeout Timeout duration
- * @retval HAL status
- */
-
 uint8_t I2C_Mem_Read(I2C_TypeDef *I2Cx, uint16_t DevAddress, uint16_t MemAddress, uint16_t MemAddSize, uint8_t *pData, uint16_t Size, uint32_t Timeout)
 {
     /* Check the parameters */
@@ -850,7 +435,7 @@ uint8_t I2C_Mem_Read(I2C_TypeDef *I2Cx, uint16_t DevAddress, uint16_t MemAddress
     if (Size == 0U)
     {
         /* Clear ADDR flag */
-        I2C_CLEAR_STATUS_FLAG(I2Cx);
+        I2C_Clear_Status_Reg(I2Cx);
 
         /* Generate Stop */
         ENABLE_BIT(I2Cx->CR1, I2C_CR1_STOP);
@@ -861,7 +446,7 @@ uint8_t I2C_Mem_Read(I2C_TypeDef *I2Cx, uint16_t DevAddress, uint16_t MemAddress
         DISABLE_BIT(I2Cx->CR1, I2C_CR1_ACK);
 
         /* Clear ADDR flag */
-        I2C_CLEAR_STATUS_FLAG(I2Cx);
+        I2C_Clear_Status_Reg(I2Cx);
 
         /* Generate Stop */
         ENABLE_BIT(I2Cx->CR1, I2C_CR1_STOP);
@@ -875,12 +460,12 @@ uint8_t I2C_Mem_Read(I2C_TypeDef *I2Cx, uint16_t DevAddress, uint16_t MemAddress
         ENABLE_BIT(I2Cx->CR1, I2C_CR1_POS);
 
         /* Clear ADDR flag */
-        I2C_CLEAR_STATUS_FLAG(I2Cx);
+        I2C_Clear_Status_Reg(I2Cx);
     }
     else
     {
         /* Clear ADDR flag */
-        I2C_CLEAR_STATUS_FLAG(I2Cx);
+        I2C_Clear_Status_Reg(I2Cx);
     }
 
     while (Size > 0U)
@@ -981,6 +566,367 @@ uint8_t I2C_Mem_Read(I2C_TypeDef *I2Cx, uint16_t DevAddress, uint16_t MemAddress
     }
 
     return 0;
+}
+
+/*-------------------------------------------------------------------------*/
+
+/*----------------------------Служебные функции----------------------------*/
+
+/*Опрос регистра на флаг*/
+FlagStatus I2C_Get_Flag(I2C_TypeDef *I2Cx, uint32_t flag)
+{
+    uint32_t rezult_flag = flag & I2C_FLAG_MASK; /*получим флаг*/
+
+    if ((flag >> 16) == 1)/*SR1*/
+    {
+        if (Read_BIT(I2Cx->SR1,rezult_flag) == rezult_flag)
+        {
+            return SET;
+        }
+        else
+        {
+            return RESET;
+        }
+    }
+    else /*SR2*/
+    {
+        if (Read_BIT(I2Cx->SR2,rezult_flag) == rezult_flag)
+        {
+            return SET;
+        }
+        else
+        {
+            return RESET;
+        }
+    }
+}
+
+/*I2C_ Ожидание флага до истечения времени Timeout*/
+RezultError I2C_WaitOnFlagUntilTimeout(I2C_TypeDef *I2Cx, uint32_t flag, FlagStatus Status, uint32_t Timeout)
+{
+    while (I2C_Get_Flag(I2Cx, flag) == Status)
+    {
+        if (Timeout-- == 0)
+        {
+            return _ERROR_TIMEOUT;
+        }
+    }
+    return _OK;
+}
+
+/*Эта функция обрабатывает тайм-аут связи I2C для конкретного использования флага BTF.*/
+RezultError I2C_WaitOnBTFFlagUntilTimeout(I2C_TypeDef *I2Cx, uint32_t Timeout)
+{
+    while (I2C_Get_Flag(I2Cx, I2C_FLAG_BTF) == _ERROR)
+    {
+        if (I2C_IsAcknowledgeFailed(I2Cx) != _OK)
+        {
+            return _ERROR;
+        }
+
+        if (Timeout-- == 0)
+        {
+            return _ERROR_TIMEOUT;
+        }
+    }
+    return _OK;
+}
+
+/*I2C_ Ожидание флага главного адреса до истечения времени ожидания*/
+void I2C_WaitOnMasterAddressFlagUntilTimeout(I2C_TypeDef *I2Cx, uint32_t Flag)
+{
+    while (!(Read_BIT(I2Cx->SR1, Flag)))
+    {
+    }
+}
+/*Эта функция обрабатывает тайм-аут связи I2C для определенного использования флага TXE.*/
+void I2C_WaitOnTXEFlagUntilTimeout(I2C_TypeDef *I2Cx)
+{
+    while (!(Read_BIT(I2Cx->SR1, I2C_SR1_TXE)))
+    {
+    }
+}
+
+/*Эта функция обрабатывает тайм-аут связи I2C для определенного использования флага RXE.*/
+void I2C_WaitOnRXNEFlagUntilTimeout(I2C_TypeDef *I2Cx)
+{
+    while (!(Read_BIT(I2Cx->SR1,I2C_SR1_RXNE)))
+    {
+    }
+}
+
+/*Запрос от мастера*/
+RezultError I2C_MasterRequestWrite(I2C_TypeDef *I2Cx, uint16_t SlaveAddress, uint32_t Timeout)
+{
+    ENABLE_BIT(I2Cx->CR1, I2C_CR1_START);
+
+    if (I2C_WaitOnFlagUntilTimeout(I2Cx, I2C_FLAG_SB, RESET, Timeout) != _OK)
+    {
+        return _ERROR_TIMEOUT;
+    }
+
+    Write_REG(I2Cx->DR, (uint8_t)(SlaveAddress & (~I2C_OAR1_ADD0)));
+
+    /*I2C_ Ожидание флага главного адреса до истечения времени ожидания*/
+    I2C_WaitOnMasterAddressFlagUntilTimeout(I2Cx, I2C_SR1_ADDR);
+
+    return _OK;
+}
+
+
+
+uint8_t I2C_MasterRequestRead(I2C_TypeDef *I2Cx, uint16_t DevAddress, uint32_t Timeout)
+{
+    ENABLE_BIT(I2Cx->CR1, I2C_CR1_ACK);
+
+    ENABLE_BIT(I2Cx->CR1, I2C_CR1_START);
+
+    // I2C_StartBit_SetTime();
+    if (I2C_WaitOnFlagUntilTimeout(I2Cx, I2C_FLAG_SB, RESET, Timeout) != 0)
+    {
+        // return HAL_TIMEOUT;
+        return _ERROR_TIMEOUT;
+    }
+
+    Write_REG(I2Cx->DR, (uint8_t)(DevAddress | I2C_OAR1_ADD0));
+
+    /*I2C_ Ожидание флага главного адреса до истечения времени ожидания*/
+    I2C_WaitOnMasterAddressFlagUntilTimeout(I2Cx, I2C_SR1_ADDR);
+
+    return 0;
+}
+
+/*Мастер отправляет адрес целевого устройства, а затем адрес внутренней памяти для запроса на чтение.*/
+uint8_t I2C_RequestMemoryRead(I2C_TypeDef *I2Cx, uint16_t DevAddress, uint16_t MemAddress, uint16_t MemAddSize, uint32_t Timeout)
+{
+    /* Включить подтверждение */
+    ENABLE_BIT(I2Cx->CR1, I2C_CR1_ACK);
+
+    /* Генерировать Пуск */
+    ENABLE_BIT(I2Cx->CR1, I2C_CR1_START);
+
+    /* Ждем пока не будет установлен флаг SB */
+    if (I2C_WaitOnFlagUntilTimeout(I2Cx, I2C_FLAG_SB, RESET, Timeout) != 0)
+    {
+        return _ERROR_TIMEOUT;
+    }
+
+    /* Send slave address */
+    I2Cx->DR = I2C_7BIT_ADD_Write(DevAddress);
+
+    /*I2C_ Ожидание флага главного адреса до истечения времени ожидания*/
+    I2C_WaitOnMasterAddressFlagUntilTimeout(I2Cx, I2C_SR1_ADDR);
+
+    /* Clear ADDR flag */
+    I2C_Clear_Status_Reg(I2Cx);
+
+    /* Ждем флаг не использования TXE */
+    I2C_WaitOnTXEFlagUntilTimeout(I2Cx);
+
+    /* If Memory address size is 8Bit */
+    if (MemAddSize == I2C_MEMADD_SIZE_8BIT)
+    {
+        /* Send Memory Address */
+        Write_REG(I2Cx->DR, I2C_MEM_ADD_LSB(MemAddress));
+    }
+    /* If Memory address size is 16Bit */
+    else
+    {
+        /* Send MSB of Memory Address */
+        Write_REG(I2Cx->DR, I2C_MEM_ADD_MSB(MemAddress));
+
+        /* Ждем флаг не использования TXE */
+        I2C_WaitOnTXEFlagUntilTimeout(I2Cx);
+
+        /* Send LSB of Memory Address */
+        Write_REG(I2Cx->DR, I2C_MEM_ADD_LSB(MemAddress));
+    }
+
+    /* Ждем флаг не использования TXE */
+    I2C_WaitOnTXEFlagUntilTimeout(I2Cx);
+
+    /* Generate Restart */
+    ENABLE_BIT(I2Cx->CR1, I2C_CR1_START);
+
+    /* Wait until SB flag is set */
+    if (I2C_WaitOnFlagUntilTimeout(I2Cx, I2C_FLAG_SB, RESET, Timeout) != 0)
+    {
+//        if (Read_BIT(I2Cx->CR1, I2C_CR1_START) == I2C_CR1_START)
+//        {
+//        }
+//        // return HAL_TIMEOUT;
+        return _ERROR_TIMEOUT;
+    }
+
+    /* Send slave address */
+    Write_REG(I2Cx->DR, (uint8_t)(DevAddress | I2C_OAR1_ADD0));
+
+    /*I2C_ Ожидание флага главного адреса до истечения времени ожидания*/
+    I2C_WaitOnMasterAddressFlagUntilTimeout(I2Cx, I2C_SR1_ADDR);
+
+    return 0;
+}
+
+uint8_t I2C_RequestMemoryWrite(I2C_TypeDef *I2Cx, uint16_t DevAddress, uint16_t MemAddress, uint16_t MemAddSize, uint32_t Timeout)
+{
+    /* Generate Start */
+    ENABLE_BIT(I2Cx->CR1, I2C_CR1_START);
+
+    /* Wait until SB flag is set */
+    if (I2C_WaitOnFlagUntilTimeout(I2Cx, I2C_FLAG_SB, RESET, Timeout) != 0)
+    {
+//        if (Read_BIT(I2Cx->CR1, I2C_CR1_START) == I2C_CR1_START)
+//        {
+
+//        }
+        return _ERROR_TIMEOUT;
+    }
+
+    /* Send slave address */
+    I2Cx->DR = I2C_7BIT_ADD_Write(DevAddress);
+
+    /*I2C_ Ожидание флага главного адреса до истечения времени ожидания*/
+    I2C_WaitOnMasterAddressFlagUntilTimeout(I2Cx, I2C_SR1_ADDR);
+
+    /* Clear ADDR flag */
+    I2C_Clear_Status_Reg(I2Cx);
+
+    /* Ждем флаг не использования TXE */
+    I2C_WaitOnTXEFlagUntilTimeout(I2Cx);
+
+    /* If Memory address size is 8Bit */
+    if (MemAddSize == I2C_MEMADD_SIZE_8BIT)
+    {
+        /* Send Memory Address */
+        Write_REG(I2Cx->DR, I2C_MEM_ADD_LSB(MemAddress));
+    }
+    /* If Memory address size is 16Bit */
+    else
+    {
+        /* Send MSB of Memory Address */
+        Write_REG(I2Cx->DR, I2C_MEM_ADD_MSB(MemAddress));
+
+        /* Ждем флаг не использования TXE */
+        I2C_WaitOnTXEFlagUntilTimeout(I2Cx);
+
+        /* Send LSB of Memory Address */
+        Write_REG(I2Cx->DR, I2C_MEM_ADD_LSB(MemAddress));
+    }
+
+    return 0;
+}
+
+/*очистим статусные регистры чтением*/
+void I2C_Clear_Status_Reg(I2C_TypeDef *I2Cx)
+{
+    I2Cx->SR1;
+    I2Cx->SR2;
+}
+
+/* очистка флага в регистре SR1*/
+void I2C_Clear_Flag(I2C_TypeDef *I2Cx, uint32_t flag)
+{
+    I2Cx->SR1 = ~(flag & I2C_FLAG_MASK);
+}
+
+/*I2c_ является подтверждением отказа флага I2C_FLAG_AF*/
+RezultError I2C_IsAcknowledgeFailed(I2C_TypeDef *I2Cx)
+{
+    if (I2C_Get_Flag(I2Cx, I2C_FLAG_AF) == SET)
+    {
+        /* очистка флага в регистре SR1*/
+        I2C_Clear_Flag(I2Cx, I2C_FLAG_AF);
+
+        return _ERROR;
+    }
+    return _OK;
+}
+
+uint8_t I2C_7BIT_ADD_Write(uint8_t SlaveAddress)
+{
+    return (uint8_t)(SlaveAddress & (~I2C_OAR1_ADD0));
+}
+
+uint8_t I2C_IsDeviceReady(I2C_TypeDef *I2Cx, uint16_t DevAddress, uint32_t Trials, uint32_t Timeout)
+{
+    uint32_t I2C_Trials = 0;
+    FlagStatus tmp1;
+    FlagStatus tmp2;
+
+    /* Wait until BUSY flag is reset */
+    if (I2C_WaitOnFlagUntilTimeout(I2Cx, I2C_FLAG_BUSY, SET, I2C_TIMEOUT_BUSY_FLAG) != 0)
+    {
+        // return HAL_BUSY;
+        return _ERROR_BUSY;
+    }
+    ENABLE_BIT(I2Cx->CR1,I2C_CR1_PE);
+
+    /* Disable Pos */
+    DISABLE_BIT(I2Cx->CR1, I2C_CR1_POS);
+
+    do
+    {
+        /* Generate Start */
+        ENABLE_BIT(I2Cx->CR1, I2C_CR1_START);
+
+        /* Wait until SB flag is set */
+        if (I2C_WaitOnFlagUntilTimeout(I2Cx, I2C_FLAG_SB, RESET, Timeout) != 0)
+        {
+            return _ERROR_TIMEOUT;
+        }
+
+        /* Send slave address */
+        I2Cx->DR = I2C_7BIT_ADD_Write(DevAddress);
+
+        tmp1 = I2C_Get_Flag(I2Cx, I2C_FLAG_ADDR);
+        tmp2 = I2C_Get_Flag(I2Cx, I2C_FLAG_AF);
+
+        while ((tmp1 == RESET) && (tmp2 == RESET))
+        {
+            tmp1 = I2C_Get_Flag(I2Cx, I2C_FLAG_ADDR);
+            tmp2 = I2C_Get_Flag(I2Cx, I2C_FLAG_AF);
+        }
+
+        /* Check if the ADDR flag has been set */
+        if (I2C_Get_Flag(I2Cx, I2C_FLAG_ADDR) == SET)
+        {
+            /* Generate Stop */
+            ENABLE_BIT(I2Cx->CR1, I2C_CR1_STOP);
+
+            /* Clear ADDR Flag */
+            I2C_Clear_Status_Reg(I2Cx);
+
+            /* Wait until BUSY flag is reset */
+            if (I2C_WaitOnFlagUntilTimeout(I2Cx, I2C_FLAG_BUSY, SET, I2C_TIMEOUT_BUSY_FLAG) != 0)
+            {
+                // return HAL_ERROR;
+                return _ERROR;
+            }
+
+            // return HAL_OK;
+            return 0;
+        }
+        else
+        {
+            /* Generate Stop */
+            ENABLE_BIT(I2Cx->CR1, I2C_CR1_STOP);
+
+            /* очистка флага в регистре SR1*/
+            I2C_Clear_Flag(I2Cx, I2C_FLAG_AF);
+
+            /* Wait until BUSY flag is reset */
+            if (I2C_WaitOnFlagUntilTimeout(I2Cx, I2C_FLAG_BUSY, SET, I2C_TIMEOUT_BUSY_FLAG) != 0)
+            {
+                return _ERROR;
+            }
+        }
+
+        /* Increment Trials */
+        I2C_Trials++;
+    }
+    while (I2C_Trials < Trials);
+
+    return 1;
 }
 
 ////IRQ
