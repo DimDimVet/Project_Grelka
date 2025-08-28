@@ -655,7 +655,7 @@ void ssd1306_I2C_WriteMulti(uint8_t address, uint8_t reg, uint8_t *data, uint16_
     for (i = 0; i < count; i++)
         dt[i + 1] = data[i];
 
-    I2C_Master_Transmit(I2C1, address, dt, count + 1, 10);
+    I2C_Master_Transmit(I2C1, address, dt, count + 1, 1000);
 }
 
 void ssd1306_I2C_Write(uint8_t address, uint8_t reg, uint8_t data)
@@ -664,5 +664,5 @@ void ssd1306_I2C_Write(uint8_t address, uint8_t reg, uint8_t data)
     dt[0] = reg;
     dt[1] = data;
 
-    I2C_Master_Transmit(I2C1, address, dt, 2, 10);
+    I2C_Master_Transmit(I2C1, address, dt, 2, 1000);
 }

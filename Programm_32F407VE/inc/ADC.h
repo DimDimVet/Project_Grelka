@@ -226,12 +226,12 @@ typedef struct
 /*var*/
 
 /*func*/
-Rezult_t ADC_Init(ADC_TypeDef* instance);
-Rezult_t ADC_SetStructure(ADC_Structure* adc);
-Rezult_t ADC_MspInit(ADC_Structure* adc);
-Rezult_t ADC_SetReg(ADC_Structure* adc);
-Rezult_t ADC_ConfigChannel(ADC_Structure* adc);
-Rezult_t ADC_Start_IT(ADC_Structure* adc);
+RezultError ADC_Init(ADC_TypeDef* instance);
+RezultError ADC_SetStructure(ADC_Structure* adc);
+RezultError ADC_MspInit(ADC_Structure* adc);
+RezultError ADC_SetReg(ADC_Structure* adc);
+RezultError ADC_ConfigChannel(ADC_Structure* adc);
+RezultError ADC_Start_IT(ADC_Structure* adc);
 void WorkADC(char* buff_str_temp);
 
 

@@ -7,13 +7,13 @@ float adcVoltage;
 char buf[32];
 char buff_str_temp[50];
 
-Rezult_t ADC_Init(ADC_TypeDef* instance)
+RezultError ADC_Init(ADC_TypeDef* instance)
 {
-    Rezult_t tmp_rezult=OK_;
+    RezultError tmp_rezult=_OK;
 
     if (instance == 0)//придумать вместо NULL
     {
-        tmp_rezult = ERROR_;
+        tmp_rezult = _ERROR;
     }
     else
     {
@@ -26,9 +26,9 @@ Rezult_t ADC_Init(ADC_TypeDef* instance)
     return tmp_rezult;
 }
 
-Rezult_t ADC_SetStructure(ADC_Structure* adc)
+RezultError ADC_SetStructure(ADC_Structure* adc)
 {
-    Rezult_t tmp_rezult=OK_;
+    RezultError tmp_rezult=_OK;
 
     adc->Init.ClockPrescaler = 0;
     adc->Init.Resolution = 0;
@@ -51,18 +51,18 @@ Rezult_t ADC_SetStructure(ADC_Structure* adc)
     ADC_SetReg(adc);
 
 
-    if (ADC_ConfigChannel(adc) != OK_)
+    if (ADC_ConfigChannel(adc) != _OK)
     {
-        tmp_rezult=ERROR_;
+        tmp_rezult=_ERROR;
     }
 
     return tmp_rezult;
 
 }
 
-Rezult_t ADC_MspInit(ADC_Structure* adc)
+RezultError ADC_MspInit(ADC_Structure* adc)
 {
-    Rezult_t tmp_rezult=OK_;
+    RezultError tmp_rezult=_OK;
 
     GPIO_Structure GPIO_InitStruct = {.GPIOx = GPIOA,.Pin = PIN1,.Mode = GPIO_MODE_ANALOG,.Pull = GPIO_PUPDR_NOPULL};
 
@@ -88,9 +88,9 @@ Rezult_t ADC_MspInit(ADC_Structure* adc)
 
 }
 
-Rezult_t ADC_SetReg(ADC_Structure* adc)
+RezultError ADC_SetReg(ADC_Structure* adc)
 {
-    Rezult_t tmp_rezult=OK_;
+    RezultError tmp_rezult=_OK;
 
     ADC_Common_TypeDef *tmpADC_Common;
 
@@ -165,9 +165,9 @@ Rezult_t ADC_SetReg(ADC_Structure* adc)
     return tmp_rezult;
 }
 
-Rezult_t ADC_ConfigChannel(ADC_Structure* adc)
+RezultError ADC_ConfigChannel(ADC_Structure* adc)
 {
-    Rezult_t tmp_rezult=OK_;
+    RezultError tmp_rezult=_OK;
 
     ADC_Common_TypeDef *tmpADC_Common;
 
@@ -223,9 +223,9 @@ Rezult_t ADC_ConfigChannel(ADC_Structure* adc)
     return tmp_rezult;
 }
 
-Rezult_t ADC_Start_IT(ADC_Structure* adc)
+RezultError ADC_Start_IT(ADC_Structure* adc)
 {
-    Rezult_t tmp_rezult=OK_;
+    RezultError tmp_rezult=_OK;
 
     uint32_t counter = 0U;
     ADC_Common_TypeDef *tmpADC_Common;
@@ -283,7 +283,7 @@ Rezult_t ADC_Start_IT(ADC_Structure* adc)
     }
     else
     {
-        tmp_rezult = ERROR_;
+        tmp_rezult = _ERROR;
     }
 
     return tmp_rezult;

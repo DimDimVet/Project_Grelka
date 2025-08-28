@@ -23,9 +23,11 @@
 /*structures*/
 typedef enum
 {
-	OK_       = 0x00U,
-  ERROR_    = 0x01U,
-}Rezult_t;
+	_OK       = 0x00U,
+  _ERROR    = 0x01U,
+	_ERROR_BUSY = 0x02U,
+	_ERROR_TIMEOUT = 0x03U,
+}RezultError;
 
 /*func*/
 void Сonverter_Int_Str(char *str, int val);
