@@ -5,8 +5,17 @@ ssd1306_t str_SSD1306;
 
 RCC_Structure rcc_str = {.mDivider_PLLM = 8,.nMultiplier_PLLN = 192,.pDivider_PLLP = 6}; /*структура для RCC*/
 PWR_Structure pwr_str = {.TIMx = TIM3,.fill_Factor = 50}; /*структура для ШИМ*/
-/*Настройки I2C*/
-I2C_Structure i2c_str = {.I2Cx = I2C1};
+I2C_Structure i2c_str = {.I2Cx = I2C1};/*Настройки I2C*/
+
+/*Настройки Key*/
+GPIO_Structure cols[4] = {{.GPIOx = GPIOA,.Pin = PIN0},{.GPIOx = GPIOA,.Pin = PIN0},{.GPIOx = GPIOA,.Pin = PIN0},{.GPIOx = GPIOA,.Pin = PIN0}};
+GPIO_Structure rows[4] = {{.GPIOx = GPIOA,.Pin = PIN0},{.GPIOx = GPIOA,.Pin = PIN0},{.GPIOx = GPIOA,.Pin = PIN0},{.GPIOx = GPIOA,.Pin = PIN0}};
+Key_Structure keys = {.cols_count = 4,.rows_count = 4,.pins_col = cols,.pins_rows = rows};
+
+char keymap1[16] = {
+  '1'
+};
+
 
 /*main*/
 

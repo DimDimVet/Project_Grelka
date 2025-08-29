@@ -10,6 +10,7 @@
 #include "ADC.h"
 #include "I2C.h"
 #include "ssd1306.h"
+#include "Key_Matrix.h"
 /*defaines*/
 
 #define SSD1306_I2C_ADDR 0x78 /*адрес I2C экрана*/

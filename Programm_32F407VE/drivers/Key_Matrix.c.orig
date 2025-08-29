@@ -1,0 +1,15 @@
+/*includes*/
+#include "Key_Matrix.h"
+
+/*defaines*/
+
+/*structures*/
+
+/*var*/
+
+/*func*/
+void Key_Init(Key_Structure *Key_Str)
+{
+	    GPIO_Structure key_PE3 = {.GPIOx = GPIOE,.Pin = PIN3,.Mode = GPIO_MODE_INPUT,.Pull = GPIO_PUPDR_PULLUP};
+			GPIO_Init(&key_PE3);
+}
