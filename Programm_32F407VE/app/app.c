@@ -1,5 +1,4 @@
 #include "app.h"
-
 int countFillFactor=0;
 ssd1306_t str_SSD1306;
 
@@ -8,6 +7,11 @@ PWR_Structure pwr_str = {.TIMx = TIM3,.fill_Factor = 50}; /*структура �
 I2C_Structure i2c_str = {.I2Cx = I2C1};/*Настройки I2C*/
 
 /*Настройки Key*/
+/*map  cols[0] - rows[0] "1"  cols[1] - rows[0] "2"  cols[2] - rows[0] "3"  cols[3] - rows[0] "A"
+		   cols[0] - rows[1] "4"  cols[1] - rows[1] "5"  cols[2] - rows[1] "6"  cols[3] - rows[1] "B"
+		   cols[0] - rows[2] "7"  cols[1] - rows[2] "8"  cols[2] - rows[2] "9"  cols[3] - rows[2] "C"
+		   cols[0] - rows[3] "*"  cols[1] - rows[3] "0"  cols[2] - rows[3] "#"  cols[3] - rows[3] "D" */
+
 GPIO_Structure cols[4] = {{.GPIOx = GPIOD,.Pin = PIN8},{.GPIOx = GPIOD,.Pin = PIN10},{.GPIOx = GPIOD,.Pin = PIN12},{.GPIOx = GPIOD,.Pin = PIN14}};
 GPIO_Structure rows[4] = {{.GPIOx = GPIOB,.Pin = PIN15},{.GPIOx = GPIOD,.Pin = PIN9},{.GPIOx = GPIOD,.Pin = PIN11},{.GPIOx = GPIOD,.Pin = PIN13}};
 Key_Structure keys = {.cols_count = 4,.rows_count = 4,.pins_col = cols,.pins_rows = rows};
@@ -47,11 +51,12 @@ int main()
   ADC_Init(ADC1);
   /*------------*/
 
-
   while (1)
     {
 			Handler_LED7();
-			Survey_Key(&keys);
+			char* temps = Survey_Key(&keys);
+			TempChar(temps);
+			
 			delay_s(1);
 			Enable_ADC();
     }

@@ -29,6 +29,6 @@ typedef struct
 /*func*/
 void Key_Init(Key_Structure *Key_Str);
 void Enable_Periphery_Key(GPIO_Structure *GPIO_Str);
-uint8_t Survey_Key(Key_Structure *Key_Str);
+char* Survey_Key(Key_Structure *Key_Str);
 
 #endif
