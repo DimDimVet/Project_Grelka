@@ -233,6 +233,9 @@ RezultError ADC_SetReg(ADC_Structure* adc);
 RezultError ADC_ConfigChannel(ADC_Structure* adc);
 RezultError ADC_Start_IT(ADC_Structure* adc);
 void WorkADC(char* buff_str_temp);
+void Enable_ADC(void);
+void Disable_ADC(void);
 
 
+void TempChar(char* tmp);
 #endif

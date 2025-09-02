@@ -7,6 +7,7 @@
 #include "HEHAL.h"
 #include "GPIO.h"
 #include "RCC.h"
+#include "ADC.h"
 
 /*defaines*/
 
@@ -26,6 +27,8 @@ typedef struct
 /*var*/
 
 /*func*/
-
+void Key_Init(Key_Structure *Key_Str);
+void Enable_Periphery_Key(GPIO_Structure *GPIO_Str);
+uint8_t Survey_Key(Key_Structure *Key_Str);
 
 #endif

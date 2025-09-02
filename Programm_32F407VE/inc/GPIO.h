@@ -165,5 +165,7 @@ typedef struct
 /*func*/
 void GPIO_Init(GPIO_Structure *GPIO_Str);
 void ODR_Xor(GPIO_Structure *GPIO_Str);
-void ODR_Or(GPIO_Structure *GPIO_Str);
+void ODR_1(GPIO_Structure *GPIO_Str);
+void ODR_0(GPIO_Structure *GPIO_Str);
+
 #endif

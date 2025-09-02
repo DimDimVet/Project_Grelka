@@ -8,8 +8,8 @@ PWR_Structure pwr_str = {.TIMx = TIM3,.fill_Factor = 50}; /*структура �
 I2C_Structure i2c_str = {.I2Cx = I2C1};/*Настройки I2C*/
 
 /*Настройки Key*/
-GPIO_Structure cols[4] = {{.GPIOx = GPIOA,.Pin = PIN0},{.GPIOx = GPIOA,.Pin = PIN0},{.GPIOx = GPIOA,.Pin = PIN0},{.GPIOx = GPIOA,.Pin = PIN0}};
-GPIO_Structure rows[4] = {{.GPIOx = GPIOA,.Pin = PIN0},{.GPIOx = GPIOA,.Pin = PIN0},{.GPIOx = GPIOA,.Pin = PIN0},{.GPIOx = GPIOA,.Pin = PIN0}};
+GPIO_Structure cols[4] = {{.GPIOx = GPIOD,.Pin = PIN8},{.GPIOx = GPIOD,.Pin = PIN10},{.GPIOx = GPIOD,.Pin = PIN12},{.GPIOx = GPIOD,.Pin = PIN14}};
+GPIO_Structure rows[4] = {{.GPIOx = GPIOB,.Pin = PIN15},{.GPIOx = GPIOD,.Pin = PIN9},{.GPIOx = GPIOD,.Pin = PIN11},{.GPIOx = GPIOD,.Pin = PIN13}};
 Key_Structure keys = {.cols_count = 4,.rows_count = 4,.pins_col = cols,.pins_rows = rows};
 
 char keymap1[16] = {
@@ -25,6 +25,7 @@ int main()
   Init_Tim_PWR(&pwr_str);
 	Init_App_Pin();
 	Init_I2C(&i2c_str);
+	Key_Init(&keys);
   /**/
   
 
@@ -49,7 +50,10 @@ int main()
 
   while (1)
     {
-
+			Handler_LED7();
+			Survey_Key(&keys);
+			delay_s(1);
+			Enable_ADC();
     }
 
   return 0;

@@ -85,10 +85,15 @@ void GPIO_Init(GPIO_Structure *GPIO_Str)
 /* побитовые выполнители*/
 void ODR_Xor(GPIO_Structure *GPIO_Str)
 {
-    GPIO_Str->GPIOx->ODR ^= 0x1 << GPIO_Str->Pin;
+    GPIO_Str->GPIOx->ODR ^= 1 << GPIO_Str->Pin;
 }
 
-void ODR_Or(GPIO_Structure *GPIO_Str)
+void ODR_1(GPIO_Structure *GPIO_Str)
 {
-    GPIO_Str->GPIOx->ODR |= 0x1 << GPIO_Str->Pin;
+    GPIO_Str->GPIOx->ODR |= 1 << GPIO_Str->Pin;
+}
+
+void ODR_0(GPIO_Structure *GPIO_Str)
+{
+    GPIO_Str->GPIOx->ODR |= 0 << GPIO_Str->Pin;
 }

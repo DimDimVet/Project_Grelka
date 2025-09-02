@@ -80,7 +80,7 @@ RezultError ADC_MspInit(ADC_Structure* adc)
     }
 
     /* ADC прерывания */
-    NVIC_SetPriority(ADC_IRQn, 0);
+    NVIC_SetPriority(ADC_IRQn, 15);
     NVIC_EnableIRQ(ADC_IRQn);
 
 
@@ -230,51 +230,32 @@ RezultError ADC_Start_IT(ADC_Structure* adc)
     uint32_t counter = 0U;
     ADC_Common_TypeDef *tmpADC_Common;
 
-    /* Enable the ADC peripheral */
-    if((adc->Instance->CR2 & ADC_CR2_ADON) != ADC_CR2_ADON)
+    /* Включить периферийное устройство */
+    Enable_ADC();
+
+    counter = (ADC_STAB_DELAY_US * (SystemCoreClock / 1000000U));
+    while(counter != 0U)
     {
-        /* Включить периферийное устройство */
-        ENABLE_BIT(adc->Instance->CR2,  ADC_CR2_ADON);
-        /* Задержка времени стабилизации АЦП */
-        counter = (ADC_STAB_DELAY_US * (SystemCoreClock / 1000000U));
-        while(counter != 0U)
-        {
-            counter--;
-        }
+        counter--;
     }
 
-    /* Начать преобразование, если АЦП включен */
-    if(ENABLE_BIT(adc->Instance->CR2, ADC_CR2_ADON))
+    /* Указатель на общий регистр управления, к которому принадлежит adc    */
+    tmpADC_Common = ADC123_COMMON;
+
+    /* Очистить флаг преобразования обычной группы и флаг переполнения */
+    DISABLE_BIT(adc->Instance->SR, (ADC_FLAG_EOC | ADC_FLAG_OVR));
+
+    /* Включить прерывание конверсии для обычной группы */
+    ENABLE_BIT(adc->Instance->CR1, (ADC_IT_EOCIE | ADC_IT_OVR));
+
+    /* Проверьте, включен ли многомодовый режим */
+    if(DISABLE_BIT(tmpADC_Common->CCR, ADC_CCR_MULTI))
     {
-        /* Установить состояние АЦП */
-
-        /* Указатель на общий регистр управления, к которому принадлежит adc    */
-        tmpADC_Common = ADC123_COMMON;
-
-        /* Очистить флаг преобразования обычной группы и флаг переполнения */
-        DISABLE_BIT(adc->Instance->SR, (ADC_FLAG_EOC | ADC_FLAG_OVR));
-
-        /* Включить прерывание конверсии для обычной группы */
-        ENABLE_BIT(adc->Instance->CR1, (ADC_IT_EOCIE | ADC_IT_OVR));
-
-        /* Проверьте, включен ли многомодовый режим */
-        if(DISABLE_BIT(tmpADC_Common->CCR, ADC_CCR_MULTI))
+        if((adc->Instance == ADC1) || ((adc->Instance == ADC2) && ((ADC->CCR & ADC_CCR_MULTI_Msk) < ADC_CCR_MULTI_0)) \
+        || ((adc->Instance == ADC3) && ((ADC->CCR & ADC_CCR_MULTI_Msk) < ADC_CCR_MULTI_4)))
         {
-            if((adc->Instance == ADC1) || ((adc->Instance == ADC2) && ((ADC->CCR & ADC_CCR_MULTI_Msk) < ADC_CCR_MULTI_0)) \
-            || ((adc->Instance == ADC3) && ((ADC->CCR & ADC_CCR_MULTI_Msk) < ADC_CCR_MULTI_4)))
-            {
-                /* если внешний триггер отсутствует, включите программное преобразование обычных каналов */
-                if((adc->Instance->CR2 & ADC_CR2_EXTEN) == RESET)
-                {
-                    /* Включить выбранное программное преобразование АЦП для обычной группы */
-                    ENABLE_BIT(adc->Instance->CR2,ADC_CR2_SWSTART);
-                }
-            }
-        }
-        else
-        {
-            /* если экземпляр дескриптора соответствует АЦП1 и нет внешнего триггера, включите программное преобразование обычных каналов */
-            if((adc->Instance == ADC1) && ((adc->Instance->CR2 & ADC_CR2_EXTEN) == RESET))
+            /* если внешний триггер отсутствует, включите программное преобразование обычных каналов */
+            if((adc->Instance->CR2 & ADC_CR2_EXTEN) == RESET)
             {
                 /* Включить выбранное программное преобразование АЦП для обычной группы */
                 ENABLE_BIT(adc->Instance->CR2,ADC_CR2_SWSTART);
@@ -283,16 +264,41 @@ RezultError ADC_Start_IT(ADC_Structure* adc)
     }
     else
     {
-        tmp_rezult = _ERROR;
+        /* если экземпляр дескриптора соответствует АЦП1 и нет внешнего триггера, включите программное преобразование обычных каналов */
+        if((adc->Instance == ADC1) && ((adc->Instance->CR2 & ADC_CR2_EXTEN) == RESET))
+        {
+            /* Включить выбранное программное преобразование АЦП для обычной группы */
+            ENABLE_BIT(adc->Instance->CR2,ADC_CR2_SWSTART);
+        }
     }
 
     return tmp_rezult;
 }
 
+void Enable_ADC()
+{
+    ENABLE_BIT(adc.Instance->CR2, ADC_CR2_ADON);
+    ENABLE_BIT(adc.Instance->CR2, ADC_CR2_SWSTART);
+}
+
+void Disable_ADC()
+{
+    DISABLE_BIT(adc.Instance->CR2, ADC_CR2_ADON);
+    DISABLE_BIT(adc.Instance->CR2, ADC_CR2_SWSTART);
+}
+
+char temp_str[5];
+
+void TempChar(char* tmp)
+{
+	for(int i=0; i< 5; i++)
+	{
+		temp_str[i] = tmp[i];
+	}
+}
 
 void ADC_IRQHandler(void)
 {
-
     adcData = ADC_GET_DATA(adc.Instance);
 
     if(adc.Instance == ADC1)
@@ -301,10 +307,10 @@ void ADC_IRQHandler(void)
         {
             adcVoltage = adcData * 3.3 / 4095;
             //Sprintf_M(buff_str_temp,"Volt",adcVoltage);
-            sprintf(buff_str_temp,"Volt=%.2fV ",adcVoltage);
+            sprintf(buff_str_temp,"Volt=%.2fV %s",adcVoltage, temp_str);
             WorkADC(buff_str_temp);
+            Disable_ADC();
 
         }
     }
-
 }
