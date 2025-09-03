@@ -56,6 +56,7 @@ int main()
 			Handler_LED7();
 			char* temps = Survey_Key(&keys);
 			TempChar(temps);
+			Reset_Key(&keys);
 			
 			//delay_ms(1);
 			Enable_ADC();
