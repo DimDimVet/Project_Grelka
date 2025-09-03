@@ -57,7 +57,7 @@ int main()
 			char* temps = Survey_Key(&keys);
 			TempChar(temps);
 			
-			delay_s(1);
+			//delay_ms(1);
 			Enable_ADC();
     }
 
