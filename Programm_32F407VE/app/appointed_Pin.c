@@ -30,8 +30,8 @@ void Init_App_Pin()
   ENABLE_BIT(EXTI->IMR,EXTI_IMR_MR3);/*Разрешение irq*/
   ENABLE_BIT(EXTI->FTSR,EXTI_FTSR_TR3);/*Прерывание по спаду*/
 
-  NVIC_EnableIRQ(EXTI4_IRQn);
-  NVIC_EnableIRQ(EXTI3_IRQn);
+  NVIC_EnableIRQ(EXTI3_IRQn);//3
+  NVIC_EnableIRQ(EXTI4_IRQn);//4
 }
 
 void Enable_Periphery_App_Pin()
@@ -62,21 +62,21 @@ void Handler_LED7()
 	ODR_Xor(&LED_7);
 }
 
-void EXTI4_IRQHandler()
-{
-  if (Read_BIT(EXTI->PR,EXTI_PR_PR4)) /*проверим флаг irq*/
-    {
-      ENABLE_BIT(EXTI->PR,EXTI_PR_PR4); /*reset флага*/
-      Handler_Key0();
-    }
-}
+//void EXTI4_IRQHandler()
+//{
+//  if (Read_BIT(EXTI->PR,EXTI_PR_PR4)) /*проверим флаг irq*/
+//    {
+//      ENABLE_BIT(EXTI->PR,EXTI_PR_PR4); /*reset флага*/
+//      Handler_Key0();
+//    }
+//}
 
-void EXTI3_IRQHandler()
-{
+//void EXTI3_IRQHandler()
+//{
 
-  if (Read_BIT(EXTI->PR,EXTI_PR_PR3)) /*проверим флаг irq*/
-    {
-      ENABLE_BIT(EXTI->PR,EXTI_PR_PR3); /*reset флага*/
-      Handler_Key1();
-    }
-}
+//  if (Read_BIT(EXTI->PR,EXTI_PR_PR3)) /*проверим флаг irq*/
+//    {
+//      ENABLE_BIT(EXTI->PR,EXTI_PR_PR3); /*reset флага*/
+//      Handler_Key1();
+//    }
+//}

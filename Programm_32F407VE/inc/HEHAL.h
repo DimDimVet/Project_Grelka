@@ -36,6 +36,8 @@ void Sprintf_str_to_str(int size_buf,char *buff, char *str1, char *str2, char *s
 
 #endif
 
+/*!E --style=gnu --indent=spaces=2*/
+/*!E --style=gnu --indent=spaces=2 --indent-switches --break-blocks --pad-oper --pad-comma --pad-header --align-pointer=name --align-reference=name --convert-tabs --keep-one-line-blocks --keep-one-line-statements*/
 
 /*includes*/
 

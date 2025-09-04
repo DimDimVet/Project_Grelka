@@ -26,5 +26,6 @@ typedef struct
 /*func*/
 void Buttons_Init(Butt_Panel_Structure* buttons);
 void Enable_Periphery_Button(GPIO_Structure *GPIO_Str);
+void Enable_EXTI_Button(GPIO_Structure *GPIO_Str);
 
 #endif
