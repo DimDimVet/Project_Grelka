@@ -1,9 +1,21 @@
 #include "appointed_Pin.h"
+/*дефолт.устройства платы*/
 
 GPIO_Structure LED_7 = {.GPIOx = GPIOA,.Pin = PIN7,.Mode = GPIO_MODE_OUTPUT,.Speed = GPIO_SPEED_LOW,.Pull = GPIO_PUPDR_PULLUP};
-
+int tt0,tt2,tt4;
+int tt1,tt3,tt5;
 void Init_App_Pin()
 {
+	tt5 = SYSCFG_EXTICR1_EXTI3_Pos;
+	tt3 = SYSCFG_EXTICR1_EXTI3;
+	tt0 = SYSCFG_EXTICR1_EXTI3_PE;
+	
+	
+	tt4 = SYSCFG_EXTICR2_EXTI4_Pos;
+	tt2 = SYSCFG_EXTICR2_EXTI4;
+	tt1 = SYSCFG_EXTICR2_EXTI4_PE;
+	
+	//
   Enable_Periphery_App_Pin();
   
   Key_Config_In_Pin();
