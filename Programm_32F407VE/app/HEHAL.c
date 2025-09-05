@@ -35,3 +35,15 @@ void Сonverter_Int_Str(char *out_str, int in_digital)
     }
     out_str[countInt] = '\0'; 
 }
+
+event_handler_t h;
+
+void Init_Event(event_handler_t func)
+{
+	h = func;
+}
+
+void H_Write(void *ctx)
+{
+	 h(ctx,0);
+}

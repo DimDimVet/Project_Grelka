@@ -19,7 +19,7 @@ Butt_Panel_Structure buttons = {.buttons_count = 5,.pin_butt = arr_buttons,.pin_
 
 
 /*main*/
-
+char* temps;
 int main()
 {
   RCC_Init(&rcc_str);
@@ -47,12 +47,13 @@ int main()
   /*------------*/
   ADC_Init(ADC1);
   /*------------*/
-
+Init_Event(my_handler);
+Init_Event(my_handler2);
   while (1)
     {
 			Handler_LED7();
 //			char* temps = Survey_Key(&keys);
-			//TempChar(temps);
+			TempChar(temps);
 			//delay_ms(1);
 			Enable_ADC();
     }
@@ -98,4 +99,19 @@ void WorkADC(char* buff_str_temp1)
   SSD1306_GotoXY(&str_SSD1306, 0, 20);
   SSD1306_Puts(&str_SSD1306, buff_str_temp1, &Font_7x10, 1);
   SSD1306_UpdateScreen(&str_SSD1306);
+}
+
+void event(void *ctx)
+{
+    temps =(char*)ctx;
+}
+
+void my_handler(void *ctx, int event_data)
+	{
+    temps =(char*)ctx;
+}
+	
+void my_handler2(void *ctx, int event_data)
+	{
+    temps =(char*)ctx;
 }

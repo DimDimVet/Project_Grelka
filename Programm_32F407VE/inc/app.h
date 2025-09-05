@@ -23,4 +23,6 @@
 /*func*/
 void Init_PWR(void);
 
+void my_handler(void *ctx, int event_data);
+void my_handler2(void *ctx, int event_data);
 #endif

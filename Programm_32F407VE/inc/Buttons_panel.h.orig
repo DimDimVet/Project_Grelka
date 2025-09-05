@@ -15,9 +15,9 @@
 /*structures*/
 typedef struct
 {
-  uint8_t buttons_count;
-  GPIO_Structure *pin_butt; /*кнопки вход*/
-  GPIO_Structure *pin_com; /*пин выход притянутый*/
+	uint8_t buttons_count;
+	GPIO_Structure* pin_butt; /*кнопки вход*/
+	GPIO_Structure* pin_com; /*пин выход притянутый*/
 
 } Butt_Panel_Structure;
 
@@ -28,9 +28,6 @@ void Buttons_Init(Butt_Panel_Structure* buttons);
 void Enable_Periphery_Button(GPIO_Structure *GPIO_Str);
 /*настройки прерывания*/
 void Enable_EXTI_Button(GPIO_Structure *GPIO_Str);
-void Set_Buttons_EXTI(uint8_t arr_reg, GPIO_Structure *GPIO_Str);
 void Enable_Buttons_NVIC(GPIO_Structure *GPIO_Str);
-
-void event(void* d);
-
+	
 #endif

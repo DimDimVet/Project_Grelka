@@ -16,7 +16,7 @@ void Buttons_Init(Butt_Panel_Structure* buttons)
       buttons->pin_butt[i].Mode = GPIO_MODE_INPUT;
       buttons->pin_butt[i].Pull = GPIO_PUPDR_PULLDOWN;
 
-			Enable_Periphery_Button(&buttons->pin_butt[i]);
+      Enable_Periphery_Button(&buttons->pin_butt[i]);
 
       GPIO_Init(&buttons->pin_butt[i]);
 
@@ -49,10 +49,10 @@ void Enable_Periphery_Button(GPIO_Structure *GPIO_Str)
     }
 
   if (GPIO_Str->GPIOx == GPIOB)
-  {
+    {
       AHB1_ENABLE_PERIPHERY(RCC_AHB1ENR_GPIOBEN);
       return;
-                 }
+    }
 
   if (GPIO_Str->GPIOx == GPIOC)
     {
@@ -75,10 +75,44 @@ void Enable_Periphery_Button(GPIO_Structure *GPIO_Str)
 
 void Enable_EXTI_Button(GPIO_Structure *GPIO_Str)
 {
-  uint8_t port_pos_tmp;
-  uint16_t SYSCFG_tmp;
-  uint8_t arr_reg;
 
+  uint8_t arr_reg;
+  
+  if ((GPIO_Str->Pin == PIN0) || (GPIO_Str->Pin == PIN1) || (GPIO_Str->Pin == PIN2) || (GPIO_Str->Pin == PIN3))
+    {
+      arr_reg = 0U;
+    }
+
+  if ((GPIO_Str->Pin == PIN4) || (GPIO_Str->Pin == PIN5) || (GPIO_Str->Pin == PIN6) || (GPIO_Str->Pin == PIN7))
+    {
+      arr_reg = 1U;
+    }
+
+  if ((GPIO_Str->Pin == PIN8) || (GPIO_Str->Pin == PIN9) || (GPIO_Str->Pin == PIN10) || (GPIO_Str->Pin == PIN11))
+    {
+      arr_reg = 2U;
+    }
+
+  if ((GPIO_Str->Pin == PIN12) || (GPIO_Str->Pin == PIN13) || (GPIO_Str->Pin == PIN14) || (GPIO_Str->Pin == PIN15))
+    {
+      arr_reg = 3U;
+    }
+		
+		Set_Buttons_EXTI(arr_reg, GPIO_Str);
+		
+	ENABLE_BIT(EXTI->IMR, 1U << GPIO_Str->Pin);
+  ENABLE_BIT(EXTI->FTSR, 1U << GPIO_Str->Pin);
+		
+Enable_Buttons_NVIC(GPIO_Str);
+		
+}
+
+void Set_Buttons_EXTI(uint8_t arr_reg, GPIO_Structure *GPIO_Str)
+{
+	uint8_t port_pos_tmp;
+  uint16_t SYSCFG_tmp;
+
+/*назначим позицию порта*/
   if (GPIO_Str->GPIOx == GPIOA)
     {
       port_pos_tmp = 0U;
@@ -104,7 +138,7 @@ void Enable_EXTI_Button(GPIO_Structure *GPIO_Str)
       port_pos_tmp = 4U;
     }
 
-  ////
+/*назначим бит на позицию*/
   if ((GPIO_Str->Pin == PIN0) || (GPIO_Str->Pin == PIN4) || (GPIO_Str->Pin == PIN8) || (GPIO_Str->Pin == PIN12))
     {
       SYSCFG_tmp = port_pos_tmp << 0U;/*0x0001*/
@@ -124,35 +158,14 @@ void Enable_EXTI_Button(GPIO_Structure *GPIO_Str)
     {
       SYSCFG_tmp = port_pos_tmp << 12U;/*0x1000*/
     }
+		
+		ENABLE_BIT(SYSCFG->EXTICR[arr_reg], SYSCFG_tmp);
+}
 
-  ////
-  if ((GPIO_Str->Pin == PIN0) || (GPIO_Str->Pin == PIN1) || (GPIO_Str->Pin == PIN2) || (GPIO_Str->Pin == PIN3))
-    {
-      arr_reg = 0U;
-    }
-
-  if ((GPIO_Str->Pin == PIN4) || (GPIO_Str->Pin == PIN5) || (GPIO_Str->Pin == PIN6) || (GPIO_Str->Pin == PIN7))
-    {
-      arr_reg = 1U;
-    }
-
-  if ((GPIO_Str->Pin == PIN8) || (GPIO_Str->Pin == PIN9) || (GPIO_Str->Pin == PIN10) || (GPIO_Str->Pin == PIN11))
-    {
-      arr_reg = 2U;
-    }
-
-  if ((GPIO_Str->Pin == PIN12) || (GPIO_Str->Pin == PIN13) || (GPIO_Str->Pin == PIN14) || (GPIO_Str->Pin == PIN15))
-    {
-      arr_reg = 3U;
-    }
-
-  ///
-  ENABLE_BIT(SYSCFG->EXTICR[arr_reg], SYSCFG_tmp);
-  ENABLE_BIT(EXTI->IMR, 1U << GPIO_Str->Pin);
-  ENABLE_BIT(EXTI->FTSR, 1U << GPIO_Str->Pin);
-
-  ///
-  if (GPIO_Str->Pin == PIN0)
+/*подключим прерывание*/
+void Enable_Buttons_NVIC(GPIO_Structure *GPIO_Str)
+{
+	 if (GPIO_Str->Pin == PIN0)
     {
       NVIC_EnableIRQ(EXTI0_IRQn);
     }
@@ -186,7 +199,6 @@ void Enable_EXTI_Button(GPIO_Structure *GPIO_Str)
     {
       NVIC_EnableIRQ(EXTI15_10_IRQn);
     }
-
 }
 
 //IRQ

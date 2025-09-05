@@ -75,10 +75,44 @@ void Enable_Periphery_Button(GPIO_Structure *GPIO_Str)
 
 void Enable_EXTI_Button(GPIO_Structure *GPIO_Str)
 {
-  uint8_t port_pos_tmp;
-  uint16_t SYSCFG_tmp;
+
   uint8_t arr_reg;
 
+  if ((GPIO_Str->Pin == PIN0) || (GPIO_Str->Pin == PIN1) || (GPIO_Str->Pin == PIN2) || (GPIO_Str->Pin == PIN3))
+    {
+      arr_reg = 0U;
+    }
+
+  if ((GPIO_Str->Pin == PIN4) || (GPIO_Str->Pin == PIN5) || (GPIO_Str->Pin == PIN6) || (GPIO_Str->Pin == PIN7))
+    {
+      arr_reg = 1U;
+    }
+
+  if ((GPIO_Str->Pin == PIN8) || (GPIO_Str->Pin == PIN9) || (GPIO_Str->Pin == PIN10) || (GPIO_Str->Pin == PIN11))
+    {
+      arr_reg = 2U;
+    }
+
+  if ((GPIO_Str->Pin == PIN12) || (GPIO_Str->Pin == PIN13) || (GPIO_Str->Pin == PIN14) || (GPIO_Str->Pin == PIN15))
+    {
+      arr_reg = 3U;
+    }
+
+  Set_Buttons_EXTI(arr_reg, GPIO_Str);
+
+  ENABLE_BIT(EXTI->IMR, 1U << GPIO_Str->Pin);
+  ENABLE_BIT(EXTI->RTSR, 1U << GPIO_Str->Pin);/*по фронту триггера, или по спаду FTSR*/
+
+  Enable_Buttons_NVIC(GPIO_Str);
+
+}
+
+void Set_Buttons_EXTI(uint8_t arr_reg, GPIO_Structure *GPIO_Str)
+{
+  uint8_t port_pos_tmp;
+  uint16_t SYSCFG_tmp;
+
+  /*назначим позицию порта*/
   if (GPIO_Str->GPIOx == GPIOA)
     {
       port_pos_tmp = 0U;
@@ -104,7 +138,7 @@ void Enable_EXTI_Button(GPIO_Structure *GPIO_Str)
       port_pos_tmp = 4U;
     }
 
-  ////
+  /*назначим бит на позицию*/
   if ((GPIO_Str->Pin == PIN0) || (GPIO_Str->Pin == PIN4) || (GPIO_Str->Pin == PIN8) || (GPIO_Str->Pin == PIN12))
     {
       SYSCFG_tmp = port_pos_tmp << 0U;/*0x0001*/
@@ -125,33 +159,12 @@ void Enable_EXTI_Button(GPIO_Structure *GPIO_Str)
       SYSCFG_tmp = port_pos_tmp << 12U;/*0x1000*/
     }
 
-  ////
-  if ((GPIO_Str->Pin == PIN0) || (GPIO_Str->Pin == PIN1) || (GPIO_Str->Pin == PIN2) || (GPIO_Str->Pin == PIN3))
-    {
-      arr_reg = 0U;
-    }
-
-  if ((GPIO_Str->Pin == PIN4) || (GPIO_Str->Pin == PIN5) || (GPIO_Str->Pin == PIN6) || (GPIO_Str->Pin == PIN7))
-    {
-      arr_reg = 1U;
-    }
-
-  if ((GPIO_Str->Pin == PIN8) || (GPIO_Str->Pin == PIN9) || (GPIO_Str->Pin == PIN10) || (GPIO_Str->Pin == PIN11))
-    {
-      arr_reg = 2U;
-    }
-
-  if ((GPIO_Str->Pin == PIN12) || (GPIO_Str->Pin == PIN13) || (GPIO_Str->Pin == PIN14) || (GPIO_Str->Pin == PIN15))
-    {
-      arr_reg = 3U;
-    }
-
-  ///
   ENABLE_BIT(SYSCFG->EXTICR[arr_reg], SYSCFG_tmp);
-  ENABLE_BIT(EXTI->IMR, 1U << GPIO_Str->Pin);
-  ENABLE_BIT(EXTI->FTSR, 1U << GPIO_Str->Pin);
+}
 
-  ///
+/*подключим прерывание*/
+void Enable_Buttons_NVIC(GPIO_Structure *GPIO_Str)
+{
   if (GPIO_Str->Pin == PIN0)
     {
       NVIC_EnableIRQ(EXTI0_IRQn);
@@ -186,8 +199,8 @@ void Enable_EXTI_Button(GPIO_Structure *GPIO_Str)
     {
       NVIC_EnableIRQ(EXTI15_10_IRQn);
     }
-
 }
+
 
 //IRQ
 void EXTI0_IRQHandler()
@@ -196,7 +209,17 @@ void EXTI0_IRQHandler()
   if (Read_BIT(EXTI->PR, EXTI_PR_PR0)) /*проверим флаг irq*/
     {
       ENABLE_BIT(EXTI->PR, EXTI_PR_PR0); /*reset флага*/
-      //Handler_Key1();
+      event("0");
+    }
+}
+
+void EXTI1_IRQHandler()
+{
+
+  if (Read_BIT(EXTI->PR, EXTI_PR_PR1)) /*проверим флаг irq*/
+    {
+      ENABLE_BIT(EXTI->PR, EXTI_PR_PR1); /*reset флага*/
+      event("1");
     }
 }
 
@@ -205,7 +228,7 @@ void EXTI2_IRQHandler()
   if (Read_BIT(EXTI->PR, EXTI_PR_PR2)) /*проверим флаг irq*/
     {
       ENABLE_BIT(EXTI->PR, EXTI_PR_PR2); /*reset флага*/
-      //Handler_Key0();
+      event("2");
     }
 }
 
@@ -214,7 +237,7 @@ void EXTI3_IRQHandler()
   if (Read_BIT(EXTI->PR, EXTI_PR_PR3)) /*проверим флаг irq*/
     {
       ENABLE_BIT(EXTI->PR, EXTI_PR_PR3); /*reset флага*/
-      //Handler_Key0();
+      event("3");
     }
 }
 
@@ -223,40 +246,42 @@ void EXTI4_IRQHandler()
   if (Read_BIT(EXTI->PR, EXTI_PR_PR4)) /*проверим флаг irq*/
     {
       ENABLE_BIT(EXTI->PR, EXTI_PR_PR4); /*reset флага*/
-      //Handler_Key0();
+      event("4");
     }
 }
 
 void EXTI9_5_IRQHandler()
 {
+event("ff");
   if (Read_BIT(EXTI->PR, EXTI_PR_PR5)) /*проверим флаг irq*/
     {
       ENABLE_BIT(EXTI->PR, EXTI_PR_PR5); /*reset флага*/
-      //Handler_Key0();
+      event("5");;
     }
 
   if (Read_BIT(EXTI->PR, EXTI_PR_PR6)) /*проверим флаг irq*/
     {
       ENABLE_BIT(EXTI->PR, EXTI_PR_PR6); /*reset флага*/
-      //Handler_Key0();
+      event("6");
     }
 
   if (Read_BIT(EXTI->PR, EXTI_PR_PR7)) /*проверим флаг irq*/
     {
       ENABLE_BIT(EXTI->PR, EXTI_PR_PR7); /*reset флага*/
-      //Handler_Key0();
+      event("7");
     }
 
   if (Read_BIT(EXTI->PR, EXTI_PR_PR8)) /*проверим флаг irq*/
     {
       ENABLE_BIT(EXTI->PR, EXTI_PR_PR8); /*reset флага*/
-      //Handler_Key0();
+      event("8");
     }
 
   if (Read_BIT(EXTI->PR, EXTI_PR_PR9)) /*проверим флаг irq*/
     {
       ENABLE_BIT(EXTI->PR, EXTI_PR_PR9); /*reset флага*/
-      //Handler_Key0();
+      event("9");
+			H_Write("ev9");
     }
 }
 
@@ -265,37 +290,39 @@ void EXTI15_10_IRQHandler()
   if (Read_BIT(EXTI->PR, EXTI_PR_PR10)) /*проверим флаг irq*/
     {
       ENABLE_BIT(EXTI->PR, EXTI_PR_PR10); /*reset флага*/
-      //Handler_Key0();
+      event("10");
     }
 
   if (Read_BIT(EXTI->PR, EXTI_PR_PR11)) /*проверим флаг irq*/
     {
       ENABLE_BIT(EXTI->PR, EXTI_PR_PR11); /*reset флага*/
-      //Handler_Key0();
+      event("11");
     }
 
   if (Read_BIT(EXTI->PR, EXTI_PR_PR12)) /*проверим флаг irq*/
     {
       ENABLE_BIT(EXTI->PR, EXTI_PR_PR12); /*reset флага*/
-      //Handler_Key0();
+      event("12");
     }
 
   if (Read_BIT(EXTI->PR, EXTI_PR_PR13)) /*проверим флаг irq*/
     {
       ENABLE_BIT(EXTI->PR, EXTI_PR_PR13); /*reset флага*/
-      //Handler_Key0();
+      event("13");
     }
 
   if (Read_BIT(EXTI->PR, EXTI_PR_PR14)) /*проверим флаг irq*/
     {
       ENABLE_BIT(EXTI->PR, EXTI_PR_PR14); /*reset флага*/
-      //Handler_Key0();
+      event("14");
     }
 
   if (Read_BIT(EXTI->PR, EXTI_PR_PR15)) /*проверим флаг irq*/
     {
       ENABLE_BIT(EXTI->PR, EXTI_PR_PR15); /*reset флага*/
-      //Handler_Key0();
+      event("15");
+			H_Write("ev15");
     }
 }
+
 
