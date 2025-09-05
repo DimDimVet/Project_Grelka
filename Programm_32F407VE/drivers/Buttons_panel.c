@@ -209,7 +209,7 @@ void EXTI0_IRQHandler()
   if (Read_BIT(EXTI->PR, EXTI_PR_PR0)) /*проверим флаг irq*/
     {
       ENABLE_BIT(EXTI->PR, EXTI_PR_PR0); /*reset флага*/
-      event("0");
+      Start_Event_Buttons_panel("0", 0);
     }
 }
 
@@ -219,7 +219,7 @@ void EXTI1_IRQHandler()
   if (Read_BIT(EXTI->PR, EXTI_PR_PR1)) /*проверим флаг irq*/
     {
       ENABLE_BIT(EXTI->PR, EXTI_PR_PR1); /*reset флага*/
-      event("1");
+      Start_Event_Buttons_panel("1", 0);
     }
 }
 
@@ -228,7 +228,7 @@ void EXTI2_IRQHandler()
   if (Read_BIT(EXTI->PR, EXTI_PR_PR2)) /*проверим флаг irq*/
     {
       ENABLE_BIT(EXTI->PR, EXTI_PR_PR2); /*reset флага*/
-      event("2");
+      Start_Event_Buttons_panel("2", 0);
     }
 }
 
@@ -237,7 +237,7 @@ void EXTI3_IRQHandler()
   if (Read_BIT(EXTI->PR, EXTI_PR_PR3)) /*проверим флаг irq*/
     {
       ENABLE_BIT(EXTI->PR, EXTI_PR_PR3); /*reset флага*/
-      event("3");
+      Start_Event_Buttons_panel("3", 0);
     }
 }
 
@@ -246,42 +246,42 @@ void EXTI4_IRQHandler()
   if (Read_BIT(EXTI->PR, EXTI_PR_PR4)) /*проверим флаг irq*/
     {
       ENABLE_BIT(EXTI->PR, EXTI_PR_PR4); /*reset флага*/
-      event("4");
+      Start_Event_Buttons_panel("4", 0);
     }
 }
 
 void EXTI9_5_IRQHandler()
 {
-event("ff");
+
   if (Read_BIT(EXTI->PR, EXTI_PR_PR5)) /*проверим флаг irq*/
     {
       ENABLE_BIT(EXTI->PR, EXTI_PR_PR5); /*reset флага*/
-      event("5");;
+      Start_Event_Buttons_panel("5", 0);
     }
 
   if (Read_BIT(EXTI->PR, EXTI_PR_PR6)) /*проверим флаг irq*/
     {
       ENABLE_BIT(EXTI->PR, EXTI_PR_PR6); /*reset флага*/
-      event("6");
+      Start_Event_Buttons_panel("6", 0);
     }
 
   if (Read_BIT(EXTI->PR, EXTI_PR_PR7)) /*проверим флаг irq*/
     {
       ENABLE_BIT(EXTI->PR, EXTI_PR_PR7); /*reset флага*/
-      event("7");
+      Start_Event_Buttons_panel("7", 0);
     }
 
   if (Read_BIT(EXTI->PR, EXTI_PR_PR8)) /*проверим флаг irq*/
     {
       ENABLE_BIT(EXTI->PR, EXTI_PR_PR8); /*reset флага*/
-      event("8");
+      Start_Event_Buttons_panel("8", 0);
     }
 
   if (Read_BIT(EXTI->PR, EXTI_PR_PR9)) /*проверим флаг irq*/
     {
       ENABLE_BIT(EXTI->PR, EXTI_PR_PR9); /*reset флага*/
-      event("9");
-			H_Write("ev9");
+      Start_Event_Buttons_panel("9", 0);
+
     }
 }
 
@@ -290,38 +290,37 @@ void EXTI15_10_IRQHandler()
   if (Read_BIT(EXTI->PR, EXTI_PR_PR10)) /*проверим флаг irq*/
     {
       ENABLE_BIT(EXTI->PR, EXTI_PR_PR10); /*reset флага*/
-      event("10");
+      Start_Event_Buttons_panel("10", 0);
     }
 
   if (Read_BIT(EXTI->PR, EXTI_PR_PR11)) /*проверим флаг irq*/
     {
       ENABLE_BIT(EXTI->PR, EXTI_PR_PR11); /*reset флага*/
-      event("11");
+      Start_Event_Buttons_panel("11", 0);
     }
 
   if (Read_BIT(EXTI->PR, EXTI_PR_PR12)) /*проверим флаг irq*/
     {
       ENABLE_BIT(EXTI->PR, EXTI_PR_PR12); /*reset флага*/
-      event("12");
+      Start_Event_Buttons_panel("12", 0);
     }
 
   if (Read_BIT(EXTI->PR, EXTI_PR_PR13)) /*проверим флаг irq*/
     {
       ENABLE_BIT(EXTI->PR, EXTI_PR_PR13); /*reset флага*/
-      event("13");
+      Start_Event_Buttons_panel("13", 0);
     }
 
   if (Read_BIT(EXTI->PR, EXTI_PR_PR14)) /*проверим флаг irq*/
     {
       ENABLE_BIT(EXTI->PR, EXTI_PR_PR14); /*reset флага*/
-      event("14");
+      Start_Event_Buttons_panel("14", 0);
     }
 
   if (Read_BIT(EXTI->PR, EXTI_PR_PR15)) /*проверим флаг irq*/
     {
       ENABLE_BIT(EXTI->PR, EXTI_PR_PR15); /*reset флага*/
-      event("15");
-			H_Write("ev15");
+      Start_Event_Buttons_panel("15", 0);
     }
 }
 

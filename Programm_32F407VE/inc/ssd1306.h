@@ -42,6 +42,28 @@ static uint8_t SSD1306_Buffer[SSD1306_WIDTH * SSD1306_HEIGHT / 8];
 /*structures*/
 typedef struct
 {
+    uint16_t x0;
+		char* str0;
+		
+		uint16_t x1;
+		char* str1;
+		
+		uint16_t x2;
+		char* str2;
+		
+		uint16_t x3;
+		char* str3;
+		
+		uint16_t x4;
+		char* str4;
+		
+		uint16_t x5;
+		char* str5;
+		
+} Screen_Structure;
+
+typedef struct
+{
     I2C_TypeDef *instance;
     uint16_t adress_I2C;
 		
@@ -50,7 +72,9 @@ typedef struct
     uint8_t inverted;
     uint8_t initialized;
 
-} ssd1306_t;
+} SSD1306_Structure;
+
+
 
 /*Цвета SSD1306*/
 typedef enum {
@@ -60,16 +84,16 @@ typedef enum {
 
 /*func*/
 /*Инициализация SSD1306*/
-uint8_t SSD1306_Init(ssd1306_t *structure);
+uint8_t SSD1306_Init(SSD1306_Structure *structure);
 
 /*Заполняет весь экран цветом*/
 void SSD1306_Fill(SSD1306_COLOR_t Color);
 
 /*Обновляет буфер из RAM SSD1306*/
-void SSD1306_UpdateScreen(ssd1306_t *structure);
+void SSD1306_UpdateScreen(SSD1306_Structure *structure);
 
 /*Включает/выключает инверсию пикселей SSD1306*/
-void SSD1306_ToggleInvert(ssd1306_t *structure) ;
+void SSD1306_StructureoggleInvert(SSD1306_Structure *structure) ;
 
 /**
  * @brief  Рисует пиксель
@@ -79,10 +103,10 @@ void SSD1306_ToggleInvert(ssd1306_t *structure) ;
  * @param  color: Цвет, который будет использоваться для заливки экрана
  * @retval None
  */
-void SSD1306_DrawPixel(ssd1306_t *structure, uint16_t x, uint16_t y, SSD1306_COLOR_t color);
+void SSD1306_DrawPixel(SSD1306_Structure *structure, uint16_t x, uint16_t y, SSD1306_COLOR_t color);
 
 /*Устанавливает указатель курсора в желаемое место для строк*/
-void SSD1306_GotoXY(ssd1306_t *structure, uint16_t x, uint16_t y);
+void SSD1306_GotoXY(SSD1306_Structure *structure, uint16_t x, uint16_t y);
 
 /**
  * @brief  Помещает символ в RAM
@@ -92,7 +116,7 @@ void SSD1306_GotoXY(ssd1306_t *structure, uint16_t x, uint16_t y);
  * @param  color: Цвет, который будет использоваться для заливки экрана
  * @retval Character written
  */
-char SSD1306_Putc(ssd1306_t *structure, char ch, FontDef_t *Font, SSD1306_COLOR_t color);
+char SSD1306_Putc(SSD1306_Structure *structure, char ch, FontDef_t *Font, SSD1306_COLOR_t color);
 
 /**
  * @brief  Помещает строку в RAM
@@ -102,7 +126,7 @@ char SSD1306_Putc(ssd1306_t *structure, char ch, FontDef_t *Font, SSD1306_COLOR_
  * @param  color: Цвет, который будет использоваться для заливки экрана
  * @retval Ноль в случае успеха или символьное значение в случае сбоя функции
  */
-char SSD1306_Puts(ssd1306_t *structure, char *str, FontDef_t *Font, SSD1306_COLOR_t color);
+char SSD1306_Puts(SSD1306_Structure *structure, char *str, FontDef_t *Font, SSD1306_COLOR_t color);
 
 /**
  * @brief  Рисование линии в LCD
@@ -114,7 +138,7 @@ char SSD1306_Puts(ssd1306_t *structure, char *str, FontDef_t *Font, SSD1306_COLO
  * @param  c: Цвет, который будет использоваться для заливки экрана
  * @retval None
  */
-void SSD1306_DrawLine(ssd1306_t *structure, uint16_t x0, uint16_t y0, uint16_t x1, uint16_t y1, SSD1306_COLOR_t c);
+void SSD1306_DrawLine(SSD1306_Structure *structure, uint16_t x0, uint16_t y0, uint16_t x1, uint16_t y1, SSD1306_COLOR_t c);
 
 /**
  * @brief  Рисование прямоугольника в LCD
@@ -126,7 +150,7 @@ void SSD1306_DrawLine(ssd1306_t *structure, uint16_t x0, uint16_t y0, uint16_t x
  * @param  c: Цвет, который будет использоваться для заливки экрана
  * @retval None
  */
-void SSD1306_DrawRectangle(ssd1306_t *structure, uint16_t x, uint16_t y, uint16_t w, uint16_t h, SSD1306_COLOR_t c);
+void SSD1306_DrawRectangle(SSD1306_Structure *structure, uint16_t x, uint16_t y, uint16_t w, uint16_t h, SSD1306_COLOR_t c);
 
 /**
  * @brief  Рисование прямоугольника с заливкой в LCD
@@ -138,7 +162,7 @@ void SSD1306_DrawRectangle(ssd1306_t *structure, uint16_t x, uint16_t y, uint16_
  * @param  c: Цвет, который будет использоваться для заливки экрана
  * @retval None
  */
-void SSD1306_DrawFilledRectangle(ssd1306_t *structure, uint16_t x, uint16_t y, uint16_t w, uint16_t h, SSD1306_COLOR_t c);
+void SSD1306_DrawFilledRectangle(SSD1306_Structure *structure, uint16_t x, uint16_t y, uint16_t w, uint16_t h, SSD1306_COLOR_t c);
 
 /**
  * @brief  Рисование треугольника в LCD
@@ -152,7 +176,7 @@ void SSD1306_DrawFilledRectangle(ssd1306_t *structure, uint16_t x, uint16_t y, u
  * @param  c: Цвет, который будет использоваться для заливки экрана
  * @retval None
  */
-void SSD1306_DrawTriangle(ssd1306_t *structure, uint16_t x1, uint16_t y1, uint16_t x2, uint16_t y2, uint16_t x3, uint16_t y3, SSD1306_COLOR_t color);
+void SSD1306_DrawTriangle(SSD1306_Structure *structure, uint16_t x1, uint16_t y1, uint16_t x2, uint16_t y2, uint16_t x3, uint16_t y3, SSD1306_COLOR_t color);
 
 /**
  * @brief  Рисование круга в LCD
@@ -163,7 +187,7 @@ void SSD1306_DrawTriangle(ssd1306_t *structure, uint16_t x1, uint16_t y1, uint16
  * @param  c: Цвет, который будет использоваться для заливки экрана
  * @retval None
  */
-void SSD1306_DrawCircle(ssd1306_t *structure, int16_t x0, int16_t y0, int16_t r, SSD1306_COLOR_t c);
+void SSD1306_DrawCircle(SSD1306_Structure *structure, int16_t x0, int16_t y0, int16_t r, SSD1306_COLOR_t c);
 
 /**
 * @brief  Рисование круга с заливкойв LCD
@@ -174,7 +198,7 @@ void SSD1306_DrawCircle(ssd1306_t *structure, int16_t x0, int16_t y0, int16_t r,
  * @param  c: Цвет, который будет использоваться для заливки экрана
  * @retval None
  */
-void SSD1306_DrawFilledCircle(ssd1306_t *structure, int16_t x0, int16_t y0, int16_t r, SSD1306_COLOR_t c);
+void SSD1306_DrawFilledCircle(SSD1306_Structure *structure, int16_t x0, int16_t y0, int16_t r, SSD1306_COLOR_t c);
 
 /**
 * @brief Записывает один байт в подчиненное устройство
@@ -206,7 +230,7 @@ void ssd1306_I2C_WriteMulti(uint8_t address, uint8_t reg, uint8_t* data, uint16_
 * @param H : высота изображения
 * @param color : 1-> белый/синий, 0-> черный
 */
-void SSD1306_DrawBitmap(ssd1306_t *structure, int16_t x, int16_t y, const unsigned char* bitmap, int16_t w, int16_t h, uint16_t color);
+void SSD1306_DrawBitmap(SSD1306_Structure *structure, int16_t x, int16_t y, const unsigned char* bitmap, int16_t w, int16_t h, uint16_t color);
 
 /*прокрутите экран для фиксированных строк*/
 void SSD1306_ScrollRight(uint8_t address,uint8_t start_row, uint8_t end_row);
@@ -220,8 +244,12 @@ void SSD1306_Scrolldiagleft(uint8_t address,uint8_t start_row, uint8_t end_row);
 void SSD1306_Stopscroll(uint8_t address);
 
 /*инвертирует отображение i = 1->инвертированный, i = 0->нормальный*/
-void SSD1306_InvertDisplay(ssd1306_t *structure,int i);
+void SSD1306_InvertDisplay(SSD1306_Structure *structure,int i);
 
 /*очистить дисплей*/
-void SSD1306_Clear(ssd1306_t *structure);
+void SSD1306_Clear(SSD1306_Structure *structure);
+
+/*вспомог. функции*/
+void Main_Screen(SSD1306_Structure *ssd, Screen_Structure* screen, uint8_t clr_time);
+void Work_Screen(SSD1306_Structure *ssd, Screen_Structure* screen);
 #endif

@@ -5,6 +5,7 @@
 #include "stm32f407xx.h"
 #include "stm32f4xx.h"
 #include "HEHAL.h"
+#include "events.h"
 #include "GPIO.h"
 #include "RCC.h"
 #include "ADC.h"
@@ -30,7 +31,5 @@ void Enable_Periphery_Button(GPIO_Structure *GPIO_Str);
 void Enable_EXTI_Button(GPIO_Structure *GPIO_Str);
 void Set_Buttons_EXTI(uint8_t arr_reg, GPIO_Structure *GPIO_Str);
 void Enable_Buttons_NVIC(GPIO_Structure *GPIO_Str);
-
-void event(void* d);
 
 #endif

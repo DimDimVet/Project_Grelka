@@ -5,6 +5,7 @@
 #include "stm32f407xx.h"
 #include "stm32f4xx.h"
 #include "HEHAL.h"
+#include "events.h"
 #include "GPIO.h"
 #include <stdio.h>
 //#include "PWR.h" //temp
@@ -232,10 +233,10 @@ RezultError ADC_MspInit(ADC_Structure* adc);
 RezultError ADC_SetReg(ADC_Structure* adc);
 RezultError ADC_ConfigChannel(ADC_Structure* adc);
 RezultError ADC_Start_IT(ADC_Structure* adc);
-void WorkADC(char* buff_str_temp);
+//void WorkADC(char* buff_str_temp);
 void Enable_ADC(void);
 void Disable_ADC(void);
 
 
-void TempChar(char* tmp);
+//void TempChar(char* tmp);
 #endif

@@ -13,25 +13,20 @@
 /*Регистовые операции*/
 #define Write_REG(REG, VAL)   ((REG) = (VAL))
 #define Read_REG(REG)         ((REG))
-#define Clear_REG(REG)        ((REG) = (0x0))
+#define Clear_REG(REG)        ((REG) = (0))
 /*Вкл. периферии*/
 #define AHB1_ENABLE_PERIPHERY(_RCC_PERIPHERY_) (RCC->AHB1ENR |= _RCC_PERIPHERY_)/*вкл что то по AHB1*/
 #define APB1_ENABLE_PERIPHERY(_RCC_PERIPHERY_) (RCC->APB1ENR |= _RCC_PERIPHERY_)/*вкл что то по APB1*/
 #define APB2_ENABLE_PERIPHERY(_RCC_PERIPHERY_) (RCC->APB2ENR |= _RCC_PERIPHERY_)/*вкл что то по APB2*/
 /*var*/
 
-/*event*/
-typedef void (*event_handler_t)(void *ctx, int event_data);
-
-void Init_Event(event_handler_t func);
-void H_Write(void *ctx);
 /*structures*/
 typedef enum
 {
-  _OK       = 0x00U,
-  _ERROR    = 0x01U,
-  _ERROR_BUSY = 0x02U,
-  _ERROR_TIMEOUT = 0x03U,
+  _OK       = 0U,
+  _ERROR    = 1U,
+  _ERROR_BUSY = 2U,
+  _ERROR_TIMEOUT = 3U,
 } RezultError;
 
 /*func*/

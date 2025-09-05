@@ -3,6 +3,7 @@
 
 /*includes*/
 #include "HEHAL.h"
+#include "events.h"
 #include "RCC.h"
 #include "GPIO.h"
 #include "PWR.h"
@@ -10,7 +11,6 @@
 #include "ADC.h"
 #include "I2C.h"
 #include "ssd1306.h"
-#include "Key_Matrix.h"
 #include "Buttons_panel.h"
 /*defaines*/
 
@@ -21,8 +21,7 @@
 /*var*/
 
 /*func*/
-void Init_PWR(void);
 
-void my_handler(void *ctx, int event_data);
-void my_handler2(void *ctx, int event_data);
+void Handler_Buttons_panel_Event(void *var, int vol);
+void Handler_ADC_Event(uint16_t adcData, float adcVoltage);
 #endif
