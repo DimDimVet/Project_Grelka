@@ -104,7 +104,7 @@ void Handler_ADC_Event(uint16_t adcData, float adcVoltage)
 
   Work_Screen(&ssd, &current_screen);
 
-  Handler_ADC_PWR(&pwr_str, adcData,50);
+  Handler_ADC_PWR(&pwr_str, adcData,80);
 
 }
 
@@ -113,54 +113,123 @@ void Handler_Buttons_panel_Event(void *var, int vol)
   temps = (char*)var;
 }
 
+//float rez_volt;
+float rez_temp;
 void Handler_ADC_PWR(PWR_Structure* pwr, uint16_t adcData, uint16_t step_temp)
 {
   float rez_volt = adcData * 3.0 / 4095;
 
-	float rez_temp;
+	//float rez_temp;
+	//{1.52,1.97,2.26,2.4,2.59,2.78,2.86}
+	if(rez_volt > 2.86)
+	{
+		rez_temp = 200;
+	}
+	else if((rez_volt > 2.78)&&(rez_volt < 2.86))
+	{
+		rez_temp = TEMP_151_180(rez_volt);
+	}
+	else if((rez_volt > 2.59)&&(rez_volt < 2.78))
+	{
+		rez_temp = TEMP_121_150(rez_volt);
+	}
+	else if((rez_volt > 2.4)&&(rez_volt < 2.59))
+	{
+		rez_temp = TEMP_101_120(rez_volt);
+	}
+	else if((rez_volt > 2.26)&&(rez_volt < 2.4))
+	{
+		rez_temp = TEMP_81_100(rez_volt);
+	}
+	else if((rez_volt > 1.97)&&(rez_volt < 2.26))
+	{
+		rez_temp = TEMP_51_80(rez_volt);
+	}
+	else if((rez_volt > 1.52)&&(rez_volt < 1.97))
+	{
+		rez_temp = TEMP_23_50(rez_volt);
+	}
+	else if((rez_volt < 1.52))
+	{
+		rez_temp = 10;
+	}
 	
-  for (int i = 0; i < LENGTH_VOLT_ARR; i++)
-    {
-      if ((rez_volt < range_volt[i]))
-        {
-          switch (i)
-            {
-							case 0:
-								rez_temp = 0;
-								break;
-              case 1:
-								rez_temp = TEMP_23_50(rez_volt);
-                break;
-							case 2:
-								rez_temp = TEMP_51_80(rez_volt);
-                break;
-							case 3:
-								rez_temp = TEMP_81_100(rez_volt);
-                break;
-							case 4:
-								rez_temp = TEMP_101_120(rez_volt);
-                break;
-							case 5:
-								rez_temp = TEMP_121_150(rez_volt);
-                break;
-							case 6:
-								rez_temp = TEMP_151_180(rez_volt);
-                break;
-             default:
-                break;
-            }
-        }
-				else
-				{
-					rez_temp = 1;
-					return;
-				}
+//  for (int i = 0; i < LENGTH_VOLT_ARR; i++)
+//    {
+//      if ((rez_volt < range_volt[i]))
+//        {
+//          switch (i)
+//            {
+//							case 0:
+//								rez_temp = 0;
+//								break;
+//              case 1:
+//								rez_temp = TEMP_23_50(rez_volt);
+//                break;
+//							case 2:
+//								rez_temp = TEMP_51_80(rez_volt);
+//                break;
+//							case 3:
+//								rez_temp = TEMP_81_100(rez_volt);
+//                break;
+//							case 4:
+//								rez_temp = TEMP_101_120(rez_volt);
+//                break;
+//							case 5:
+//								rez_temp = TEMP_121_150(rez_volt);
+//                break;
+//							case 6:
+//								rez_temp = TEMP_151_180(rez_volt);
+//                break;
+//             default:
+//                break;
+//            }
+//        }
+//				else
+//				{
+//					rez_temp = 200;
+//					//return;
+//				}
 
-    }
+//    }
 		
 		///
 		if(step_temp > rez_temp)
 		{
+			uint16_t temp = step_temp - rez_temp;
 			
+			if(temp > 20)
+			{
+				pwr_str.fill_Factor = 55;
+			}
+			
+			if((temp > 10) & (temp < 20))
+			{
+				pwr_str.fill_Factor = 15;
+			}
+			
+			if((temp > 5) & (temp < 10))
+			{
+				pwr_str.fill_Factor = 5;
+			}
+			
+			if((temp > 2) & (temp < 5))
+			{
+				pwr_str.fill_Factor = 1;
+			}
+		}
+		else
+		{
+			uint16_t temp = rez_temp - step_temp;
+			
+			if((temp > 2) & (temp < 5))
+			{
+				pwr_str.fill_Factor = 1;
+			}
+			
+			if(temp > 5)
+			{
+				pwr_str.fill_Factor = 0;
+			}
 		}
 }

@@ -18,12 +18,12 @@
 
 
 
-#define TEMP_23_50(volt) ((volt*1000-1136,667)/16,666)
-#define TEMP_51_80(volt) ((volt*1000-1487,586)/9,655)
-#define TEMP_81_100(volt) ((volt*1000-1715,736)/ 6,842)
+#define TEMP_23_50(volt) ((volt*1000-1136.667)/16.666)
+#define TEMP_51_80(volt) ((volt*1000-1487.586)/9.655)
+#define TEMP_81_100(volt) ((volt*1000-1715.736)/ 6.842)
 #define TEMP_101_120(volt) ((volt*1000-1390)/ 10)
-#define TEMP_121_150(volt) ((volt*1000-1823)/ 6,379)
-#define TEMP_151_180(volt) ((volt*1000- 2363,414)/ 2,758)
+#define TEMP_121_150(volt) ((volt*1000-1823)/ 6.379)
+#define TEMP_151_180(volt) ((volt*1000- 2363.414)/ 2.758)
 #define LENGTH_VOLT_ARR 7
 /*structures*/
 
