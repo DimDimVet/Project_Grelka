@@ -288,7 +288,7 @@ void ADC_IRQHandler(void)
     {
 				DISABLE_BIT(adc.Instance->SR,ADC_SR_EOC);
 				
-        adcVoltage = adcData * 3.3 / 4095;
+        adcVoltage = adcData * 3.0 / 4095;
 				Start_Event_ADC(adcData,adcVoltage);
 				Disable_ADC();
     }

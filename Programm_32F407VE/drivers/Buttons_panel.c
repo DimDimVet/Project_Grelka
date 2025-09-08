@@ -232,23 +232,24 @@ void EXTI2_IRQHandler()
     }
 }
 
-void EXTI3_IRQHandler()
-{
-  if (Read_BIT(EXTI->PR, EXTI_PR_PR3)) /*проверим флаг irq*/
-    {
-      ENABLE_BIT(EXTI->PR, EXTI_PR_PR3); /*reset флага*/
-      Start_Event_Buttons_panel("3", 0);
-    }
-}
+/*резерв, использую на встроеных кнопках*/
+//void EXTI3_IRQHandler()
+//{
+//  if (Read_BIT(EXTI->PR, EXTI_PR_PR3)) /*проверим флаг irq*/
+//    {
+//      ENABLE_BIT(EXTI->PR, EXTI_PR_PR3); /*reset флага*/
+//      Start_Event_Buttons_panel("3", 0);
+//    }
+//}
 
-void EXTI4_IRQHandler()
-{
-  if (Read_BIT(EXTI->PR, EXTI_PR_PR4)) /*проверим флаг irq*/
-    {
-      ENABLE_BIT(EXTI->PR, EXTI_PR_PR4); /*reset флага*/
-      Start_Event_Buttons_panel("4", 0);
-    }
-}
+//void EXTI4_IRQHandler()
+//{
+//  if (Read_BIT(EXTI->PR, EXTI_PR_PR4)) /*проверим флаг irq*/
+//    {
+//      ENABLE_BIT(EXTI->PR, EXTI_PR_PR4); /*reset флага*/
+//      Start_Event_Buttons_panel("4", 0);
+//    }
+//}
 
 void EXTI9_5_IRQHandler()
 {

@@ -62,21 +62,21 @@ void Handler_LED7()
 	ODR_Xor(&LED_7);
 }
 
-//void EXTI4_IRQHandler()
-//{
-//  if (Read_BIT(EXTI->PR,EXTI_PR_PR4)) /*проверим флаг irq*/
-//    {
-//      ENABLE_BIT(EXTI->PR,EXTI_PR_PR4); /*reset флага*/
-//      Handler_Key0();
-//    }
-//}
+void EXTI4_IRQHandler()
+{
+  if (Read_BIT(EXTI->PR,EXTI_PR_PR4)) /*проверим флаг irq*/
+    {
+      ENABLE_BIT(EXTI->PR,EXTI_PR_PR4); /*reset флага*/
+      Handler_Key0();
+    }
+}
 
-//void EXTI3_IRQHandler()
-//{
+void EXTI3_IRQHandler()
+{
 
-//  if (Read_BIT(EXTI->PR,EXTI_PR_PR3)) /*проверим флаг irq*/
-//    {
-//      ENABLE_BIT(EXTI->PR,EXTI_PR_PR3); /*reset флага*/
-//      Handler_Key1();
-//    }
-//}
+  if (Read_BIT(EXTI->PR,EXTI_PR_PR3)) /*проверим флаг irq*/
+    {
+      ENABLE_BIT(EXTI->PR,EXTI_PR_PR3); /*reset флага*/
+      Handler_Key1();
+    }
+}
