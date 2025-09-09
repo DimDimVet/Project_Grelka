@@ -16,6 +16,7 @@ typedef struct
 {
 	TIM_TypeDef* TIMx;  /*Указывает настраиваемые таймер TIM_TypeDef*/
 	uint8_t fill_Factor; /*значение Коэффициента заполнения*/
+	uint16_t step_temp; /*значение ограничения по заполнению*/
 	
 } PWR_Structure;
 

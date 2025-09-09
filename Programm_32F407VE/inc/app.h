@@ -16,15 +16,15 @@
 /*defaines*/
 #define SSD1306_I2C_ADDR 0x78 /*адрес I2C экрана*/
 
-
-
 #define TEMP_23_50(volt) ((volt*1000-1136.667)/16.666)
 #define TEMP_51_80(volt) ((volt*1000-1487.586)/9.655)
 #define TEMP_81_100(volt) ((volt*1000-1715.736)/ 6.842)
 #define TEMP_101_120(volt) ((volt*1000-1390)/ 10)
 #define TEMP_121_150(volt) ((volt*1000-1823)/ 6.379)
 #define TEMP_151_180(volt) ((volt*1000- 2363.414)/ 2.758)
-#define LENGTH_VOLT_ARR 7
+
+#define MAX_STEP_TEMP 180
+#define MIN_STEP_TEMP 50
 /*structures*/
 
 /*var*/
@@ -37,10 +37,11 @@
 2,78V = 150C = 0.8k
 2,86V = 180C = 0.5k
 */
-static float range_volt[LENGTH_VOLT_ARR]={1.52,1.97,2.26,2.4,2.59,2.78,2.86};
+
 /*func*/
 
 void Handler_Buttons_panel_Event(void *var, int vol);
 void Handler_ADC_Event(uint16_t adcData, float adcVoltage);
-void Handler_ADC_PWR(PWR_Structure* pwr, uint16_t adcData, uint16_t step_temp);
+void Handler_ADC_PWR(PWR_Structure* pwr, uint16_t adcData);
+void Set_Fill_Factor(PWR_Structure* pwr, uint8_t vol);
 #endif

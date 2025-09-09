@@ -14,6 +14,8 @@
 #define Write_REG(REG, VAL)   ((REG) = (VAL))
 #define Read_REG(REG)         ((REG))
 #define Clear_REG(REG)        ((REG) = (0))
+/*Логика*/
+#define _RANGE(vol,min,max) ((vol > min) && (vol < max))
 /*Вкл. периферии*/
 #define AHB1_ENABLE_PERIPHERY(_RCC_PERIPHERY_) (RCC->AHB1ENR |= _RCC_PERIPHERY_)/*вкл что то по AHB1*/
 #define APB1_ENABLE_PERIPHERY(_RCC_PERIPHERY_) (RCC->APB1ENR |= _RCC_PERIPHERY_)/*вкл что то по APB1*/

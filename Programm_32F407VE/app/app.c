@@ -1,10 +1,9 @@
 #include "app.h"
-int countFillFactor = 0;
 
 /*структура для RCC*/
 RCC_Structure rcc_str = {.mDivider_PLLM = 8, .nMultiplier_PLLN = 192, .pDivider_PLLP = 6}; /*структура для RCC*/
 /*структура для ШИМ*/
-PWR_Structure pwr_str = {.TIMx = TIM3, .fill_Factor = 50};
+PWR_Structure pwr_str = {.TIMx = TIM3, .fill_Factor = 50,.step_temp = MIN_STEP_TEMP};
 /*Настройки SSD1306*/
 SSD1306_Structure ssd = {.adress_I2C = SSD1306_I2C_ADDR, .instance = I2C1};
 Screen_Structure main_screen = {.str0 = "*Project:*", .x0 = 10, .str2 = "GRELKA", .x2 = 30};
@@ -12,6 +11,7 @@ Screen_Structure current_screen = {};
 /*Настройки I2C*/
 I2C_Structure i2c_str = {.I2Cx = I2C1};
 /*Настройки Buttons*/
+/*Pin8 Enter, pin15 +10, pin9 -10, pin11 +1, pin13 -1*/
 GPIO_Structure arr_buttons[5] = {{.GPIOx = GPIOD, .Pin = PIN8}, {.GPIOx = GPIOB, .Pin = PIN15}, {.GPIOx = GPIOD, .Pin = PIN9}, {.GPIOx = GPIOD, .Pin = PIN11}, {.GPIOx = GPIOD, .Pin = PIN13}};
 GPIO_Structure com = {.GPIOx = GPIOD, .Pin = PIN14};
 Butt_Panel_Structure buttons = {.buttons_count = 5, .pin_butt = arr_buttons, .pin_com = &com};
@@ -104,132 +104,143 @@ void Handler_ADC_Event(uint16_t adcData, float adcVoltage)
 
   Work_Screen(&ssd, &current_screen);
 
-  Handler_ADC_PWR(&pwr_str, adcData,80);
+  Handler_ADC_PWR(&pwr_str, adcData);
 
 }
 
 void Handler_Buttons_panel_Event(void *var, int vol)
 {
-  temps = (char*)var;
+		//temps = (char*)var;
+	
+	Set_Fill_Factor(&pwr_str,vol);
+	
+	sprintf(temps, "%d", pwr_str.step_temp);
+
+}
+uint8_t temp;
+void Set_Fill_Factor(PWR_Structure* pwr, uint8_t vol)
+{
+	/*Pin8 Enter, pin15 +10, pin9 -10, pin11 +1, pin13 -1*/
+	 if(vol == PIN8)
+	 {
+		 
+	 }
+	 
+	 temp = pwr->step_temp;
+	 
+	 if(vol == PIN15)
+	 {
+		 //if(_RANGE(temp,MIN_STEP_TEMP-1,MAX_STEP_TEMP))
+		 //{
+			 temp = +10;
+			 if(temp > MAX_STEP_TEMP)
+			 {
+				 temp = MAX_STEP_TEMP;
+			 }
+		 //}
+	 }
+	 
+	 if(vol == PIN9)
+	 {
+		 //if(_RANGE(temp,MIN_STEP_TEMP,MAX_STEP_TEMP))
+		 //{
+			 temp = -10;
+			 if(temp < MIN_STEP_TEMP)
+			 {
+				 temp = MIN_STEP_TEMP;
+			 }
+		 //}
+	 }
+	 
+	 if(vol == PIN11)
+	 {
+		 
+	 }
+	 
+	 if(vol == PIN13)
+	 {
+		 
+	 }
+	 
+	 pwr->step_temp = temp;
 }
 
-//float rez_volt;
-float rez_temp;
-void Handler_ADC_PWR(PWR_Structure* pwr, uint16_t adcData, uint16_t step_temp)
+void Handler_ADC_PWR(PWR_Structure* pwr, uint16_t adcData)
 {
   float rez_volt = adcData * 3.0 / 4095;
 
-	//float rez_temp;
-	//{1.52,1.97,2.26,2.4,2.59,2.78,2.86}
-	if(rez_volt > 2.86)
-	{
-		rez_temp = 200;
-	}
-	else if((rez_volt > 2.78)&&(rez_volt < 2.86))
-	{
-		rez_temp = TEMP_151_180(rez_volt);
-	}
-	else if((rez_volt > 2.59)&&(rez_volt < 2.78))
-	{
-		rez_temp = TEMP_121_150(rez_volt);
-	}
-	else if((rez_volt > 2.4)&&(rez_volt < 2.59))
-	{
-		rez_temp = TEMP_101_120(rez_volt);
-	}
-	else if((rez_volt > 2.26)&&(rez_volt < 2.4))
-	{
-		rez_temp = TEMP_81_100(rez_volt);
-	}
-	else if((rez_volt > 1.97)&&(rez_volt < 2.26))
-	{
-		rez_temp = TEMP_51_80(rez_volt);
-	}
-	else if((rez_volt > 1.52)&&(rez_volt < 1.97))
-	{
-		rez_temp = TEMP_23_50(rez_volt);
-	}
-	else if((rez_volt < 1.52))
-	{
-		rez_temp = 10;
-	}
-	
-//  for (int i = 0; i < LENGTH_VOLT_ARR; i++)
-//    {
-//      if ((rez_volt < range_volt[i]))
-//        {
-//          switch (i)
-//            {
-//							case 0:
-//								rez_temp = 0;
-//								break;
-//              case 1:
-//								rez_temp = TEMP_23_50(rez_volt);
-//                break;
-//							case 2:
-//								rez_temp = TEMP_51_80(rez_volt);
-//                break;
-//							case 3:
-//								rez_temp = TEMP_81_100(rez_volt);
-//                break;
-//							case 4:
-//								rez_temp = TEMP_101_120(rez_volt);
-//                break;
-//							case 5:
-//								rez_temp = TEMP_121_150(rez_volt);
-//                break;
-//							case 6:
-//								rez_temp = TEMP_151_180(rez_volt);
-//                break;
-//             default:
-//                break;
-//            }
-//        }
-//				else
-//				{
-//					rez_temp = 200;
-//					//return;
-//				}
+  float rez_temp;
+  //{1.52,1.97,2.26,2.4,2.59,2.78,2.86}
+  if (_RANGE(rez_volt,2.86,3))
+    {
+      rez_temp = 200;
+    }
+  else if (_RANGE(rez_volt,2.78,2.86))
+    {
+      rez_temp = TEMP_151_180(rez_volt);
+    }
+  else if (_RANGE(rez_volt,2.59,2.78))
+    {
+      rez_temp = TEMP_121_150(rez_volt);
+    }
+  else if (_RANGE(rez_volt,2.4,2.59))
+    {
+      rez_temp = TEMP_101_120(rez_volt);
+    }
+  else if (_RANGE(rez_volt,2.26,2.4))
+    {
+      rez_temp = TEMP_81_100(rez_volt);
+    }
+  else if (_RANGE(rez_volt, 1.97,2.26))
+    {
+      rez_temp = TEMP_51_80(rez_volt);
+    }
+  else if (_RANGE(rez_volt, 1.52,1.97))
+    {
+      rez_temp = TEMP_23_50(rez_volt);
+    }
+  else if (_RANGE(rez_volt, 0,1.52))
+    {
+      rez_temp = 10;
+    }
 
-//    }
-		
-		///
-		if(step_temp > rez_temp)
-		{
-			uint16_t temp = step_temp - rez_temp;
-			
-			if(temp > 20)
-			{
-				pwr_str.fill_Factor = 55;
-			}
-			
-			if((temp > 10) & (temp < 20))
-			{
-				pwr_str.fill_Factor = 15;
-			}
-			
-			if((temp > 5) & (temp < 10))
-			{
-				pwr_str.fill_Factor = 5;
-			}
-			
-			if((temp > 2) & (temp < 5))
-			{
-				pwr_str.fill_Factor = 1;
-			}
-		}
-		else
-		{
-			uint16_t temp = rez_temp - step_temp;
-			
-			if((temp > 2) & (temp < 5))
-			{
-				pwr_str.fill_Factor = 1;
-			}
-			
-			if(temp > 5)
-			{
-				pwr_str.fill_Factor = 0;
-			}
-		}
+
+  if (pwr->step_temp > rez_temp)
+    {
+      uint16_t temp = pwr->step_temp - rez_temp;
+
+      if (_RANGE(temp, 20,200))
+        {
+          pwr_str.fill_Factor = 55;
+        }
+
+      if (_RANGE(temp, 10,20))
+        {
+          pwr_str.fill_Factor = 15;
+        }
+
+      if (_RANGE(temp, 5,10))
+        {
+          pwr_str.fill_Factor = 5;
+        }
+
+      if (_RANGE(temp, 2,5))
+        {
+          pwr_str.fill_Factor = 1;
+        }
+    }
+  else
+    {
+      uint16_t temp = rez_temp - pwr->step_temp;
+
+      if (_RANGE(temp, 2,5))
+        {
+          pwr_str.fill_Factor = 1;
+        }
+
+      if (_RANGE(temp, 5,200))
+        {
+          pwr_str.fill_Factor = 0;
+        }
+    }
 }

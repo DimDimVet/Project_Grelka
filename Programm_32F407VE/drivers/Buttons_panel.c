@@ -168,36 +168,43 @@ void Enable_Buttons_NVIC(GPIO_Structure *GPIO_Str)
   if (GPIO_Str->Pin == PIN0)
     {
       NVIC_EnableIRQ(EXTI0_IRQn);
+			return;
     }
 
   if (GPIO_Str->Pin == PIN1)
     {
       NVIC_EnableIRQ(EXTI1_IRQn);
+			return;
     }
 
   if (GPIO_Str->Pin == PIN2)
     {
       NVIC_EnableIRQ(EXTI2_IRQn);
+			return;
     }
 
   if (GPIO_Str->Pin == PIN3)
     {
       NVIC_EnableIRQ(EXTI3_IRQn);
+			return;
     }
 
   if (GPIO_Str->Pin == PIN4)
     {
       NVIC_EnableIRQ(EXTI4_IRQn);
+			return;
     }
 
   if ((GPIO_Str->Pin == PIN5) || (GPIO_Str->Pin == PIN6) || (GPIO_Str->Pin == PIN7) || (GPIO_Str->Pin == PIN8) || (GPIO_Str->Pin == PIN9))
     {
       NVIC_EnableIRQ(EXTI9_5_IRQn);
+			return;
     }
 
   if ((GPIO_Str->Pin == PIN10) || (GPIO_Str->Pin == PIN11) || (GPIO_Str->Pin == PIN12) || (GPIO_Str->Pin == PIN13) || (GPIO_Str->Pin == PIN14) || (GPIO_Str->Pin == PIN15))
     {
       NVIC_EnableIRQ(EXTI15_10_IRQn);
+			return;
     }
 }
 
@@ -209,7 +216,8 @@ void EXTI0_IRQHandler()
   if (Read_BIT(EXTI->PR, EXTI_PR_PR0)) /*проверим флаг irq*/
     {
       ENABLE_BIT(EXTI->PR, EXTI_PR_PR0); /*reset флага*/
-      Start_Event_Buttons_panel("0", 0);
+      Start_Event_Buttons_panel("0", PIN0);
+			return;
     }
 }
 
@@ -219,7 +227,8 @@ void EXTI1_IRQHandler()
   if (Read_BIT(EXTI->PR, EXTI_PR_PR1)) /*проверим флаг irq*/
     {
       ENABLE_BIT(EXTI->PR, EXTI_PR_PR1); /*reset флага*/
-      Start_Event_Buttons_panel("1", 0);
+      Start_Event_Buttons_panel("1", PIN1);
+			return;
     }
 }
 
@@ -228,7 +237,8 @@ void EXTI2_IRQHandler()
   if (Read_BIT(EXTI->PR, EXTI_PR_PR2)) /*проверим флаг irq*/
     {
       ENABLE_BIT(EXTI->PR, EXTI_PR_PR2); /*reset флага*/
-      Start_Event_Buttons_panel("2", 0);
+      Start_Event_Buttons_panel("2", PIN2);
+			return;
     }
 }
 
@@ -257,32 +267,36 @@ void EXTI9_5_IRQHandler()
   if (Read_BIT(EXTI->PR, EXTI_PR_PR5)) /*проверим флаг irq*/
     {
       ENABLE_BIT(EXTI->PR, EXTI_PR_PR5); /*reset флага*/
-      Start_Event_Buttons_panel("5", 0);
+      Start_Event_Buttons_panel("5", PIN5);
+			return;
     }
 
   if (Read_BIT(EXTI->PR, EXTI_PR_PR6)) /*проверим флаг irq*/
     {
       ENABLE_BIT(EXTI->PR, EXTI_PR_PR6); /*reset флага*/
-      Start_Event_Buttons_panel("6", 0);
+      Start_Event_Buttons_panel("6", PIN6);
+			return;
     }
 
   if (Read_BIT(EXTI->PR, EXTI_PR_PR7)) /*проверим флаг irq*/
     {
       ENABLE_BIT(EXTI->PR, EXTI_PR_PR7); /*reset флага*/
-      Start_Event_Buttons_panel("7", 0);
+      Start_Event_Buttons_panel("7", PIN7);
+			return;
     }
 
   if (Read_BIT(EXTI->PR, EXTI_PR_PR8)) /*проверим флаг irq*/
     {
       ENABLE_BIT(EXTI->PR, EXTI_PR_PR8); /*reset флага*/
-      Start_Event_Buttons_panel("8", 0);
+      Start_Event_Buttons_panel("8", PIN8);
+			return;
     }
 
   if (Read_BIT(EXTI->PR, EXTI_PR_PR9)) /*проверим флаг irq*/
     {
       ENABLE_BIT(EXTI->PR, EXTI_PR_PR9); /*reset флага*/
-      Start_Event_Buttons_panel("9", 0);
-
+      Start_Event_Buttons_panel("9", PIN9);
+			return;
     }
 }
 
@@ -291,37 +305,43 @@ void EXTI15_10_IRQHandler()
   if (Read_BIT(EXTI->PR, EXTI_PR_PR10)) /*проверим флаг irq*/
     {
       ENABLE_BIT(EXTI->PR, EXTI_PR_PR10); /*reset флага*/
-      Start_Event_Buttons_panel("10", 0);
+      Start_Event_Buttons_panel("10", PIN10);
+			return;
     }
 
   if (Read_BIT(EXTI->PR, EXTI_PR_PR11)) /*проверим флаг irq*/
     {
       ENABLE_BIT(EXTI->PR, EXTI_PR_PR11); /*reset флага*/
-      Start_Event_Buttons_panel("11", 0);
+      Start_Event_Buttons_panel("11", PIN11);
+			return;
     }
 
   if (Read_BIT(EXTI->PR, EXTI_PR_PR12)) /*проверим флаг irq*/
     {
       ENABLE_BIT(EXTI->PR, EXTI_PR_PR12); /*reset флага*/
-      Start_Event_Buttons_panel("12", 0);
+      Start_Event_Buttons_panel("12", PIN12);
+			return;
     }
 
   if (Read_BIT(EXTI->PR, EXTI_PR_PR13)) /*проверим флаг irq*/
     {
       ENABLE_BIT(EXTI->PR, EXTI_PR_PR13); /*reset флага*/
-      Start_Event_Buttons_panel("13", 0);
+      Start_Event_Buttons_panel("13", PIN13);
+			return;
     }
 
   if (Read_BIT(EXTI->PR, EXTI_PR_PR14)) /*проверим флаг irq*/
     {
       ENABLE_BIT(EXTI->PR, EXTI_PR_PR14); /*reset флага*/
-      Start_Event_Buttons_panel("14", 0);
+      Start_Event_Buttons_panel("14", PIN14);
+			return;
     }
 
   if (Read_BIT(EXTI->PR, EXTI_PR_PR15)) /*проверим флаг irq*/
     {
       ENABLE_BIT(EXTI->PR, EXTI_PR_PR15); /*reset флага*/
-      Start_Event_Buttons_panel("15", 0);
+      Start_Event_Buttons_panel("15", PIN15);
+			return;
     }
 }
 
