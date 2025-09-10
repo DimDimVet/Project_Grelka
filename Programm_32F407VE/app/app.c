@@ -28,8 +28,10 @@ int main()
   Buttons_Init(&buttons);
   Connect_Event_Buttons_panel(Handler_Buttons_panel_Event);
   Connect_Event_ADC(Handler_ADC_Event);
+	
+	Get_Flash_Data(&pwr_str);
   /**/
-  Main_Screen(&ssd, &main_screen, 5);
+  Main_Screen(&ssd, &main_screen, 1);
   /*------------*/
   ADC_Init(ADC1);
   /*------------*/
@@ -80,7 +82,10 @@ void Handler_ADC_Event(uint16_t adcData, float adcVoltage)
   char buff_str_temp[50];
   char buff_str_temp1[50];
   char buff_str_PWR[50];
+	char buff_str_Step[50];
   sprintf(buff_str_temp, "Volt=%.2fV %s", adcVoltage, temps);
+	
+	sprintf(buff_str_Step, "Step temp=%d", pwr_str.step_temp);
   sprintf(buff_str_PWR, "Fill PWR=%.2d", pwr_str.fill_Factor);
   sprintf(buff_str_temp1, "=%.2d", adcData / 4095);
   //
@@ -96,7 +101,7 @@ void Handler_ADC_Event(uint16_t adcData, float adcVoltage)
   current_screen.str3 = buff_str_temp;
   current_screen.x3 = 10;
 
-  current_screen.str4 = buff_str_temp1;
+  current_screen.str4 = buff_str_Step;
   current_screen.x4 = 10;
 
   current_screen.str5 = buff_str_PWR;
@@ -111,45 +116,45 @@ void Handler_ADC_Event(uint16_t adcData, float adcVoltage)
 void Handler_Buttons_panel_Event(void *var, int vol)
 {
 		//temps = (char*)var;
-	
+	delay_ms(150);
 	Set_Fill_Factor(&pwr_str,vol);
 	
 	sprintf(temps, "%d", pwr_str.step_temp);
 
 }
-uint8_t temp;
+int isRun_setup = 1;
 void Set_Fill_Factor(PWR_Structure* pwr, uint8_t vol)
 {
-	/*Pin8 Enter, pin15 +10, pin9 -10, pin11 +1, pin13 -1*/
+	/*Pin8 Enter, pin15 -10, pin9 +10, pin11 -1, pin13 +1*/
 	 if(vol == PIN8)
 	 {
+//												if(isRun_setup == 1)
+//												{
+													isRun_setup = 0;
+													pwr->step_temp+=1;
+													Set_Flash_Data(pwr);
+//												}
 		 
 	 }
-	 
-	 temp = pwr->step_temp;
-	 
+
 	 if(vol == PIN15)
 	 {
-		 //if(_RANGE(temp,MIN_STEP_TEMP-1,MAX_STEP_TEMP))
-		 //{
-			 temp = +10;
-			 if(temp > MAX_STEP_TEMP)
+			 pwr->step_temp -= 5;
+			 isRun_setup = 1;
+			 if(pwr->step_temp <= MIN_STEP_TEMP)
 			 {
-				 temp = MAX_STEP_TEMP;
+				 pwr->step_temp = MIN_STEP_TEMP;
 			 }
-		 //}
 	 }
 	 
 	 if(vol == PIN9)
 	 {
-		 //if(_RANGE(temp,MIN_STEP_TEMP,MAX_STEP_TEMP))
-		 //{
-			 temp = -10;
-			 if(temp < MIN_STEP_TEMP)
+			 pwr->step_temp += 5;
+			 isRun_setup = 1;
+			 if(pwr->step_temp >= MAX_STEP_TEMP)
 			 {
-				 temp = MIN_STEP_TEMP;
+				 pwr->step_temp = MAX_STEP_TEMP;
 			 }
-		 //}
 	 }
 	 
 	 if(vol == PIN11)
@@ -162,7 +167,7 @@ void Set_Fill_Factor(PWR_Structure* pwr, uint8_t vol)
 		 
 	 }
 	 
-	 pwr->step_temp = temp;
+	 Replace_Fill_Factor(&pwr_str);
 }
 
 void Handler_ADC_PWR(PWR_Structure* pwr, uint16_t adcData)
@@ -211,7 +216,7 @@ void Handler_ADC_PWR(PWR_Structure* pwr, uint16_t adcData)
 
       if (_RANGE(temp, 20,200))
         {
-          pwr_str.fill_Factor = 55;
+          pwr_str.fill_Factor = 45;
         }
 
       if (_RANGE(temp, 10,20))

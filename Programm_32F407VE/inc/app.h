@@ -12,6 +12,7 @@
 #include "I2C.h"
 #include "ssd1306.h"
 #include "Buttons_panel.h"
+#include "setup_flash_F407.h"
 
 /*defaines*/
 #define SSD1306_I2C_ADDR 0x78 /*адрес I2C экрана*/
