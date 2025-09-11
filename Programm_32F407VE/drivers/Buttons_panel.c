@@ -6,8 +6,8 @@
 /*structures*/
 
 /*var*/
-uint8_t flag_delay=1;
-
+uint8_t flag_delay = 1;
+FLASH_Status temp2;
 /*func*/
 
 void Buttons_Init(Butt_Panel_Structure* buttons)
@@ -169,43 +169,43 @@ void Enable_Buttons_NVIC(GPIO_Structure *GPIO_Str)
   if (GPIO_Str->Pin == PIN0)
     {
       NVIC_EnableIRQ(EXTI0_IRQn);
-			return;
+      return;
     }
 
   if (GPIO_Str->Pin == PIN1)
     {
       NVIC_EnableIRQ(EXTI1_IRQn);
-			return;
+      return;
     }
 
   if (GPIO_Str->Pin == PIN2)
     {
       NVIC_EnableIRQ(EXTI2_IRQn);
-			return;
+      return;
     }
 
   if (GPIO_Str->Pin == PIN3)
     {
       NVIC_EnableIRQ(EXTI3_IRQn);
-			return;
+      return;
     }
 
   if (GPIO_Str->Pin == PIN4)
     {
       NVIC_EnableIRQ(EXTI4_IRQn);
-			return;
+      return;
     }
 
   if ((GPIO_Str->Pin == PIN5) || (GPIO_Str->Pin == PIN6) || (GPIO_Str->Pin == PIN7) || (GPIO_Str->Pin == PIN8) || (GPIO_Str->Pin == PIN9))
     {
       NVIC_EnableIRQ(EXTI9_5_IRQn);
-			return;
+      return;
     }
 
   if ((GPIO_Str->Pin == PIN10) || (GPIO_Str->Pin == PIN11) || (GPIO_Str->Pin == PIN12) || (GPIO_Str->Pin == PIN13) || (GPIO_Str->Pin == PIN14) || (GPIO_Str->Pin == PIN15))
     {
       NVIC_EnableIRQ(EXTI15_10_IRQn);
-			return;
+      return;
     }
 }
 
@@ -218,37 +218,37 @@ void EXTI0_IRQHandler()
     {
       ENABLE_BIT(EXTI->PR, EXTI_PR_PR0); /*reset флага*/
       Start_Event_Buttons_panel("0", PIN0);
-			return;
+      return;
     }
 }
 
 void EXTI1_IRQHandler()
 {
 
-  if (Read_BIT(EXTI->PR, EXTI_PR_PR1)&& flag_delay) /*проверим флаг irq*/
+  if (Read_BIT(EXTI->PR, EXTI_PR_PR1) && flag_delay) /*проверим флаг irq*/
     {
-		flag_delay = 0;
+      flag_delay = 0;
       ENABLE_BIT(EXTI->PR, EXTI_PR_PR1); /*reset флага*/
       Start_Event_Buttons_panel("1", PIN1);
-			return;
+      return;
     }
-		
-					delay_ms(500);
-			flag_delay = 1;
+
+  delay_ms(500);
+  flag_delay = 1;
 }
 
 void EXTI2_IRQHandler()
 {
-  if (Read_BIT(EXTI->PR, EXTI_PR_PR2)&& flag_delay) /*проверим флаг irq*/
+  if (Read_BIT(EXTI->PR, EXTI_PR_PR2) && flag_delay) /*проверим флаг irq*/
     {
-		flag_delay = 0;
+      flag_delay = 0;
       ENABLE_BIT(EXTI->PR, EXTI_PR_PR2); /*reset флага*/
       Start_Event_Buttons_panel("2", PIN2);
-			return;
+      return;
     }
-		
-					delay_ms(500);
-			flag_delay = 1;
+
+  delay_ms(500);
+  flag_delay = 1;
 }
 
 /*резерв, использую на встроеных кнопках*/
@@ -269,108 +269,108 @@ void EXTI2_IRQHandler()
 //      Start_Event_Buttons_panel("4", 0);
 //    }
 //}
-
+int tst=0;
 void EXTI9_5_IRQHandler()
 {
-
-  if (Read_BIT(EXTI->PR, EXTI_PR_PR5)&& flag_delay) /*проверим флаг irq*/
+  if (Read_BIT(EXTI->PR, EXTI_PR_PR5) && flag_delay) /*проверим флаг irq*/
     {
-		flag_delay = 0;
+      flag_delay = 0;
       ENABLE_BIT(EXTI->PR, EXTI_PR_PR5); /*reset флага*/
       Start_Event_Buttons_panel("5", PIN5);
-			return;
+      return;
     }
 
-  if (Read_BIT(EXTI->PR, EXTI_PR_PR6)&& flag_delay) /*проверим флаг irq*/
+  if (Read_BIT(EXTI->PR, EXTI_PR_PR6) && flag_delay) /*проверим флаг irq*/
     {
-		flag_delay = 0;
+      flag_delay = 0;
       ENABLE_BIT(EXTI->PR, EXTI_PR_PR6); /*reset флага*/
       Start_Event_Buttons_panel("6", PIN6);
-			return;
+      return;
     }
 
-  if (Read_BIT(EXTI->PR, EXTI_PR_PR7)&& flag_delay) /*проверим флаг irq*/
+  if (Read_BIT(EXTI->PR, EXTI_PR_PR7) && flag_delay) /*проверим флаг irq*/
     {
-		flag_delay = 0;
+      flag_delay = 0;
       ENABLE_BIT(EXTI->PR, EXTI_PR_PR7); /*reset флага*/
       Start_Event_Buttons_panel("7", PIN7);
-			return;
+      return;
     }
 
-  if (Read_BIT(EXTI->PR, EXTI_PR_PR8)&& flag_delay) /*проверим флаг irq*/
+  if (Read_BIT(EXTI->PR, EXTI_PR_PR8) && flag_delay) /*проверим флаг irq*/
     {
-		flag_delay = 0;
+      flag_delay = 0;
       ENABLE_BIT(EXTI->PR, EXTI_PR_PR8); /*reset флага*/
-      Start_Event_Buttons_panel("8", PIN8);
-			return;
+			Event_Tst(PIN8);
+      //Start_Event_Buttons_panel("8", PIN8);
+      return;
     }
 
-  if (Read_BIT(EXTI->PR, EXTI_PR_PR9)&& flag_delay) /*проверим флаг irq*/
+  if (Read_BIT(EXTI->PR, EXTI_PR_PR9) && flag_delay) /*проверим флаг irq*/
     {
-		flag_delay = 0;
+      flag_delay = 0;
       ENABLE_BIT(EXTI->PR, EXTI_PR_PR9); /*reset флага*/
-      Start_Event_Buttons_panel("9", PIN9);
-			return;
+      //Start_Event_Buttons_panel("9", PIN9);
+			Event_Tst(PIN9);
+      return;
     }
-		
-					delay_ms(500);
-			flag_delay = 1;
+
+  delay_ms(500);
+  flag_delay = 1;
 }
 
 void EXTI15_10_IRQHandler()
 {
-  if (Read_BIT(EXTI->PR, EXTI_PR_PR10)&& flag_delay) /*проверим флаг irq*/
+  if (Read_BIT(EXTI->PR, EXTI_PR_PR10) && flag_delay) /*проверим флаг irq*/
     {
-		flag_delay = 0;
+      flag_delay = 0;
       ENABLE_BIT(EXTI->PR, EXTI_PR_PR10); /*reset флага*/
       Start_Event_Buttons_panel("10", PIN10);
-			return;
+      return;
     }
 
-  if (Read_BIT(EXTI->PR, EXTI_PR_PR11)&& flag_delay) /*проверим флаг irq*/
+  if (Read_BIT(EXTI->PR, EXTI_PR_PR11) && flag_delay) /*проверим флаг irq*/
     {
-		flag_delay = 0;
+      flag_delay = 0;
       ENABLE_BIT(EXTI->PR, EXTI_PR_PR11); /*reset флага*/
       Start_Event_Buttons_panel("11", PIN11);
-			return;
+      return;
     }
 
-  if (Read_BIT(EXTI->PR, EXTI_PR_PR12)&& flag_delay) /*проверим флаг irq*/
+  if (Read_BIT(EXTI->PR, EXTI_PR_PR12) && flag_delay) /*проверим флаг irq*/
     {
-		flag_delay = 0;
+      flag_delay = 0;
       ENABLE_BIT(EXTI->PR, EXTI_PR_PR12); /*reset флага*/
       Start_Event_Buttons_panel("12", PIN12);
-			return;
+      return;
     }
 
-  if (Read_BIT(EXTI->PR, EXTI_PR_PR13)&& flag_delay) /*проверим флаг irq*/
+  if (Read_BIT(EXTI->PR, EXTI_PR_PR13) && flag_delay) /*проверим флаг irq*/
     {
-		flag_delay = 0;
+      flag_delay = 0;
       ENABLE_BIT(EXTI->PR, EXTI_PR_PR13); /*reset флага*/
       Start_Event_Buttons_panel("13", PIN13);
-			return;
+      return;
     }
 
-  if (Read_BIT(EXTI->PR, EXTI_PR_PR14)&& flag_delay) /*проверим флаг irq*/
+  if (Read_BIT(EXTI->PR, EXTI_PR_PR14) && flag_delay) /*проверим флаг irq*/
     {
-		flag_delay = 0;
+      flag_delay = 0;
       ENABLE_BIT(EXTI->PR, EXTI_PR_PR14); /*reset флага*/
       Start_Event_Buttons_panel("14", PIN14);
-			return;
+      return;
     }
 
-  if (Read_BIT(EXTI->PR, EXTI_PR_PR15) && flag_delay) /*проверим флаг irq*/
+  if (Read_BIT(EXTI->PR, EXTI_PR_PR15) && flag_delay ) /*проверим флаг irq*/
     {
-		flag_delay = 0;
+      flag_delay = 0;
       ENABLE_BIT(EXTI->PR, EXTI_PR_PR15); /*reset флага*/
-			
-      Start_Event_Buttons_panel("15", PIN15);
-
-			return;
+			Event_Tst(PIN15);
+      //Start_Event_Buttons_panel("15", PIN15);
+      return;
     }
-		
-			delay_ms(500);
-			flag_delay = 1;
+
+  delay_ms(500);
+  flag_delay = 1;
 }
 
 

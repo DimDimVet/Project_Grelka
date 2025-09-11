@@ -19,7 +19,7 @@ static int arr_time_date[SIZE];
 /*structures*/
 
 /*func*/
-void Set_Flash_Data(PWR_Structure* pwr);
+void Set_Flash_Data(int data);
 void Get_Flash_Data(PWR_Structure* pwr);
 
 #endif

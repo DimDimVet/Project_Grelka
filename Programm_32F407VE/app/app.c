@@ -122,39 +122,34 @@ void Handler_Buttons_panel_Event(void *var, int vol)
 	sprintf(temps, "%d", pwr_str.step_temp);
 
 }
-int isRun_setup = 1;
+
+void Event_Tst(uint8_t data)
+{
+	Set_Fill_Factor(&pwr_str,data);
+}
+
 void Set_Fill_Factor(PWR_Structure* pwr, uint8_t vol)
 {
 	/*Pin8 Enter, pin15 -10, pin9 +10, pin11 -1, pin13 +1*/
-	 if(vol == PIN8)
-	 {
-//												if(isRun_setup == 1)
-//												{
-													isRun_setup = 0;
-													pwr->step_temp+=1;
-													Set_Flash_Data(pwr);
-//												}
-		 
-	 }
 
 	 if(vol == PIN15)
 	 {
 			 pwr->step_temp -= 5;
-			 isRun_setup = 1;
 			 if(pwr->step_temp <= MIN_STEP_TEMP)
 			 {
 				 pwr->step_temp = MIN_STEP_TEMP;
 			 }
+			 //Set_Flash_Data(pwr_str.step_temp);
 	 }
 	 
 	 if(vol == PIN9)
 	 {
 			 pwr->step_temp += 5;
-			 isRun_setup = 1;
 			 if(pwr->step_temp >= MAX_STEP_TEMP)
 			 {
 				 pwr->step_temp = MAX_STEP_TEMP;
 			 }
+			 //Set_Flash_Data(pwr_str.step_temp);
 	 }
 	 
 	 if(vol == PIN11)
@@ -167,7 +162,12 @@ void Set_Fill_Factor(PWR_Structure* pwr, uint8_t vol)
 		 
 	 }
 	 
-	 Replace_Fill_Factor(&pwr_str);
+	 if(vol == PIN8)
+	 {
+		 Set_Flash_Data(pwr->step_temp);
+	 }
+	 //pwr_str.step_temp = temp;
+	 Replace_Fill_Factor(pwr);
 }
 
 void Handler_ADC_PWR(PWR_Structure* pwr, uint16_t adcData)

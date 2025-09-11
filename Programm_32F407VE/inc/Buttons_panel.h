@@ -9,7 +9,8 @@
 #include "GPIO.h"
 #include "RCC.h"
 #include "ADC.h"
-
+#include "flash_F407.h"
+#include "setup_flash_F407.h"
 /*defaines*/
 
 
@@ -32,4 +33,5 @@ void Enable_EXTI_Button(GPIO_Structure *GPIO_Str);
 void Set_Buttons_EXTI(uint8_t arr_reg, GPIO_Structure *GPIO_Str);
 void Enable_Buttons_NVIC(GPIO_Structure *GPIO_Str);
 
+void Event_Tst(uint8_t data);
 #endif
