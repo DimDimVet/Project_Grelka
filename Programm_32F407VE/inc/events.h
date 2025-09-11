@@ -11,18 +11,17 @@
 
 /*defaines*/
 
-
 /*structures*/
-
 
 /*var*/
 
 /*event var*/
-typedef void (*event_buttons_panel_t)(void *var, int vol);
+//typedef void (*event_buttons_panel_t)(int vol);
 typedef void (*event_ADC_t)(uint16_t adcData, float adcVoltage);
+
 /*event func*/
-void Connect_Event_Buttons_panel(event_buttons_panel_t func);
-void Start_Event_Buttons_panel(void *var, int vol);
+//void Connect_Event_Buttons_panel(event_buttons_panel_t func);
+//void Start_Event_Buttons_panel(int vol);
 
 void Connect_Event_ADC(event_ADC_t func);
 void Start_Event_ADC(uint16_t adcData, float adcVoltage);

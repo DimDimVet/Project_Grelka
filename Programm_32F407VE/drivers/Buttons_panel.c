@@ -209,7 +209,6 @@ void Enable_Buttons_NVIC(GPIO_Structure *GPIO_Str)
     }
 }
 
-
 //IRQ
 void EXTI0_IRQHandler()
 {
@@ -217,7 +216,7 @@ void EXTI0_IRQHandler()
   if (Read_BIT(EXTI->PR, EXTI_PR_PR0)) /*проверим флаг irq*/
     {
       ENABLE_BIT(EXTI->PR, EXTI_PR_PR0); /*reset флага*/
-      Start_Event_Buttons_panel("0", PIN0);
+      Event_Buttons_panel(PIN0);
       return;
     }
 }
@@ -229,7 +228,7 @@ void EXTI1_IRQHandler()
     {
       flag_delay = 0;
       ENABLE_BIT(EXTI->PR, EXTI_PR_PR1); /*reset флага*/
-      Start_Event_Buttons_panel("1", PIN1);
+      Event_Buttons_panel(PIN1);
       return;
     }
 
@@ -243,7 +242,7 @@ void EXTI2_IRQHandler()
     {
       flag_delay = 0;
       ENABLE_BIT(EXTI->PR, EXTI_PR_PR2); /*reset флага*/
-      Start_Event_Buttons_panel("2", PIN2);
+      Event_Buttons_panel(PIN2);
       return;
     }
 
@@ -257,7 +256,7 @@ void EXTI2_IRQHandler()
 //  if (Read_BIT(EXTI->PR, EXTI_PR_PR3)) /*проверим флаг irq*/
 //    {
 //      ENABLE_BIT(EXTI->PR, EXTI_PR_PR3); /*reset флага*/
-//      Start_Event_Buttons_panel("3", 0);
+//      Start_Event_Buttons_panel(0);
 //    }
 //}
 
@@ -266,7 +265,7 @@ void EXTI2_IRQHandler()
 //  if (Read_BIT(EXTI->PR, EXTI_PR_PR4)) /*проверим флаг irq*/
 //    {
 //      ENABLE_BIT(EXTI->PR, EXTI_PR_PR4); /*reset флага*/
-//      Start_Event_Buttons_panel("4", 0);
+//      Start_Event_Buttons_panel(0);
 //    }
 //}
 int tst=0;
@@ -276,7 +275,7 @@ void EXTI9_5_IRQHandler()
     {
       flag_delay = 0;
       ENABLE_BIT(EXTI->PR, EXTI_PR_PR5); /*reset флага*/
-      Start_Event_Buttons_panel("5", PIN5);
+      Event_Buttons_panel(PIN5);
       return;
     }
 
@@ -284,7 +283,7 @@ void EXTI9_5_IRQHandler()
     {
       flag_delay = 0;
       ENABLE_BIT(EXTI->PR, EXTI_PR_PR6); /*reset флага*/
-      Start_Event_Buttons_panel("6", PIN6);
+      Event_Buttons_panel(PIN6);
       return;
     }
 
@@ -292,7 +291,7 @@ void EXTI9_5_IRQHandler()
     {
       flag_delay = 0;
       ENABLE_BIT(EXTI->PR, EXTI_PR_PR7); /*reset флага*/
-      Start_Event_Buttons_panel("7", PIN7);
+      Event_Buttons_panel(PIN7);
       return;
     }
 
@@ -300,8 +299,7 @@ void EXTI9_5_IRQHandler()
     {
       flag_delay = 0;
       ENABLE_BIT(EXTI->PR, EXTI_PR_PR8); /*reset флага*/
-			Event_Tst(PIN8);
-      //Start_Event_Buttons_panel("8", PIN8);
+      Event_Buttons_panel(PIN8);
       return;
     }
 
@@ -309,8 +307,7 @@ void EXTI9_5_IRQHandler()
     {
       flag_delay = 0;
       ENABLE_BIT(EXTI->PR, EXTI_PR_PR9); /*reset флага*/
-      //Start_Event_Buttons_panel("9", PIN9);
-			Event_Tst(PIN9);
+      Event_Buttons_panel(PIN9);
       return;
     }
 
@@ -324,7 +321,7 @@ void EXTI15_10_IRQHandler()
     {
       flag_delay = 0;
       ENABLE_BIT(EXTI->PR, EXTI_PR_PR10); /*reset флага*/
-      Start_Event_Buttons_panel("10", PIN10);
+      Event_Buttons_panel(PIN10);
       return;
     }
 
@@ -332,7 +329,7 @@ void EXTI15_10_IRQHandler()
     {
       flag_delay = 0;
       ENABLE_BIT(EXTI->PR, EXTI_PR_PR11); /*reset флага*/
-      Start_Event_Buttons_panel("11", PIN11);
+      Event_Buttons_panel(PIN11);
       return;
     }
 
@@ -340,7 +337,7 @@ void EXTI15_10_IRQHandler()
     {
       flag_delay = 0;
       ENABLE_BIT(EXTI->PR, EXTI_PR_PR12); /*reset флага*/
-      Start_Event_Buttons_panel("12", PIN12);
+      Event_Buttons_panel(PIN12);
       return;
     }
 
@@ -348,7 +345,7 @@ void EXTI15_10_IRQHandler()
     {
       flag_delay = 0;
       ENABLE_BIT(EXTI->PR, EXTI_PR_PR13); /*reset флага*/
-      Start_Event_Buttons_panel("13", PIN13);
+      Event_Buttons_panel(PIN13);
       return;
     }
 
@@ -356,7 +353,7 @@ void EXTI15_10_IRQHandler()
     {
       flag_delay = 0;
       ENABLE_BIT(EXTI->PR, EXTI_PR_PR14); /*reset флага*/
-      Start_Event_Buttons_panel("14", PIN14);
+      Event_Buttons_panel(PIN14);
       return;
     }
 
@@ -364,8 +361,7 @@ void EXTI15_10_IRQHandler()
     {
       flag_delay = 0;
       ENABLE_BIT(EXTI->PR, EXTI_PR_PR15); /*reset флага*/
-			Event_Tst(PIN15);
-      //Start_Event_Buttons_panel("15", PIN15);
+      Event_Buttons_panel(PIN15);
       return;
     }
 

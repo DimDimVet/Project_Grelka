@@ -26,7 +26,6 @@ int main()
   Init_I2C(&i2c_str);
   SSD1306_Init(&ssd);
   Buttons_Init(&buttons);
-  Connect_Event_Buttons_panel(Handler_Buttons_panel_Event);
   Connect_Event_ADC(Handler_ADC_Event);
 	
 	Get_Flash_Data(&pwr_str);
@@ -45,37 +44,37 @@ int main()
   return 0;
 }
 
-void Handler_Key0(void)//temp
-{
-  Handler_LED7();
-  pwr_str.fill_Factor += 10;
+//void Handler_Key0(void)//temp
+//{
+//  Handler_LED7();
+//  pwr_str.fill_Factor += 10;
 
-  if ((pwr_str.fill_Factor) <= 100)
-    {
-      Replace_Fill_Factor(&pwr_str);
-    }
-  else
-    {
-      pwr_str.fill_Factor = 0;
-      Replace_Fill_Factor(&pwr_str);
-    }
-}
+//  if ((pwr_str.fill_Factor) <= 100)
+//    {
+//      Replace_Fill_Factor(&pwr_str);
+//    }
+//  else
+//    {
+//      pwr_str.fill_Factor = 0;
+//      Replace_Fill_Factor(&pwr_str);
+//    }
+//}
 
-void Handler_Key1(void)//temp
-{
-  Handler_LED7();
-  pwr_str.fill_Factor -= 10;
+//void Handler_Key1(void)//temp
+//{
+//  Handler_LED7();
+//  pwr_str.fill_Factor -= 10;
 
-  if ((pwr_str.fill_Factor) >= 0)
-    {
-      Replace_Fill_Factor(&pwr_str);
-    }
-  else
-    {
-      pwr_str.fill_Factor = 0;
-      Replace_Fill_Factor(&pwr_str);
-    }
-}
+//  if ((pwr_str.fill_Factor) >= 0)
+//    {
+//      Replace_Fill_Factor(&pwr_str);
+//    }
+//  else
+//    {
+//      pwr_str.fill_Factor = 0;
+//      Replace_Fill_Factor(&pwr_str);
+//    }
+//}
 
 void Handler_ADC_Event(uint16_t adcData, float adcVoltage)
 {
@@ -113,139 +112,9 @@ void Handler_ADC_Event(uint16_t adcData, float adcVoltage)
 
 }
 
-void Handler_Buttons_panel_Event(void *var, int vol)
+void Event_Buttons_panel(uint8_t pin)
 {
-		//temps = (char*)var;
-	delay_ms(150);
-	Set_Fill_Factor(&pwr_str,vol);
-	
-	sprintf(temps, "%d", pwr_str.step_temp);
-
+	Set_Fill_Factor(&pwr_str,pin,STEP_VOL,MIN_STEP_TEMP,MAX_STEP_TEMP);
 }
 
-void Event_Tst(uint8_t data)
-{
-	Set_Fill_Factor(&pwr_str,data);
-}
 
-void Set_Fill_Factor(PWR_Structure* pwr, uint8_t vol)
-{
-	/*Pin8 Enter, pin15 -10, pin9 +10, pin11 -1, pin13 +1*/
-
-	 if(vol == PIN15)
-	 {
-			 pwr->step_temp -= 5;
-			 if(pwr->step_temp <= MIN_STEP_TEMP)
-			 {
-				 pwr->step_temp = MIN_STEP_TEMP;
-			 }
-			 //Set_Flash_Data(pwr_str.step_temp);
-	 }
-	 
-	 if(vol == PIN9)
-	 {
-			 pwr->step_temp += 5;
-			 if(pwr->step_temp >= MAX_STEP_TEMP)
-			 {
-				 pwr->step_temp = MAX_STEP_TEMP;
-			 }
-			 //Set_Flash_Data(pwr_str.step_temp);
-	 }
-	 
-	 if(vol == PIN11)
-	 {
-		 
-	 }
-	 
-	 if(vol == PIN13)
-	 {
-		 
-	 }
-	 
-	 if(vol == PIN8)
-	 {
-		 Set_Flash_Data(pwr->step_temp);
-	 }
-	 //pwr_str.step_temp = temp;
-	 Replace_Fill_Factor(pwr);
-}
-
-void Handler_ADC_PWR(PWR_Structure* pwr, uint16_t adcData)
-{
-  float rez_volt = adcData * 3.0 / 4095;
-
-  float rez_temp;
-  //{1.52,1.97,2.26,2.4,2.59,2.78,2.86}
-  if (_RANGE(rez_volt,2.86,3))
-    {
-      rez_temp = 200;
-    }
-  else if (_RANGE(rez_volt,2.78,2.86))
-    {
-      rez_temp = TEMP_151_180(rez_volt);
-    }
-  else if (_RANGE(rez_volt,2.59,2.78))
-    {
-      rez_temp = TEMP_121_150(rez_volt);
-    }
-  else if (_RANGE(rez_volt,2.4,2.59))
-    {
-      rez_temp = TEMP_101_120(rez_volt);
-    }
-  else if (_RANGE(rez_volt,2.26,2.4))
-    {
-      rez_temp = TEMP_81_100(rez_volt);
-    }
-  else if (_RANGE(rez_volt, 1.97,2.26))
-    {
-      rez_temp = TEMP_51_80(rez_volt);
-    }
-  else if (_RANGE(rez_volt, 1.52,1.97))
-    {
-      rez_temp = TEMP_23_50(rez_volt);
-    }
-  else if (_RANGE(rez_volt, 0,1.52))
-    {
-      rez_temp = 10;
-    }
-
-
-  if (pwr->step_temp > rez_temp)
-    {
-      uint16_t temp = pwr->step_temp - rez_temp;
-
-      if (_RANGE(temp, 20,200))
-        {
-          pwr_str.fill_Factor = 45;
-        }
-
-      if (_RANGE(temp, 10,20))
-        {
-          pwr_str.fill_Factor = 15;
-        }
-
-      if (_RANGE(temp, 5,10))
-        {
-          pwr_str.fill_Factor = 5;
-        }
-
-      if (_RANGE(temp, 2,5))
-        {
-          pwr_str.fill_Factor = 1;
-        }
-    }
-  else
-    {
-      uint16_t temp = rez_temp - pwr->step_temp;
-
-      if (_RANGE(temp, 2,5))
-        {
-          pwr_str.fill_Factor = 1;
-        }
-
-      if (_RANGE(temp, 5,200))
-        {
-          pwr_str.fill_Factor = 0;
-        }
-    }
-}

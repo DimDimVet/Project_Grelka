@@ -33,5 +33,6 @@ void Enable_EXTI_Button(GPIO_Structure *GPIO_Str);
 void Set_Buttons_EXTI(uint8_t arr_reg, GPIO_Structure *GPIO_Str);
 void Enable_Buttons_NVIC(GPIO_Structure *GPIO_Str);
 
-void Event_Tst(uint8_t data);
+void Event_Buttons_panel(uint8_t pin);
+
 #endif

@@ -1,8 +1,9 @@
 #include "setup_flash_F407.h"
-int temp1;
+
 void Set_Flash_Data(int data)
 {
 	uint32_t prim = __get_PRIMASK();
+	
 	__disable_irq();
 	
 	FLASH_Unlock();
@@ -22,14 +23,15 @@ void Set_Flash_Data(int data)
 	
 	for(uint8_t i = 0; i <  SIZE; i++)
 	{
-		temp1 = FLASH_ProgramWord(addr_time_date[i], arr_time_date[i]);
+		FLASH_ProgramWord(addr_time_date[i], arr_time_date[i]);
 		//delay_ms(50);
 	}
 
 	FLASH_Lock();
 	
 	if (!prim) __enable_irq();
-	//__enable_irq();
+	
+	__enable_irq();
 }
 
 void Get_Flash_Data(PWR_Structure* pwr)
@@ -46,7 +48,7 @@ void Get_Flash_Data(PWR_Structure* pwr)
 	}
 	
 	FLASH_Lock();
-	temp1 =arr_time_date[0];
+
 	pwr->step_temp = arr_time_date[0];
 	
 	__enable_irq();

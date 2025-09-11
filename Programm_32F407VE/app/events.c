@@ -2,17 +2,17 @@
 
 /*события Buttons_panel*/
 
-event_buttons_panel_t event_buttons_panel;
+//event_buttons_panel_t event_buttons_panel;
 
-void Connect_Event_Buttons_panel(event_buttons_panel_t func)
-{
-	event_buttons_panel = func;
-}
+//void Connect_Event_Buttons_panel(event_buttons_panel_t func)
+//{
+//	event_buttons_panel = func;
+//}
 
-void Start_Event_Buttons_panel(void *var, int vol)
-{
-	 event_buttons_panel(var,vol);
-}
+//void Start_Event_Buttons_panel(int vol)
+//{
+//	 event_buttons_panel(vol);
+//}
 
 /*события ADC*/
 

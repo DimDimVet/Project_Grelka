@@ -27,6 +27,6 @@ void Key_Config_In_Pin(void);
 void Led_Config_Out_Pin(void);
 
 void Handler_LED7(void);
-void Handler_Key0(void);
-void Handler_Key1(void);
+//void Handler_Key0(void);
+//void Handler_Key1(void);
 #endif
