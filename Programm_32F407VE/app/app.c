@@ -116,5 +116,36 @@ void Event_Buttons_panel(uint8_t pin)
 {
 	Set_Fill_Factor(&pwr_str,pin,STEP_VOL,MIN_STEP_TEMP,MAX_STEP_TEMP);
 }
+/*temp*/
+void ExecutorTerminal_USART_Irq(void)
+{
+    USART1_ReadChar(receivedChar); // Читаем из консоли
+
+    if (count_size_buf >= SIZE_BUF_USART)
+    {
+        count_size_buf = 0;
+
+        __disable_irq();
+
+//        while (I2C_Master_Transmit(I2C1, I2C_ADDRESS, (uint8_t*)rezultReadConsol, BUFFER_SIZE_I2C, 10) != 0)
+//        {
+//            Error_Handler();
+//        }
 
 
+//        while (I2C_Master_Receive(I2C1, I2C_ADDRESS, (uint8_t*)rezultReadI2C, BUFFER_SIZE_I2C, 10) != 0)
+//        {
+//            Error_Handler();
+//        }
+
+        __enable_irq();
+
+        USART1_SetString(rezultReadI2C);
+
+    }
+    else
+    {
+        rezultReadConsol[count_size_buf] = receivedChar_;
+        count_size_buf++;
+    }
+}

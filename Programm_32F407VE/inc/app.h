@@ -13,6 +13,7 @@
 #include "ssd1306.h"
 #include "Buttons_panel.h"
 #include "logic_ADC_PWR.h"
+#include "usart.h"
 
 
 /*defaines*/
@@ -22,10 +23,21 @@
 #define MAX_STEP_TEMP 180
 #define MIN_STEP_TEMP 50
 
+/*Скорость USART*/
+#define BAUND_RATE 9600
+/*Размер буфера USART*/
+#define SIZE_BUFF_USART 36
+/*новая строка*/
+#define NEW_STRING_CONSOLE "\r"
+/*символ очистки консоли*/
+#define CLEAR_CONSOLE "\r\033[K"
 /*structures*/
 
 /*var*/
-
+static char receivedChar_;
+static char *receivedChar = &receivedChar_;
+static char rezultReadConsol[SIZE_BUF_USART];
+static char rezultReadI2C[SIZE_BUF_USART];
 /*func*/
 
 void Handler_ADC_Event(uint16_t adcData, float adcVoltage);
