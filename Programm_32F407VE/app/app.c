@@ -21,10 +21,12 @@ char *temps;
 int main()
 {
   RCC_Init(&rcc_str);
+	Init_USART1(BAUND_RATE);
   Init_Tim_PWR(&pwr_str);
   Init_App_Pin();
   Init_I2C(&i2c_str);
   SSD1306_Init(&ssd);
+	
   Buttons_Init(&buttons);
   Connect_Event_ADC(Handler_ADC_Event);
 	
@@ -42,6 +44,18 @@ int main()
     }
 
   return 0;
+}
+
+void Write_Terminal_USART(char *str1, char *str2, char *str3)
+{
+	char buff_str[SIZE_BUFF_USART];
+	
+	USART1_SetString(NEW_STRING_CONSOLE);
+	
+	Sprintf_str_to_str(SIZE_BUFF_USART,buff_str,str1," ",str2," ",str3," /stop");
+	
+	USART1_SetString(buff_str);
+
 }
 
 //void Handler_Key0(void)//temp
@@ -84,10 +98,12 @@ void Handler_ADC_Event(uint16_t adcData, float adcVoltage)
 	char buff_str_Step[50];
   sprintf(buff_str_temp, "Volt=%.2fV %s", adcVoltage, temps);
 	
-	sprintf(buff_str_Step, "Step temp=%d", pwr_str.step_temp);
+	sprintf(buff_str_Step, "Step temp=%d  ", pwr_str.step_temp);
   sprintf(buff_str_PWR, "Fill PWR=%.2d", pwr_str.fill_Factor);
   sprintf(buff_str_temp1, "=%.2d", adcData / 4095);
   //
+	//SSD1306_Clear(&ssd);
+	
   current_screen.str0 = buff_str_temp;
   current_screen.x0 = 10;
 
@@ -97,9 +113,9 @@ void Handler_ADC_Event(uint16_t adcData, float adcVoltage)
   current_screen.str2 = buff_str_temp;
   current_screen.x2 = 10;
 
-  current_screen.str3 = buff_str_temp;
+  current_screen.str3 = rezultReadConsol;
   current_screen.x3 = 10;
-
+	
   current_screen.str4 = buff_str_Step;
   current_screen.x4 = 10;
 
@@ -109,12 +125,14 @@ void Handler_ADC_Event(uint16_t adcData, float adcVoltage)
   Work_Screen(&ssd, &current_screen);
 
   Handler_ADC_PWR(&pwr_str, adcData);
-
+	
 }
 
 void Event_Buttons_panel(uint8_t pin)
 {
+	Write_Terminal_USART("ASD","_FGT","33");
 	Set_Fill_Factor(&pwr_str,pin,STEP_VOL,MIN_STEP_TEMP,MAX_STEP_TEMP);
+	
 }
 /*temp*/
 void ExecutorTerminal_USART_Irq(void)

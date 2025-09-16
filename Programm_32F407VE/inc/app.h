@@ -41,5 +41,6 @@ static char rezultReadI2C[SIZE_BUF_USART];
 /*func*/
 
 void Handler_ADC_Event(uint16_t adcData, float adcVoltage);
+void Write_Terminal_USART(char *str1, char *str2, char *str3);
 
 #endif

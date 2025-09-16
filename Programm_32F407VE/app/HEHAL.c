@@ -36,3 +36,80 @@ void Сonverter_Int_Str(char *out_str, int in_digital)
     out_str[countInt] = '\0'; 
 }
 
+void Sprintf_str_to_str(int size_buf,char *buff, char *str1, char *str2, char *str3,char *str4,char *str5,char *str6) 
+{
+    int i = 0;
+    
+    while (*str1) 
+		{
+				if(i < size_buf)
+				{
+					buff[i++] = *str1++;
+				}
+				else
+				{
+					break;
+				}
+    }
+		
+		while (*str2) 
+		{
+        if(i < size_buf)
+				{
+					buff[i++] = *str2++;
+				}
+				else
+				{
+					break;
+				}
+    }
+		
+		while (*str3) 
+		{
+        if(i < size_buf)
+				{
+					buff[i++] = *str3++;
+				}
+				else
+				{
+					break;
+				}
+    }
+		
+		while (*str4) 
+		{
+        if(i < size_buf)
+				{
+					buff[i++] = *str4++;
+				}
+				else
+				{
+					break;
+				}
+    }
+		
+		while (*str5) 
+		{
+        if(i < size_buf)
+				{
+					buff[i++] = *str5++;
+				}
+				else
+				{
+					break;
+				}
+    }
+		
+		while (*str6) 
+		{
+        if(i < size_buf)
+				{
+					buff[i++] = *str6++;
+				}
+				else
+				{
+					break;
+				}
+    }
+
+}
