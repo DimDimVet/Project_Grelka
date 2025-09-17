@@ -34,6 +34,13 @@ namespace WPF_COM_Port
         {
             port = new SerialPort();
             SetPort();
+
+            vm.CloseBtnIsEnable = false;
+            vm.SendBtnIsEnable = false;
+
+            vm.RefreshBtnIsEnable = true;
+            vm.OpenBtnIsEnable = true;
+            vm.ClearBtnIsEnable = true;
         }
 
         public void SetPort() 
@@ -87,14 +94,153 @@ namespace WPF_COM_Port
                 vm.PortComboSelectIndex = 0;
             }
         }
+
+        public void OpenBtnClick()
+        {
+            if (port != null && port.IsOpen)
+            {
+                return;
+            }
+
+            if (vm.PortComboSelectItem == null)
+            {
+                MessageBox.Show("Select port", "Error", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return;
+            }
+
+            try
+            {
+                string portName = vm.PortComboSelectItem.ToString();
+                int baud = Convert.ToInt32(vm.BaudComboSelectItem);
+                Parity parity = vm.ParityComboSelectItem;
+                int dataBits = Convert.ToInt32(vm.DataBitsComboSelectItem);
+                StopBits stopBits = (StopBits)vm.StopBitsComboSelectItem;
+                Handshake handshake = (Handshake)vm.HandshakeComboSelectItem;
+
+                port = new SerialPort(portName, baud, parity, dataBits, stopBits)
+                {
+                    Encoding = Encoding.UTF8,
+                    Handshake = handshake,
+                    ReadTimeout = 500,
+                    WriteTimeout = 500,
+                    DtrEnable = vm.DtrCheckClick == true,
+                    RtsEnable = vm.RtsCheckClick == true,
+                    NewLine = "\n"
+                };
+
+                port.DataReceived += PortDataReceived;
+                port.ErrorReceived += PortErrorReceived; 
+                port.Open();
+
+               vm.LogText=string.Format("Opened {0} @ {1}", portName, baud);
+               vm.OpenBtnIsEnable = false;
+               vm.CloseBtnIsEnable = true;
+               vm.SendBtnIsEnable = true;
+
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Open error: " + ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+
+        private void PortDataReceived(object sender, SerialDataReceivedEventArgs e)
+        {
+            try
+            {
+                if (port == null)
+                {
+                    return;
+                }
+
+                string data = port.ReadExisting();
+                AppendReceived(data);
+            }
+            catch (Exception ex)
+            {
+                vm.LogText = ("Read error: " + ex.Message);
+            }
+        }
+
+        private void PortErrorReceived(object sender, SerialErrorReceivedEventArgs e)
+        {
+            vm.LogText = ("Serial error: " + e.EventType);
+        }
+
+        private void AppendReceived(string data)
+        {
+            vm.LogText = data;
+        }
+
+        public void CloseBtnClick()
+        {
+            ClosePort();
+        }
+
+        private void ClosePort()
+        {
+            if (port == null)
+            {
+                return;
+            }
+            try
+            {
+                port.DataReceived -= PortDataReceived;
+                port.ErrorReceived -= PortErrorReceived;
+
+                if (port.IsOpen)
+                {
+                    port.Close();
+                }
+
+                port.Dispose();
+                vm.LogText="Closed port";
+            }
+            catch (Exception ex)
+            {
+                vm.LogText = "Close error: " + ex.Message;
+            }
+            finally
+            {
+                port = null;
+                vm.OpenBtnIsEnable = true;
+                vm.CloseBtnIsEnable = false;
+                vm.SendBtnIsEnable = false;
+
+            }
+        }
+
+        public void SendBtnClick()
+        {
+            if (port == null || !port.IsOpen)
+            {
+                MessageBox.Show("Port is not open", "Error", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return;
+            }
+
+            var text = vm.SendBox ?? string.Empty;
+            try
+            {
+                port.WriteLine(text);
+                vm.LogText = "> " + text;
+            }
+            catch (Exception ex)
+            {
+                vm.LogText = "Write error: " + ex.Message;
+            }
+        }
+
+        public void ClearBtnClick()
+        {
+            vm.LogText = "";
+        }
+
+        public void Closed(bool flag)
+        {
+            ClosePort();
+        }
     }
 }
-
-
-
-
-
-
 
 
 
@@ -177,8 +323,8 @@ namespace WPF_COM_Port
                     NewLine = "\n"
                 };
 
-                port.DataReceived += PortDataReceived;
-                port.ErrorReceived += PortErrorReceived;
+                port.DataReceived += Port_DataReceived;
+                port.ErrorReceived += Port_ErrorReceived;
                 port.Open();
 
                 Log(string.Format("Opened {0} @ {1}", portName, baud));
@@ -196,6 +342,7 @@ namespace WPF_COM_Port
         {
             ClosePort();
         }
+
 private void ClosePort()
         {
             if (_port == null) return;
@@ -220,7 +367,7 @@ private void ClosePort()
             }
         }
 
-        private void SendBtn_Click(object sender, RoutedEventArgs e)
+        private void SendBtnClick(object sender, RoutedEventArgs e)
         {
             if (_port == null || !_port.IsOpen)
             {

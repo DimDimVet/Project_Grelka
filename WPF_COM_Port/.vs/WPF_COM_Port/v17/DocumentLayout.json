@@ -36,7 +36,7 @@
               "RelativeDocumentMoniker": "HandlerCOM.cs",
               "ToolTip": "F:\\ELECTRONIC\\Keil\\Project_Grelka\\WPF_COM_Port\\HandlerCOM.cs",
               "RelativeToolTip": "HandlerCOM.cs",
-              "ViewState": "AQIAAEgAAAAAAAAAAAAAAHMAAAAeAAAA",
+              "ViewState": "AQIAANgAAAAAAAAAAAAuwOkAAAAJAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-09-16T13:45:12.391Z",
               "EditorCaption": ""
@@ -49,9 +49,10 @@
               "RelativeDocumentMoniker": "MainWindow.xaml.cs",
               "ToolTip": "F:\\ELECTRONIC\\Keil\\Project_Grelka\\WPF_COM_Port\\MainWindow.xaml.cs",
               "RelativeToolTip": "MainWindow.xaml.cs",
-              "ViewState": "AQIAAAwAAAAAAAAAAAAAABQAAAAIAAAA",
+              "ViewState": "AQIAAAYAAAAAAAAAAAAAACYAAAAAAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-09-16T13:45:12.391Z"
+              "WhenOpened": "2025-09-16T13:45:12.391Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
@@ -62,7 +63,8 @@
               "ToolTip": "F:\\ELECTRONIC\\Keil\\Project_Grelka\\WPF_COM_Port\\MainWindow.xaml",
               "RelativeToolTip": "MainWindow.xaml",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
-              "WhenOpened": "2025-09-16T13:45:13.687Z"
+              "WhenOpened": "2025-09-16T13:45:13.687Z",
+              "EditorCaption": ""
             }
           ]
         },
@@ -78,7 +80,7 @@
               "RelativeDocumentMoniker": "ViewModel.cs",
               "ToolTip": "F:\\ELECTRONIC\\Keil\\Project_Grelka\\WPF_COM_Port\\ViewModel.cs",
               "RelativeToolTip": "ViewModel.cs",
-              "ViewState": "AQIAABcAAAAAAAAAAAAUwC0AAAAdAAAA",
+              "ViewState": "AQIAAPwAAAAAAAAAAAAkwBYBAAAJAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-09-16T13:48:42.267Z",
               "EditorCaption": ""

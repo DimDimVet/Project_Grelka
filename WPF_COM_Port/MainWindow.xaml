@@ -22,20 +22,20 @@
             <ComboBox x:Name="ParityCombo" ItemsSource="{Binding ParityCombo}" SelectedItem="{Binding ParityComboSelectItem}" Width="90" Margin="0,0,6,0"/>
             <ComboBox x:Name="DataBitsCombo" ItemsSource="{Binding DataBitsCombo}" SelectedItem="{Binding DataBitsComboSelectItem}" Width="70" Margin="0,0,6,0"/>
             <ComboBox x:Name="StopBitsCombo" ItemsSource="{Binding StopBitsCombo}" SelectedItem="{Binding StopBitsComboSelectItem}" Width="90" Margin="0,0,6,0"/>
-            <CheckBox x:Name="RtsCheck" Content="RTS" VerticalAlignment="Center" Margin="0,0,6,0"/>
-            <CheckBox x:Name="DtrCheck" Content="DTR" VerticalAlignment="Center" Margin="0,0,6,0"/>
+            <CheckBox x:Name="RtsCheck" IsChecked="{Binding RtsCheckClick}" Content="RTS" VerticalAlignment="Center" Margin="0,0,6,0"/>
+            <CheckBox x:Name="DtrCheck" IsChecked="{Binding DtrCheckClick}" Content="DTR" VerticalAlignment="Center" Margin="0,0,6,0"/>
             <ComboBox x:Name="HandshakeCombo" ItemsSource="{Binding HandshakeCombo}" SelectedItem="{Binding HandshakeComboSelectItem}" Width="130" Margin="0,0,6,0"/>
-            <Button x:Name="RefreshBtn" Content="Refresh" Width="70" Command="{Binding RefreshBtnClick}" Margin="0,0,6,0"/>
-            <Button x:Name="OpenBtn" Content="Open" Width="70" Command="{Binding OpenBtnClick}" Margin="0,0,6,0"/>
-            <Button x:Name="CloseBtn" Content="Close" Width="70" Command="{Binding CloseBtnClick}" IsEnabled="False"/>
+            <Button x:Name="RefreshBtn" Content="Refresh" Width="70" IsEnabled="{Binding RefreshBtnIsEnable}"  Command="{Binding RefreshBtnClick}" Margin="0,0,6,0"/>
+            <Button x:Name="OpenBtn" Content="Open" Width="70" IsEnabled="{Binding OpenBtnIsEnable}" Command="{Binding OpenBtnClick}" Margin="0,0,6,0"/>
+            <Button x:Name="CloseBtn" Content="Close" Width="70" IsEnabled="{Binding CloseBtnIsEnable}" Command="{Binding CloseBtnClick}"/>
         </StackPanel>
 
         <TextBox x:Name="LogBox" Text="{Binding LogText}" VerticalScrollBarVisibility="Auto" AcceptsReturn="True" IsReadOnly="True" TextWrapping="Wrap" FontFamily="Consolas" Margin="31,10,25,98" Grid.Row="1"/>
         <!--Stack2-->
         <StackPanel Grid.Row="2" Orientation="Horizontal" Margin="0,8,0,0">
-            <TextBox x:Name="SendBox" Text="{Binding SendBox}" Width="620" Height="28" VerticalContentAlignment="Center"/>
-            <Button x:Name="SendBtn" Content="Send" Width="80" Command="{Binding SendBtnClick}" IsEnabled="False" Margin="6,0,6,0"/>
-            <Button x:Name="ClearBtn" Content="Clear" Width="80" Command="{Binding ClearBtnClick}"/>
+            <TextBox x:Name="SendBox" Text="{Binding SendBox}" Width="549" Height="28" VerticalContentAlignment="Center"/>
+            <Button x:Name="SendBtn" Content="Send" Width="80" IsEnabled="{Binding SendBtnIsEnable}"  Command="{Binding SendBtnClick}" Margin="6,0,6,0"/>
+            <Button x:Name="ClearBtn" Content="Clear" Width="80" IsEnabled="{Binding ClearBtnIsEnable}"  Command="{Binding ClearBtnClick}"/>
         </StackPanel>
 
 

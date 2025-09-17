@@ -268,7 +268,7 @@ void EXTI2_IRQHandler()
 //      Start_Event_Buttons_panel(0);
 //    }
 //}
-int tst=0;
+int tst = 0;
 void EXTI9_5_IRQHandler()
 {
   if (Read_BIT(EXTI->PR, EXTI_PR_PR5) && flag_delay) /*проверим флаг irq*/

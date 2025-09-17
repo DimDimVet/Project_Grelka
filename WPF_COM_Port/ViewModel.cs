@@ -7,6 +7,7 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Controls;
 using System.Windows.Input;
 
 namespace WPF_COM_Port
@@ -17,10 +18,89 @@ namespace WPF_COM_Port
         HandlerCOM handlerCOM;
         /*кнопки*/
         public ICommand RefreshBtnClick { get; set; }
+        private bool _refreshBtnIsEnable;
+        public bool RefreshBtnIsEnable
+        {
+            get => _refreshBtnIsEnable;
+            set
+            {
+                if (_refreshBtnIsEnable == value) return;
+                _refreshBtnIsEnable = value;
+                OnPropertyChanged();
+            }
+        }
         public ICommand OpenBtnClick { get; set; }
+        private bool _openBtnIsEnable;
+        public bool OpenBtnIsEnable
+        {
+            get => _openBtnIsEnable;
+            set
+            {
+                if (_openBtnIsEnable == value) return;
+                _openBtnIsEnable = value;
+                OnPropertyChanged();
+            }
+        }
         public ICommand CloseBtnClick { get; set; }
+        private bool _closeBtnIsEnable;
+        public bool CloseBtnIsEnable
+        {
+            get => _closeBtnIsEnable;
+            set
+            {
+                if (_closeBtnIsEnable == value) return;
+                _closeBtnIsEnable = value;
+                OnPropertyChanged();
+            }
+        }
         public ICommand SendBtnClick { get; set; }
+        private bool _sendBtnIsEnable;
+        public bool SendBtnIsEnable
+        {
+            get => _sendBtnIsEnable;
+            set
+            {
+                if (_sendBtnIsEnable == value) return;
+                _sendBtnIsEnable = value;
+                OnPropertyChanged();
+            }
+        }
         public ICommand ClearBtnClick { get; set; }
+        private bool _clearBtnIsEnable;
+        public bool ClearBtnIsEnable
+        {
+            get => _clearBtnIsEnable;
+            set
+            {
+                if (_clearBtnIsEnable == value) return;
+                _clearBtnIsEnable = value;
+                OnPropertyChanged();
+            }
+        }
+        /*чеки*/
+        private bool _rtsCheckClick;
+        public bool RtsCheckClick
+        {
+            get => _rtsCheckClick;
+            set
+            {
+                if (_rtsCheckClick == value) return;
+                _rtsCheckClick = value;
+                OnPropertyChanged();
+            }
+        }
+
+        private bool _dtrCheckClick;
+        public bool DtrCheckClick
+        {
+            get => _dtrCheckClick;
+            set
+            {
+                if (_dtrCheckClick == value) return;
+                _dtrCheckClick = value;
+                OnPropertyChanged();
+            }
+        }
 
         /*списки*/
         public ObservableCollection<string> PortCombo { get; set; } = new ObservableCollection<string>();
@@ -32,7 +112,7 @@ namespace WPF_COM_Port
             {
                 if (_portComboSelectItem == value) return;
                 _portComboSelectItem = value;
-                //OnPropertyChanged();
+                OnPropertyChanged();
             }
         }
         private int _portComboSelectIndex;
@@ -43,7 +123,7 @@ namespace WPF_COM_Port
             {
                 if (_portComboSelectIndex == value) return;
                 _portComboSelectIndex = value;
-                //OnPropertyChanged();
+                OnPropertyChanged();
             }
         }
         public ObservableCollection<int> BaudCombo { get; set; } = new ObservableCollection<int>();
@@ -55,7 +135,7 @@ namespace WPF_COM_Port
             {
                 if (_baudComboSelectItem == value) return;
                 _baudComboSelectItem = value;
-                //OnPropertyChanged();
+                OnPropertyChanged();
             }
         }
         public ObservableCollection<Parity> ParityCombo { get; set; } = new ObservableCollection<Parity>();
@@ -67,7 +147,7 @@ namespace WPF_COM_Port
             {
                 if (_parityComboSelectItem == value) return;
                 _parityComboSelectItem = value;
-                //OnPropertyChanged();
+                OnPropertyChanged();
             }
         }
         public ObservableCollection<int> DataBitsCombo { get; set; } = new ObservableCollection<int>();
@@ -79,7 +159,7 @@ namespace WPF_COM_Port
             {
                 if (_dataBitsComboSelectItem == value) return;
                 _dataBitsComboSelectItem = value;
-                //OnPropertyChanged();
+                OnPropertyChanged();
             }
         }
         public ObservableCollection<StopBits> StopBitsCombo { get; set; } = new ObservableCollection<StopBits>();
@@ -91,7 +171,7 @@ namespace WPF_COM_Port
             {
                 if (_stopBitsComboSelectItem == value) return;
                 _stopBitsComboSelectItem = value;
-                //OnPropertyChanged();
+                OnPropertyChanged();
             }
         }
         public ObservableCollection<Handshake> HandshakeCombo { get; set; } = new ObservableCollection<Handshake>();
@@ -103,7 +183,7 @@ namespace WPF_COM_Port
             {
                 if (_handshakeComboSelectItem == value) return;
                 _handshakeComboSelectItem = value;
-                //OnPropertyChanged();
+                OnPropertyChanged();
             }
         }
 
@@ -140,6 +220,8 @@ namespace WPF_COM_Port
             //LogText = "[eqyz";
             //PortCombo.Add(LogText);
             handlerCOM = new HandlerCOM(this);
+
+            MainWindow.OnIsClosed += Closed;
         }
         private void InitButtons()
         {
@@ -161,7 +243,7 @@ namespace WPF_COM_Port
 
         public void OnOpenBtnClick(object parameter)
         {
-
+            handlerCOM.OpenBtnClick();
         }
         private bool CanOpenBtnClick(object parameter)
         {
@@ -170,7 +252,7 @@ namespace WPF_COM_Port
 
         public void OnCloseBtnClick(object parameter)
         {
-
+            handlerCOM.CloseBtnClick();
         }
         private bool CanCloseBtnClick(object parameter)
         {
@@ -178,7 +260,7 @@ namespace WPF_COM_Port
         }
         public void OnSendBtnClick(object parameter)
         {
-
+            handlerCOM.SendBtnClick();
         }
         private bool CanSendBtnClick(object parameter)
         {
@@ -186,18 +268,25 @@ namespace WPF_COM_Port
         }
         public void OnClearBtnClick(object parameter)
         {
-
+            handlerCOM.ClearBtnClick();
         }
         private bool CanClearBtnClick(object parameter)
         {
             return true;
         }
-
+        /*обработчик*/
+        private void Closed(bool flag)
+        {
+            handlerCOM.Closed(flag);
+        }
         /*обработка текстов - евенты*/
         public event PropertyChangedEventHandler PropertyChanged;
         protected void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
+
+
+
     }
 }
