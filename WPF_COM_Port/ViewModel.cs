@@ -24,11 +24,88 @@ namespace WPF_COM_Port
 
         /*списки*/
         public ObservableCollection<string> PortCombo { get; set; } = new ObservableCollection<string>();
+        private string _portComboSelectItem;
+        public string PortComboSelectItem
+        {
+            get => _portComboSelectItem;
+            set
+            {
+                if (_portComboSelectItem == value) return;
+                _portComboSelectItem = value;
+                //OnPropertyChanged();
+            }
+        }
+        private int _portComboSelectIndex;
+        public int PortComboSelectIndex
+        {
+            get => _portComboSelectIndex;
+            set
+            {
+                if (_portComboSelectIndex == value) return;
+                _portComboSelectIndex = value;
+                //OnPropertyChanged();
+            }
+        }
         public ObservableCollection<int> BaudCombo { get; set; } = new ObservableCollection<int>();
+        private int _baudComboSelectItem;
+        public int BaudComboSelectItem
+        {
+            get => _baudComboSelectItem;
+            set
+            {
+                if (_baudComboSelectItem == value) return;
+                _baudComboSelectItem = value;
+                //OnPropertyChanged();
+            }
+        }
         public ObservableCollection<Parity> ParityCombo { get; set; } = new ObservableCollection<Parity>();
+        private Parity _parityComboSelectItem;
+        public Parity ParityComboSelectItem
+        {
+            get => _parityComboSelectItem;
+            set
+            {
+                if (_parityComboSelectItem == value) return;
+                _parityComboSelectItem = value;
+                //OnPropertyChanged();
+            }
+        }
         public ObservableCollection<int> DataBitsCombo { get; set; } = new ObservableCollection<int>();
+        private int _dataBitsComboSelectItem;
+        public int DataBitsComboSelectItem
+        {
+            get => _dataBitsComboSelectItem;
+            set
+            {
+                if (_dataBitsComboSelectItem == value) return;
+                _dataBitsComboSelectItem = value;
+                //OnPropertyChanged();
+            }
+        }
         public ObservableCollection<StopBits> StopBitsCombo { get; set; } = new ObservableCollection<StopBits>();
+        private StopBits _stopBitsComboSelectItem;
+        public StopBits StopBitsComboSelectItem
+        {
+            get => _stopBitsComboSelectItem;
+            set
+            {
+                if (_stopBitsComboSelectItem == value) return;
+                _stopBitsComboSelectItem = value;
+                //OnPropertyChanged();
+            }
+        }
         public ObservableCollection<Handshake> HandshakeCombo { get; set; } = new ObservableCollection<Handshake>();
+        private Handshake _handshakeComboSelectItem;
+        public Handshake HandshakeComboSelectItem
+        {
+            get => _handshakeComboSelectItem;
+            set
+            {
+                if (_handshakeComboSelectItem == value) return;
+                _handshakeComboSelectItem = value;
+                //OnPropertyChanged();
+            }
+        }
 
         /*тексты*/
         private string _logText;
@@ -75,10 +152,7 @@ namespace WPF_COM_Port
         /*обработка кнопок*/
         public void OnRefreshBtnClick(object parameter)
         {
-            //Items.Add(string.IsNullOrWhiteSpace(Text1) ? "(пусто)" : Text1);
-            // LogText = string.Empty;
-            //LogText = LogText + 1;
-            //PortCombo.Add(LogText);
+            handlerCOM.RefreshBtnClick();
         }
         private bool CanRefreshBtnClick(object parameter)
         {

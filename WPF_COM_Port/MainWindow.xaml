@@ -17,14 +17,14 @@
         </Grid.RowDefinitions>
         <!--Stack1-->
         <StackPanel Orientation="Horizontal" VerticalAlignment="Top" Grid.Row="0">
-            <ComboBox x:Name="PortCombo" ItemsSource="{Binding PortCombo}" Width="120" Margin="0,0,6,0"/>
-            <ComboBox x:Name="BaudCombo" ItemsSource="{Binding BaudCombo}" Width="100" Margin="0,0,6,0"/>
-            <ComboBox x:Name="ParityCombo" ItemsSource="{Binding ParityCombo}" Width="90" Margin="0,0,6,0"/>
-            <ComboBox x:Name="DataBitsCombo" ItemsSource="{Binding DataBitsCombo}" Width="70" Margin="0,0,6,0"/>
-            <ComboBox x:Name="StopBitsCombo" ItemsSource="{Binding StopBitsCombo}" Width="90" Margin="0,0,6,0"/>
+            <ComboBox x:Name="PortCombo" ItemsSource="{Binding PortCombo}" SelectedItem="{Binding PortComboSelectItem}" SelectedIndex="{Binding PortComboSelectIndex}" Width="120" Margin="0,0,6,0"/>
+            <ComboBox x:Name="BaudCombo" ItemsSource="{Binding BaudCombo}" SelectedItem="{Binding BaudComboSelectItem}" Width="100" Margin="0,0,6,0"/>
+            <ComboBox x:Name="ParityCombo" ItemsSource="{Binding ParityCombo}" SelectedItem="{Binding ParityComboSelectItem}" Width="90" Margin="0,0,6,0"/>
+            <ComboBox x:Name="DataBitsCombo" ItemsSource="{Binding DataBitsCombo}" SelectedItem="{Binding DataBitsComboSelectItem}" Width="70" Margin="0,0,6,0"/>
+            <ComboBox x:Name="StopBitsCombo" ItemsSource="{Binding StopBitsCombo}" SelectedItem="{Binding StopBitsComboSelectItem}" Width="90" Margin="0,0,6,0"/>
             <CheckBox x:Name="RtsCheck" Content="RTS" VerticalAlignment="Center" Margin="0,0,6,0"/>
             <CheckBox x:Name="DtrCheck" Content="DTR" VerticalAlignment="Center" Margin="0,0,6,0"/>
-            <ComboBox x:Name="HandshakeCombo" ItemsSource="{Binding HandshakeCombo}" Width="130" Margin="0,0,6,0"/>
+            <ComboBox x:Name="HandshakeCombo" ItemsSource="{Binding HandshakeCombo}" SelectedItem="{Binding HandshakeComboSelectItem}" Width="130" Margin="0,0,6,0"/>
             <Button x:Name="RefreshBtn" Content="Refresh" Width="70" Command="{Binding RefreshBtnClick}" Margin="0,0,6,0"/>
             <Button x:Name="OpenBtn" Content="Open" Width="70" Command="{Binding OpenBtnClick}" Margin="0,0,6,0"/>
             <Button x:Name="CloseBtn" Content="Close" Width="70" Command="{Binding CloseBtnClick}" IsEnabled="False"/>

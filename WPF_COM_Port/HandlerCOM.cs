@@ -41,26 +41,51 @@ namespace WPF_COM_Port
             string[] ports = SerialPort.GetPortNames().OrderBy(n => n).ToArray();
             PortCombo = new ObservableCollection<string>(ports);
             vm.PortCombo = PortCombo;
+            if (ports.Length > 0) 
+            { 
+                vm.PortComboSelectIndex = 0; 
+            }
 
             int[] listBaund = new int[] { 300, 1200, 2400, 4800, 9600, 19200, 38400, 57600, 115200 };
             BaudCombo = new ObservableCollection<int>(listBaund);
             vm.BaudCombo = BaudCombo;
+            vm.BaudComboSelectItem = 9600;
 
             IEnumerable<Parity> parity = Enum.GetValues(typeof(Parity)).Cast<Parity>();
             ParityCombo = new ObservableCollection<Parity>(parity);
             vm.ParityCombo = ParityCombo;
+            vm.ParityComboSelectItem = Parity.None;
 
             int[] listBits = new int[] { 5, 6, 7, 8 };
             DataBitsCombo = new ObservableCollection<int>(listBits);
             vm.DataBitsCombo = DataBitsCombo;
+            vm.DataBitsComboSelectItem = 8;
 
             IEnumerable<StopBits> stopBits = Enum.GetValues(typeof(StopBits)).Cast<StopBits>();
             StopBitsCombo = new ObservableCollection<StopBits> (stopBits);
             vm.StopBitsCombo = StopBitsCombo;
+            vm.StopBitsComboSelectItem = StopBits.One;
 
             IEnumerable<Handshake> handshake = Enum.GetValues(typeof(Handshake)).Cast<Handshake>();
             HandshakeCombo = new ObservableCollection<Handshake> (handshake);
             vm.HandshakeCombo = HandshakeCombo;
+            vm.HandshakeComboSelectItem = Handshake.None;
+        }
+        public void RefreshBtnClick()
+        {
+            int selint = vm.PortComboSelectIndex;
+            string sel = selint.ToString();
+            string[] ports = SerialPort.GetPortNames().OrderBy(n => n).ToArray();
+            PortCombo = new ObservableCollection<string>(ports);
+            vm.PortCombo = PortCombo;
+            if (!string.IsNullOrEmpty(sel) && ports.Contains(sel))
+            {
+                vm.PortComboSelectItem = sel;
+            }
+            else if (ports.Length > 0)
+            {
+                vm.PortComboSelectIndex = 0;
+            }
         }
     }
 }
