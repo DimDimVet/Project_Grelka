@@ -211,6 +211,18 @@ namespace WPF_COM_Port
             }
         }
 
+        private string _pwrStep;
+        public string PWRStep
+        {
+            get => _pwrStep;
+            set
+            {
+                if (_pwrStep == value) return;
+                _pwrStep = value;
+                OnPropertyChanged();
+            }
+        }
+
         /*вход*/
         public ViewModel()
         {

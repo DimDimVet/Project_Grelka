@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WPF_COM_Port"
         mc:Ignorable="d"
-        Title="Project Grelka" Height="450" Width="800">
+        Title="Project Grelka" Height="459" Width="768">
     <Window.DataContext>
         <local:ViewModel/>
     </Window.DataContext>
@@ -30,12 +30,17 @@
             <Button x:Name="CloseBtn" Content="Close" Width="70" IsEnabled="{Binding CloseBtnIsEnable}" Command="{Binding CloseBtnClick}"/>
         </StackPanel>
 
-        <TextBox x:Name="LogBox" Text="{Binding LogText}" VerticalScrollBarVisibility="Auto" AcceptsReturn="True" IsReadOnly="True" TextWrapping="Wrap" FontFamily="Consolas" Margin="31,10,25,98" Grid.Row="1"/>
+        <TextBox x:Name="LogBox" Text="{Binding LogText}" VerticalScrollBarVisibility="Auto" AcceptsReturn="True" IsReadOnly="True" TextWrapping="Wrap" FontFamily="Consolas" Margin="31,100,25,98" Grid.Row="1"/>
         <!--Stack2-->
-        <StackPanel Grid.Row="2" Orientation="Horizontal" Margin="0,8,0,0">
+        <StackPanel Grid.Row="1" Orientation="Horizontal" Margin="0,10,0,0">
+            <Label x:Name="NamePWRStep" Content="Значение уровня температуры" Height="30" Width="190" VerticalContentAlignment="Top" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+            <Label x:Name="PWRStep" Content="{Binding PWRStep}" Width="180" Height="83" VerticalContentAlignment="Top" VerticalAlignment="Top"/>
+
+
             <TextBox x:Name="SendBox" Text="{Binding SendBox}" Width="549" Height="28" VerticalContentAlignment="Center"/>
             <Button x:Name="SendBtn" Content="Send" Width="80" IsEnabled="{Binding SendBtnIsEnable}"  Command="{Binding SendBtnClick}" Margin="6,0,6,0"/>
             <Button x:Name="ClearBtn" Content="Clear" Width="80" IsEnabled="{Binding ClearBtnIsEnable}"  Command="{Binding ClearBtnClick}"/>
+
         </StackPanel>
 
 

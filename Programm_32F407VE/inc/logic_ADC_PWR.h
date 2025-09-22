@@ -8,6 +8,8 @@
 #include "ADC.h"
 #include "PWR.h"
 #include "setup_flash_F407.h"
+#include "events.h"
+#include "usart.h"
 
 /*defaines*/
 /*соот. B57045-K 103-K в делителе с 10к
@@ -27,6 +29,7 @@
 #define TEMP_121_150(volt) ((volt*1000-1823)/ 6.379)
 #define TEMP_151_180(volt) ((volt*1000- 2363.414)/ 2.758)
 
+#define FLASH_FLAG 999
 /*structures*/
 
 /*var*/
@@ -34,5 +37,5 @@
 /*func*/
 void Handler_ADC_PWR(PWR_Structure* pwr, uint16_t adcData);
 void Set_Fill_Factor(PWR_Structure* pwr, uint8_t vol, uint8_t step_vol,uint16_t min_temp, uint16_t max_temp);
-
+void Handler_USART(uint16_t data);
 #endif

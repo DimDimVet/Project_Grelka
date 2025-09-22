@@ -12,6 +12,8 @@ void Set_Fill_Factor(PWR_Structure* pwr, uint8_t vol, uint8_t step_vol,uint16_t 
 			 {
 				 pwr->step_temp = min_temp;
 			 }
+			 
+			 Start_Event_Buttons_USART(pwr->step_temp);/*передадим в ПК значение с кнопок*/
 	 }
 	 
 	 if(vol == PIN9)
@@ -22,6 +24,8 @@ void Set_Fill_Factor(PWR_Structure* pwr, uint8_t vol, uint8_t step_vol,uint16_t 
 			 {
 				 pwr->step_temp = max_temp;
 			 }
+			 
+			 Start_Event_Buttons_USART(pwr->step_temp);/*передадим в ПК значение с кнопок*/
 	 }
 	 
 	 if(vol == PIN11)
@@ -37,6 +41,8 @@ void Set_Fill_Factor(PWR_Structure* pwr, uint8_t vol, uint8_t step_vol,uint16_t 
 	 if(vol == PIN8)
 	 {
 		 Set_Flash_Data(pwr->step_temp);
+		 
+		 Start_Event_Buttons_USART(FLASH_FLAG);/*передадим в ПК значение с кнопок,*/
 	 }
 	 
 	 Replace_Fill_Factor(pwr);

@@ -15,6 +15,7 @@ namespace WPF_COM_Port
     public partial class HandlerCOM
     {
         private ViewModel vm;
+        private int lengthCode = 3;
         public HandlerCOM(ViewModel _vm)
         {
             vm = _vm;
@@ -56,7 +57,7 @@ namespace WPF_COM_Port
             int[] listBaund = new int[] { 300, 1200, 2400, 4800, 9600, 19200, 38400, 57600, 115200 };
             BaudCombo = new ObservableCollection<int>(listBaund);
             vm.BaudCombo = BaudCombo;
-            vm.BaudComboSelectItem = 9600;
+            vm.BaudComboSelectItem = 19200;
 
             IEnumerable<Parity> parity = Enum.GetValues(typeof(Parity)).Cast<Parity>();
             ParityCombo = new ObservableCollection<Parity>(parity);
@@ -170,7 +171,36 @@ namespace WPF_COM_Port
         private void AppendReceived(string data)
         {
             vm.LogText = data;
+            DecodingUSART(data, lengthCode);
         }
+
+        private void DecodingUSART(string data, int lengthCode)
+        {
+            char[] arrChar = data.ToCharArray();
+            string commandCodeUSART = string.Empty;
+            string arrDataUSART = string.Empty;
+
+            for (int i = 0; i < arrChar.Length; i++)
+            {
+                if (i < 3)
+                {
+                    commandCodeUSART += arrChar[i];
+                }
+                else
+                {
+                    arrDataUSART += arrChar[i];
+                }
+            }
+
+            if (commandCodeUSART == "But")
+            {
+                vm.PWRStep = arrDataUSART;
+            }
+
+            
+            vm.LogText = commandCodeUSART;
+        }
+
 
         public void CloseBtnClick()
         {
@@ -218,11 +248,11 @@ namespace WPF_COM_Port
                 return;
             }
 
-            var text = vm.SendBox ?? string.Empty;
+            string text = vm.SendBox ?? string.Empty;
             try
             {
                 port.WriteLine(text);
-                vm.LogText = "> " + text;
+                vm.LogText = ">>> " + text;
             }
             catch (Exception ex)
             {
@@ -232,7 +262,7 @@ namespace WPF_COM_Port
 
         public void ClearBtnClick()
         {
-            vm.LogText = "";
+            vm.LogText = string.Empty;
         }
 
         public void Closed(bool flag)

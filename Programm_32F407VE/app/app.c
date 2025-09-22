@@ -29,6 +29,7 @@ int main()
 	
   Buttons_Init(&buttons);
   Connect_Event_ADC(Handler_ADC_Event);
+	Connect_Event_Buttons_USART(Handler_Buttons_USART);
 	
 	Get_Flash_Data(&pwr_str);
   /**/
@@ -96,6 +97,7 @@ void Handler_ADC_Event(uint16_t adcData, float adcVoltage)
   char buff_str_temp1[50];
   char buff_str_PWR[50];
 	char buff_str_Step[50];
+	
   sprintf(buff_str_temp, "Volt=%.2fV %s", adcVoltage, temps);
 	
 	sprintf(buff_str_Step, "Step temp=%d  ", pwr_str.step_temp);
@@ -128,13 +130,22 @@ void Handler_ADC_Event(uint16_t adcData, float adcVoltage)
 	
 }
 
+void Handler_Buttons_USART(uint16_t vol)/*передаем значение с кнопок в ПК для обновления в окне*/
+{
+	char buff_str[SIZE_BUFF_USART];
+	
+	//USART1_SetString(NEW_STRING_CONSOLE);
+	
+	sprintf(buff_str,"%s%d",FLAG_USART_BUTTONS, vol);
+	
+	USART1_SetString(buff_str);
+}
+
 void Event_Buttons_panel(uint8_t pin)
 {
-	Write_Terminal_USART("ASD","_FGT","33");
 	Set_Fill_Factor(&pwr_str,pin,STEP_VOL,MIN_STEP_TEMP,MAX_STEP_TEMP);
-	
 }
-/*temp*/
+
 void ExecutorTerminal_USART_Irq(void)
 {
     USART1_ReadChar(receivedChar); // Читаем из консоли
@@ -142,21 +153,6 @@ void ExecutorTerminal_USART_Irq(void)
     if (count_size_buf >= SIZE_BUF_USART)
     {
         count_size_buf = 0;
-
-        __disable_irq();
-
-//        while (I2C_Master_Transmit(I2C1, I2C_ADDRESS, (uint8_t*)rezultReadConsol, BUFFER_SIZE_I2C, 10) != 0)
-//        {
-//            Error_Handler();
-//        }
-
-
-//        while (I2C_Master_Receive(I2C1, I2C_ADDRESS, (uint8_t*)rezultReadI2C, BUFFER_SIZE_I2C, 10) != 0)
-//        {
-//            Error_Handler();
-//        }
-
-        __enable_irq();
 
         USART1_SetString(rezultReadI2C);
 
