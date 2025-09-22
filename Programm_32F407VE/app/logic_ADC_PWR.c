@@ -13,7 +13,7 @@ void Set_Fill_Factor(PWR_Structure* pwr, uint8_t vol, uint8_t step_vol,uint16_t 
 				 pwr->step_temp = min_temp;
 			 }
 			 
-			 Start_Event_Buttons_USART(pwr->step_temp);/*передадим в ПК значение с кнопок*/
+			 Start_Event_Write_To_USART(pwr->step_temp,FLAG_USART_BUTTONS);/*передадим в ПК значение с кнопок*/
 	 }
 	 
 	 if(vol == PIN9)
@@ -25,7 +25,7 @@ void Set_Fill_Factor(PWR_Structure* pwr, uint8_t vol, uint8_t step_vol,uint16_t 
 				 pwr->step_temp = max_temp;
 			 }
 			 
-			 Start_Event_Buttons_USART(pwr->step_temp);/*передадим в ПК значение с кнопок*/
+			 Start_Event_Write_To_USART(pwr->step_temp,FLAG_USART_BUTTONS);/*передадим в ПК значение с кнопок*/
 	 }
 	 
 	 if(vol == PIN11)
@@ -42,10 +42,11 @@ void Set_Fill_Factor(PWR_Structure* pwr, uint8_t vol, uint8_t step_vol,uint16_t 
 	 {
 		 Set_Flash_Data(pwr->step_temp);
 		 
-		 Start_Event_Buttons_USART(FLASH_FLAG);/*передадим в ПК значение с кнопок,*/
+		 Start_Event_Write_To_USART(0,FLAG_USART_FLASH);/*передадим в ПК значение истины записи флеш*/
 	 }
 	 
 	 Replace_Fill_Factor(pwr);
+	 Start_Event_Write_To_USART(pwr->fill_Factor,FLAG_USART_FILL_PWR);
 }
 
 void Handler_ADC_PWR(PWR_Structure* pwr, uint16_t adcData)
@@ -128,4 +129,5 @@ void Handler_ADC_PWR(PWR_Structure* pwr, uint16_t adcData)
     }
 		
 		Replace_Fill_Factor(pwr);
+		Start_Event_Write_To_USART(pwr->fill_Factor,FLAG_USART_FILL_PWR);
 }

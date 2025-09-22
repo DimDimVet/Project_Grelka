@@ -27,8 +27,6 @@
 #define BAUND_RATE 9600
 /*Размер буфера USART*/
 #define SIZE_BUFF_USART 36
-/*Признак пакета в USART: от кнопок*/
-#define FLAG_USART_BUTTONS "But"
 
 /*новая строка*/
 #define NEW_STRING_CONSOLE "\r"
@@ -44,8 +42,6 @@ static char rezultReadI2C[SIZE_BUF_USART];
 /*func*/
 
 void Handler_ADC_Event(uint16_t adcData, float adcVoltage);
-void Handler_Buttons_USART(uint16_t vol);
-void Write_Terminal_USART(char *str1, char *str2, char *str3);
-
+void Write_To_USART(uint16_t vol, char* flag);
 
 #endif

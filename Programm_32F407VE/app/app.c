@@ -29,7 +29,7 @@ int main()
 	
   Buttons_Init(&buttons);
   Connect_Event_ADC(Handler_ADC_Event);
-	Connect_Event_Buttons_USART(Handler_Buttons_USART);
+	Connect_Event_Write_To_USART(Write_To_USART);
 	
 	Get_Flash_Data(&pwr_str);
   /**/
@@ -130,13 +130,13 @@ void Handler_ADC_Event(uint16_t adcData, float adcVoltage)
 	
 }
 
-void Handler_Buttons_USART(uint16_t vol)/*передаем значение с кнопок в ПК для обновления в окне*/
+void Write_To_USART(uint16_t vol, char* flag)/*передаем значение с кнопок в ПК для обновления в окне*/
 {
 	char buff_str[SIZE_BUFF_USART];
 	
 	//USART1_SetString(NEW_STRING_CONSOLE);
 	
-	sprintf(buff_str,"%s%d",FLAG_USART_BUTTONS, vol);
+	sprintf(buff_str,"%s%d#",flag, vol);
 	
 	USART1_SetString(buff_str);
 }
@@ -146,6 +146,7 @@ void Event_Buttons_panel(uint8_t pin)
 	Set_Fill_Factor(&pwr_str,pin,STEP_VOL,MIN_STEP_TEMP,MAX_STEP_TEMP);
 }
 
+//
 void ExecutorTerminal_USART_Irq(void)
 {
     USART1_ReadChar(receivedChar); // Читаем из консоли

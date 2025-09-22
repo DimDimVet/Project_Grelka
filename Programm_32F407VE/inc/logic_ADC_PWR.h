@@ -29,7 +29,13 @@
 #define TEMP_121_150(volt) ((volt*1000-1823)/ 6.379)
 #define TEMP_151_180(volt) ((volt*1000- 2363.414)/ 2.758)
 
-#define FLASH_FLAG 999
+/*Признак пакета в USART: от кнопок*/
+#define FLAG_USART_BUTTONS "But"
+/*Признак пакета в USART: запись в флеш*/
+#define FLAG_USART_FLASH "Flh"
+/*Признак пакета в USART: заполненость ШИМ*/
+#define FLAG_USART_FILL_PWR "Pwr"
+
 /*structures*/
 
 /*var*/

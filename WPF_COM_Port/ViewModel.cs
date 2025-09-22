@@ -223,6 +223,30 @@ namespace WPF_COM_Port
             }
         }
 
+        private string _pwrFill;
+        public string PWRFill
+        {
+            get => _pwrFill;
+            set
+            {
+                if (_pwrFill == value) return;
+                _pwrFill = value;
+                OnPropertyChanged();
+            }
+        }
+
+        private bool _checkFlash;
+        public bool CheckFlash
+        {
+            get => _checkFlash;
+            set
+            {
+                if (_checkFlash == value) return;
+                _checkFlash = value;
+                OnPropertyChanged();
+            }
+        }
+
         /*вход*/
         public ViewModel()
         {

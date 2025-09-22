@@ -30,14 +30,14 @@ void Start_Event_ADC(uint16_t adcData, float adcVoltage)
 
 /*события Buttons_panel передача в USART*/
 
-event_buttons_USART_t event_buttons_USART;
+event_write_to_USART_t event_write_USART;
 
-void Connect_Event_Buttons_USART(event_buttons_USART_t func)
+void Connect_Event_Write_To_USART(event_write_to_USART_t func)
 {
-	event_buttons_USART = func;
+	event_write_USART = func;
 }
 
-void Start_Event_Buttons_USART(uint16_t vol)
+void Start_Event_Write_To_USART(uint16_t vol, char* flag)
 {
-	 event_buttons_USART(vol);
+	 event_write_USART(vol,flag);
 }

@@ -16,6 +16,10 @@ namespace WPF_COM_Port
     {
         private ViewModel vm;
         private int lengthCode = 3;
+        private char flagStop = '#';
+        private string comandButton = "But";
+        private string comandFlesh = "Flh";
+        private string comandPwr = "Pwr";
         public HandlerCOM(ViewModel _vm)
         {
             vm = _vm;
@@ -188,16 +192,34 @@ namespace WPF_COM_Port
                 }
                 else
                 {
-                    arrDataUSART += arrChar[i];
+                    if (arrChar[i] == flagStop)
+                    {
+                        break;
+                    }
+                    else
+                    {
+                        arrDataUSART += arrChar[i];
+                    }
                 }
             }
 
-            if (commandCodeUSART == "But")
+            if (commandCodeUSART == comandButton)
             {
                 vm.PWRStep = arrDataUSART;
+                vm.CheckFlash = false;
             }
 
-            
+            if (commandCodeUSART == comandPwr)
+            {
+                vm.PWRFill = arrDataUSART;
+            }
+
+            if (commandCodeUSART == comandFlesh)
+            {
+                vm.CheckFlash = true;
+            }
+
+
             vm.LogText = commandCodeUSART;
         }
 
