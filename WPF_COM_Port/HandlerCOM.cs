@@ -3,23 +3,26 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO.Ports;
 using System.Linq;
-using System.Security.Policy;
 using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
-using WPF_COM_Port;
 
 
 namespace WPF_COM_Port
 {
     public partial class HandlerCOM
     {
+        
         private ViewModel vm;
-        private int lengthCode = 3;
-        private char flagStop = '#';
+
+        private int lengthCode = 3; /*количество символов в коде пакета usart*/
+        private char flagStop = '#';  /*символ стоп пакета usart*/
         private string comandButton = "But";
         private string comandFlesh = "Flh";
         private string comandPwr = "Pwr";
+
+        public string btnComandPlus = "BtnPlus";
+        public string btnComandMinus = "BtnMinus";
+        public string btnComandFlesh = "BtnFlesh";
         public HandlerCOM(ViewModel _vm)
         {
             vm = _vm;
@@ -175,10 +178,10 @@ namespace WPF_COM_Port
         private void AppendReceived(string data)
         {
             vm.LogText = data;
-            DecodingUSART(data, lengthCode);
+            DecodUSART(data, lengthCode);
         }
 
-        private void DecodingUSART(string data, int lengthCode)
+        private void DecodUSART(string data, int lengthCode)
         {
             char[] arrChar = data.ToCharArray();
             string commandCodeUSART = string.Empty;
@@ -186,7 +189,7 @@ namespace WPF_COM_Port
 
             for (int i = 0; i < arrChar.Length; i++)
             {
-                if (i < 3)
+                if (i < lengthCode)
                 {
                     commandCodeUSART += arrChar[i];
                 }
@@ -259,6 +262,27 @@ namespace WPF_COM_Port
                 vm.CloseBtnIsEnable = false;
                 vm.SendBtnIsEnable = false;
 
+            }
+        }
+
+        public void BtnComandClick(string comand)
+        {
+            if (port == null || !port.IsOpen)
+            {
+                MessageBox.Show("Port is not open", "Error", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return;
+            }
+
+            comand += flagStop;
+
+            try
+            {
+                port.WriteLine(comand);
+                vm.LogText = ">>> " + comand;
+            }
+            catch (Exception ex)
+            {
+                vm.LogText = "Write error: " + ex.Message;
             }
         }
 

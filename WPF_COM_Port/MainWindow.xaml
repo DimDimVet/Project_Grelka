@@ -43,8 +43,8 @@
             <StackPanel Grid.Row="1" Orientation="Horizontal" Margin="0,0,0,0">
                 <Label x:Name="NamePWRStep" Content="Значение порога температуры" Height="30" Width="190" VerticalContentAlignment="Top" VerticalAlignment="Top"/>
                 <Label x:Name="PWRStep" Content="{Binding PWRStep}" Width="180" Height="30" VerticalContentAlignment="Top" HorizontalAlignment="Left" VerticalAlignment="Top"/>
-                <Button x:Name="ButtonPlus" Content="+t" Width="30" Margin="5,0,5,0" BorderThickness="4,4,4,4"/>
-                <Button x:Name="ButtonMinus" Content="-t" Width="30" Margin="5,0,5,0" BorderThickness="4,4,4,4"/>
+                <Button x:Name="ButtonPlus" Content="+t" Command="{Binding ButtonPlusClick}" Width="30" Margin="5,0,5,0" BorderThickness="4,4,4,4"/>
+                <Button x:Name="ButtonMinus" Content="-t" Command="{Binding ButtonMinusClick}" Width="30" Margin="5,0,5,0" BorderThickness="4,4,4,4"/>
             </StackPanel>
 
             <StackPanel Grid.Row="1" Orientation="Horizontal" Margin="0,0,0,0">
@@ -55,7 +55,7 @@
             <StackPanel Grid.Row="1" Orientation="Horizontal" Margin="0,0,0,0">
                 <Label x:Name="NameCheckFlash" Content="Запись в флеш устройства" Height="30" Width="213" HorizontalAlignment="Left" VerticalAlignment="Top"/>
                 <CheckBox x:Name="CheckFlash" IsChecked="{Binding CheckFlash}" VerticalAlignment="Center" HorizontalAlignment="Center" IsEnabled="False"/>
-                <Button x:Name="ButtonFlesh" Content="Запись в флеш STM32" Width="138" Margin="5,0,5,0" BorderThickness="4,4,4,4" BorderBrush="#FF494949" Background="#FF38D716"/>
+                <Button x:Name="ButtonFlesh" Content="Запись в флеш STM32" Command="{Binding ButtonFleshClick}" Width="138" Margin="5,0,5,0" BorderThickness="4,4,4,4" BorderBrush="#FF494949" Background="#FF38D716"/>
             </StackPanel>
 
             <TextBox x:Name="SendBox" Text="{Binding SendBox}" Width="123" Height="28" VerticalContentAlignment="Center"  Grid.Row="1" HorizontalAlignment="Left" Margin="0,35,0,0" Background="#FFE5E5E5"/>
@@ -63,7 +63,6 @@
             <Button x:Name="ClearBtn" Content="Clear" Width="80" IsEnabled="{Binding ClearBtnIsEnable}"  Command="{Binding ClearBtnClick}" VerticalAlignment="Top" HorizontalAlignment="Left"/>
             <TextBox x:Name="LogBox" Text="{Binding LogText}" VerticalScrollBarVisibility="Auto" AcceptsReturn="True" IsReadOnly="True" TextWrapping="Wrap" FontFamily="Consolas" Margin="0,0,0,5" Grid.Row="1" HorizontalAlignment="Left" Width="122" Height="50" Background="#FF9CA894"/>
         </StackPanel>
-
 
     </Grid>
 </Window>

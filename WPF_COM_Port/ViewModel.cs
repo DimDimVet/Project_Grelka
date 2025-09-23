@@ -16,6 +16,7 @@ namespace WPF_COM_Port
     {
         /*модель*/
         HandlerCOM handlerCOM;
+
         /*кнопки*/
         public ICommand RefreshBtnClick { get; set; }
         private bool _refreshBtnIsEnable;
@@ -77,6 +78,13 @@ namespace WPF_COM_Port
                 OnPropertyChanged();
             }
         }
+
+        public ICommand ButtonPlusClick { get; set; }
+
+        public ICommand ButtonMinusClick { get; set; }
+
+        public ICommand ButtonFleshClick { get; set; }
+
         /*чеки*/
         private bool _rtsCheckClick;
         public bool RtsCheckClick
@@ -98,6 +106,18 @@ namespace WPF_COM_Port
             {
                 if (_dtrCheckClick == value) return;
                 _dtrCheckClick = value;
+                OnPropertyChanged();
+            }
+        }
+
+        private bool _checkFlash;
+        public bool CheckFlash
+        {
+            get => _checkFlash;
+            set
+            {
+                if (_checkFlash == value) return;
+                _checkFlash = value;
                 OnPropertyChanged();
             }
         }
@@ -235,18 +255,6 @@ namespace WPF_COM_Port
             }
         }
 
-        private bool _checkFlash;
-        public bool CheckFlash
-        {
-            get => _checkFlash;
-            set
-            {
-                if (_checkFlash == value) return;
-                _checkFlash = value;
-                OnPropertyChanged();
-            }
-        }
-
         /*вход*/
         public ViewModel()
         {
@@ -266,6 +274,10 @@ namespace WPF_COM_Port
             CloseBtnClick = new RelayCommand(OnCloseBtnClick, CanCloseBtnClick);
             SendBtnClick = new RelayCommand(OnSendBtnClick, CanSendBtnClick);
             ClearBtnClick = new RelayCommand(OnClearBtnClick, CanClearBtnClick);
+            ButtonPlusClick = new RelayCommand(OnButtonPlusClick, CanButtonPlusClick);
+            ButtonMinusClick = new RelayCommand(OnButtonMinusClick, CanButtonMinusClick);
+            ButtonFleshClick = new RelayCommand(OnButtonFleshClick, CanButtonFleshClick);
+
         }
         /*обработка кнопок*/
         public void OnRefreshBtnClick(object parameter)
@@ -294,6 +306,7 @@ namespace WPF_COM_Port
         {
             return true;
         }
+
         public void OnSendBtnClick(object parameter)
         {
             handlerCOM.SendBtnClick();
@@ -302,6 +315,7 @@ namespace WPF_COM_Port
         {
             return true;
         }
+
         public void OnClearBtnClick(object parameter)
         {
             handlerCOM.ClearBtnClick();
@@ -314,6 +328,33 @@ namespace WPF_COM_Port
         private void Closed(bool flag)
         {
             handlerCOM.Closed(flag);
+        }
+
+        public void OnButtonPlusClick(object parameter)
+        {
+            handlerCOM.BtnComandClick(handlerCOM.btnComandPlus);
+        }
+        private bool CanButtonPlusClick(object parameter)
+        {
+            return true;
+        }
+
+        public void OnButtonMinusClick(object parameter)
+        {
+            handlerCOM.BtnComandClick(handlerCOM.btnComandMinus);
+        }
+        private bool CanButtonMinusClick(object parameter)
+        {
+            return true;
+        }
+
+        public void OnButtonFleshClick(object parameter)
+        {
+            handlerCOM.BtnComandClick(handlerCOM.btnComandFlesh);
+        }
+        private bool CanButtonFleshClick(object parameter)
+        {
+            return true;
         }
         /*обработка текстов - евенты*/
         public event PropertyChangedEventHandler PropertyChanged;

@@ -54,14 +54,19 @@ void USART1_IRQHandler(void)
 }
 ///
 
-void USART1_ReadChar(char *ch)
+char USART1_ReadChar(char *ch)
 {
+	char temp;
+	
 	if (USART1->SR & USART_SR_RXNE)
 	{
-		char temp = USART1->DR;
-
+		temp = USART1->DR;
+		
 		ch[0] = temp;
+	
 	}
+	
+	return temp;
 }
 
 void USART1_SetString(char *str) // Установка строки по символьно
@@ -84,4 +89,16 @@ void USART1_SetString(char *str) // Установка строки по сим�
 }
 
 /**/
+/*события чтение USART*/
 
+event_read_USART_t event_read_USART;
+
+void Connect_Event_Read_USART(event_read_USART_t func)
+{
+	event_read_USART = func;
+}
+
+void Start_Event_Read_USART(char ch)
+{
+	 event_read_USART(ch);
+}

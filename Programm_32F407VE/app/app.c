@@ -15,6 +15,12 @@ I2C_Structure i2c_str = {.I2Cx = I2C1};
 GPIO_Structure arr_buttons[5] = {{.GPIOx = GPIOD, .Pin = PIN8}, {.GPIOx = GPIOB, .Pin = PIN15}, {.GPIOx = GPIOD, .Pin = PIN9}, {.GPIOx = GPIOD, .Pin = PIN11}, {.GPIOx = GPIOD, .Pin = PIN13}};
 GPIO_Structure com = {.GPIOx = GPIOD, .Pin = PIN14};
 Butt_Panel_Structure buttons = {.buttons_count = 5, .pin_butt = arr_buttons, .pin_com = &com};
+/*Настройки кода входящего пакета Uart*/
+char btn_plus[SIZE_BUF_USART] = BTN_PLUS_FLAG_USART;
+char btn_minus[SIZE_BUF_USART] = BTN_MINUS_FLAG_USART;
+char btn_flesh[SIZE_BUF_USART] = BTN_FLESH_FLAG_USART;
+
+char rezultReadUsart[SIZE_BUF_USART];
 
 /*main*/
 char *temps;
@@ -41,22 +47,11 @@ int main()
   while (1)
     {
       Handler_LED7();
+			
       Enable_ADC();
     }
 
   return 0;
-}
-
-void Write_Terminal_USART(char *str1, char *str2, char *str3)
-{
-	char buff_str[SIZE_BUFF_USART];
-	
-	USART1_SetString(NEW_STRING_CONSOLE);
-	
-	Sprintf_str_to_str(SIZE_BUFF_USART,buff_str,str1," ",str2," ",str3," /stop");
-	
-	USART1_SetString(buff_str);
-
 }
 
 //void Handler_Key0(void)//temp
@@ -115,7 +110,7 @@ void Handler_ADC_Event(uint16_t adcData, float adcVoltage)
   current_screen.str2 = buff_str_temp;
   current_screen.x2 = 10;
 
-  current_screen.str3 = rezultReadConsol;
+  current_screen.str3 = rezultReadUsart;
   current_screen.x3 = 10;
 	
   current_screen.str4 = buff_str_Step;
@@ -136,7 +131,7 @@ void Write_To_USART(uint16_t vol, char* flag)/*передаем значение
 	
 	//USART1_SetString(NEW_STRING_CONSOLE);
 	
-	sprintf(buff_str,"%s%d#",flag, vol);
+	sprintf(buff_str,"%s%d%c",flag, vol, STOP_FLAG_USART);
 	
 	USART1_SetString(buff_str);
 }
@@ -147,20 +142,54 @@ void Event_Buttons_panel(uint8_t pin)
 }
 
 //
-void ExecutorTerminal_USART_Irq(void)
+void ExecutorTerminal_USART_Irq()
 {
-    USART1_ReadChar(receivedChar); // Читаем из консоли
+  USART1_ReadChar(receivedChar); // Читаем из usart
+		
+	if(receivedChar_ != STOP_FLAG_USART)
+	{
+				rezultReadUsart[count_size_buf] = receivedChar_;
+	
+				count_size_buf++;
+	}
+	else
+	{
+		Decoder_Usart(rezultReadUsart,count_size_buf);
+		count_size_buf = 0;
+	}
+}
 
-    if (count_size_buf >= SIZE_BUF_USART)
-    {
-        count_size_buf = 0;
+void Decoder_Usart(char *data,uint16_t len)
+{
+	/*Pin8 Enter = BtnFlesh, pin15 -5 = BtnMinus, pin9 +5 = BtnPlus*/
 
-        USART1_SetString(rezultReadI2C);
+	if(R_Arr(btn_plus,rezultReadUsart,len))
+	{
+		Set_Fill_Factor(&pwr_str,PIN9,STEP_VOL,MIN_STEP_TEMP,MAX_STEP_TEMP);
+	}
+	
+	if(R_Arr(btn_minus,rezultReadUsart,len))
+	{
+		Set_Fill_Factor(&pwr_str,PIN15,STEP_VOL,MIN_STEP_TEMP,MAX_STEP_TEMP);
+	}
+	
+	if(R_Arr(btn_flesh,rezultReadUsart,len))
+	{
+		Set_Fill_Factor(&pwr_str,PIN8,STEP_VOL,MIN_STEP_TEMP,MAX_STEP_TEMP);
+	}
+}
 
-    }
-    else
-    {
-        rezultReadConsol[count_size_buf] = receivedChar_;
-        count_size_buf++;
-    }
+uint16_t R_Arr(char* arr1, char* arr2, uint16_t len)
+{
+	for(uint16_t i = 0; i < len; i++)
+	{
+		
+		if(arr1[i] != arr2[i])
+		{
+			return 0;
+		}
+		
+	}
+	
+	return 1;
 }

@@ -27,6 +27,12 @@
 #define BAUND_RATE 9600
 /*Размер буфера USART*/
 #define SIZE_BUFF_USART 36
+/*Конец строчного пакета*/
+#define STOP_FLAG_USART '#'
+/*значение пакета*/
+#define BTN_PLUS_FLAG_USART "\nBtnPlus"
+#define BTN_MINUS_FLAG_USART "\nBtnMinus"
+#define BTN_FLESH_FLAG_USART "\nBtnFlesh"
 
 /*новая строка*/
 #define NEW_STRING_CONSOLE "\r"
@@ -37,11 +43,13 @@
 /*var*/
 static char receivedChar_;
 static char *receivedChar = &receivedChar_;
-static char rezultReadConsol[SIZE_BUF_USART];
+
 static char rezultReadI2C[SIZE_BUF_USART];
 /*func*/
 
 void Handler_ADC_Event(uint16_t adcData, float adcVoltage);
 void Write_To_USART(uint16_t vol, char* flag);
+void Decoder_Usart(char *data,uint16_t leght);
+uint16_t R_Arr(char* arr1, char* arr2, uint16_t len);
 
 #endif
