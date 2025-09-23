@@ -47,14 +47,11 @@ void Config_USART1(uint16_t baudRate)
 void USART1_IRQHandler(void)
 {
 	// LED7();
-	//
-	ExecutorTerminal_USART_Irq();
-	//
+	Start_Event_Read_USART(USART1_ReadChar());
 	// LED7();
 }
-///
 
-char USART1_ReadChar(char *ch)
+char USART1_ReadChar()
 {
 	char temp;
 	
@@ -62,8 +59,7 @@ char USART1_ReadChar(char *ch)
 	{
 		temp = USART1->DR;
 		
-		ch[0] = temp;
-	
+		//ch[0] = temp;
 	}
 	
 	return temp;

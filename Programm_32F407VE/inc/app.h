@@ -41,15 +41,13 @@
 /*structures*/
 
 /*var*/
-static char receivedChar_;
-static char *receivedChar = &receivedChar_;
 
-static char rezultReadI2C[SIZE_BUF_USART];
 /*func*/
 
 void Handler_ADC_Event(uint16_t adcData, float adcVoltage);
 void Write_To_USART(uint16_t vol, char* flag);
+void Read_USART(char ch);
 void Decoder_Usart(char *data,uint16_t leght);
-uint16_t R_Arr(char* arr1, char* arr2, uint16_t len);
+uint16_t Comparator_Arr(char* arr1, char* arr2, uint16_t len);
 
 #endif
