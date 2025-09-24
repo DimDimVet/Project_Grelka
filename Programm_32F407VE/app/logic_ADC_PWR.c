@@ -2,6 +2,15 @@
 
 uint8_t flag_On_Off = OFF;
 
+void On_Off_Factor(PWR_Structure* pwr, uint8_t flag)
+{
+	pwr->pwr_on = flag;
+	
+	Replace_Fill_Factor(pwr);
+	
+	Start_Event_Write_To_USART(pwr->pwr_on,FLAG_USART_ON_OFF_PWR);
+}
+
 void Set_Fill_Factor(PWR_Structure* pwr, uint8_t vol, uint8_t step_vol,uint16_t min_temp, uint16_t max_temp)
 {
 	/*Pin8 Enter, pin15 -10, pin9 +10, pin11 -1, pin13 +1*/
@@ -60,49 +69,49 @@ void Set_Fill_Factor(PWR_Structure* pwr, uint8_t vol, uint8_t step_vol,uint16_t 
 	 Start_Event_Write_To_USART(pwr->fill_Factor,FLAG_USART_FILL_PWR);
 }
 
-void Handler_ADC_PWR(PWR_Structure* pwr, uint16_t adcData)
+void Handler_ADC_PWR(PWR_Structure* pwr, uint16_t adcData, float* rez_temp)
 {
   float rez_volt = adcData * 3.0 / 4095;
 
-  float rez_temp;
+  //float rez_temp;
   //{1.52,1.97,2.26,2.4,2.59,2.78,2.86}
   if (_RANGE(rez_volt,2.86,3))
     {
-      rez_temp = 200;
+      rez_temp[0] = 200;
     }
   else if (_RANGE(rez_volt,2.78,2.86))
     {
-      rez_temp = TEMP_151_180(rez_volt);
+      rez_temp[0] = TEMP_151_180(rez_volt);
     }
   else if (_RANGE(rez_volt,2.59,2.78))
     {
-      rez_temp = TEMP_121_150(rez_volt);
+      rez_temp[0] = TEMP_121_150(rez_volt);
     }
   else if (_RANGE(rez_volt,2.4,2.59))
     {
-      rez_temp = TEMP_101_120(rez_volt);
+      rez_temp[0] = TEMP_101_120(rez_volt);
     }
   else if (_RANGE(rez_volt,2.26,2.4))
     {
-      rez_temp = TEMP_81_100(rez_volt);
+      rez_temp[0] = TEMP_81_100(rez_volt);
     }
   else if (_RANGE(rez_volt, 1.97,2.26))
     {
-      rez_temp = TEMP_51_80(rez_volt);
+      rez_temp[0] = TEMP_51_80(rez_volt);
     }
   else if (_RANGE(rez_volt, 1.52,1.97))
     {
-      rez_temp = TEMP_23_50(rez_volt);
+      rez_temp[0] = TEMP_23_50(rez_volt);
     }
   else if (_RANGE(rez_volt, 0,1.52))
     {
-      rez_temp = 10;
+      rez_temp[0] = 10;
     }
 
 
-  if (pwr->step_temp > rez_temp)
+  if (pwr->step_temp > rez_temp[0])
     {
-      uint16_t temp = pwr->step_temp - rez_temp;
+      uint16_t temp = pwr->step_temp - rez_temp[0];
 
       if (_RANGE(temp, 20,200))
         {
@@ -126,7 +135,7 @@ void Handler_ADC_PWR(PWR_Structure* pwr, uint16_t adcData)
     }
   else
     {
-      uint16_t temp = rez_temp - pwr->step_temp;
+      uint16_t temp = rez_temp[0] - pwr->step_temp;
 
       if (_RANGE(temp, 2,5))
         {

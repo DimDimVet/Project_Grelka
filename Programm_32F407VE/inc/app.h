@@ -33,6 +33,7 @@
 #define BTN_PLUS_FLAG_USART "\nBtnPlus"
 #define BTN_MINUS_FLAG_USART "\nBtnMinus"
 #define BTN_FLESH_FLAG_USART "\nBtnFlesh"
+#define BTN_ON_OFF_FLAG_USART "\nBtnOnOff"
 
 /*новая строка*/
 #define NEW_STRING_CONSOLE "\r"

@@ -4,9 +4,12 @@
 RCC_Structure rcc_str = {.mDivider_PLLM = 8, .nMultiplier_PLLN = 192, .pDivider_PLLP = 6}; /*структура для RCC*/
 
 /*структура для ШИМ*/
-PWR_Structure pwr_str = {.pwr_on = OFF,.TIMx = TIM3, .fill_Factor = 50, .step_temp = MIN_STEP_TEMP};
+PWR_Structure pwr_str = {.pwr_on = OFF, .TIMx = TIM3, .fill_Factor = 50, .step_temp = MIN_STEP_TEMP};
 char buff_str_pwr_on_[50];
-char* buff_str_pwr_on;
+char *buff_str_pwr_on;
+
+float rez_temp_;
+float* rez_temp = &rez_temp_;
 
 /*Настройки SSD1306*/
 SSD1306_Structure ssd = {.adress_I2C = SSD1306_I2C_ADDR, .instance = I2C1};
@@ -27,13 +30,18 @@ uint8_t count_size_buf;
 char btn_plus[SIZE_BUF_USART] = BTN_PLUS_FLAG_USART;
 char btn_minus[SIZE_BUF_USART] = BTN_MINUS_FLAG_USART;
 char btn_flesh[SIZE_BUF_USART] = BTN_FLESH_FLAG_USART;
+char btn_on_off[SIZE_BUF_USART] = BTN_ON_OFF_FLAG_USART;
 
 char rezultReadUsart[SIZE_BUF_USART];
 
 /*main*/
-char *temps;
 int main()
 {
+	Connect_Event_ADC(Handler_ADC_Event);
+  Connect_Event_Write_To_USART(Write_To_USART);
+  Connect_Event_Read_USART(Read_USART);
+  Connect_Event_On_Off_PWR(Set_Flag_PWR);
+
   RCC_Init(&rcc_str);
   Init_USART1(BAUND_RATE);
   Init_Tim_PWR(&pwr_str);
@@ -43,12 +51,7 @@ int main()
   SSD1306_Init(&ssd);
 
   Buttons_Init(&buttons);
-  Connect_Event_ADC(Handler_ADC_Event);
-  Connect_Event_Write_To_USART(Write_To_USART);
-  Connect_Event_Read_USART(Read_USART);
-	Connect_Event_On_Off_PWR(Set_Flag_PWR);
 
-	
   Get_Flash_Data(&pwr_str);
   /**/
   Main_Screen(&ssd, &main_screen, 1);
@@ -99,30 +102,30 @@ int main()
 
 void Handler_ADC_Event(uint16_t adcData, float adcVoltage)
 {
+	
   char buff_str_temp[50];
-  char buff_str_temp1[50];
   char buff_str_PWR[50];
   char buff_str_Step[50];
 
-  sprintf(buff_str_temp, "Volt=%.2fV %s", adcVoltage, temps);
+  //sprintf(buff_str_temp, "Volt=%.2fV", adcVoltage);
 
   sprintf(buff_str_Step, "Step temp=%d  ", pwr_str.step_temp);
   sprintf(buff_str_PWR, "Fill PWR=%.2d", pwr_str.fill_Factor);
-  sprintf(buff_str_temp1, "=%.2d", adcData / 4095);
+  sprintf(buff_str_temp, "Curr.Temp=%.1fC", rez_temp_);
   //
   //SSD1306_Clear(&ssd);
 
   current_screen.str0 = buff_str_temp;
   current_screen.x0 = 10;
 
-  current_screen.str1 = buff_str_temp;
-  current_screen.x1 = 10;
+//  current_screen.str1 = buff_str_temp;
+//  current_screen.x1 = 10;
 
-  current_screen.str2 = rezultReadUsart;
+  current_screen.str2 = buff_str_pwr_on;
   current_screen.x2 = 10;
 
-  current_screen.str3 = buff_str_pwr_on;
-  current_screen.x3 = 10;
+//  current_screen.str3 = rezultReadUsart;
+//  current_screen.x3 = 10;
 
   current_screen.str4 = buff_str_Step;
   current_screen.x4 = 10;
@@ -131,9 +134,10 @@ void Handler_ADC_Event(uint16_t adcData, float adcVoltage)
   current_screen.x5 = 10;
 
   Work_Screen(&ssd, &current_screen);
-
-  Handler_ADC_PWR(&pwr_str, adcData);
-
+	
+	Set_Flag_PWR(pwr_str.pwr_on);
+	
+  Handler_ADC_PWR(&pwr_str, adcData,rez_temp);
 }
 
 /*передаем значение с кнопок в ПК для обновления в окне*/
@@ -150,22 +154,22 @@ void Write_To_USART(uint16_t vol, char* flag)
 
 void Set_Flag_PWR(uint8_t flag)
 {
-	pwr_str.pwr_on = flag;
-	Replace_Fill_Factor(&pwr_str);
-	
-	if(pwr_str.pwr_on == ON)
-	{
-		buff_str_pwr_on = "On  ";
-	}
-	else
-	{
-		buff_str_pwr_on = "Off ";
-	}
+  On_Off_Factor(&pwr_str, flag);
+
+  if (pwr_str.pwr_on == ON)
+    {
+      buff_str_pwr_on = "On  ";
+    }
+  else
+    {
+      buff_str_pwr_on = "Off ";
+    }
 }
+
 /*меняем шим по кнопке*/
 void Event_Buttons_panel(uint8_t pin)
 {
-      Set_Fill_Factor(&pwr_str, pin, STEP_VOL, MIN_STEP_TEMP, MAX_STEP_TEMP);
+  Set_Fill_Factor(&pwr_str, pin, STEP_VOL, MIN_STEP_TEMP, MAX_STEP_TEMP);
 }
 
 /*читаем usart по прерыванию*/
@@ -190,17 +194,23 @@ void Decoder_Usart(char *data, uint16_t len)
 
   if (Comparator_Arr(btn_plus, data, len))
     {
-          Set_Fill_Factor(&pwr_str, PIN9, STEP_VOL, MIN_STEP_TEMP, MAX_STEP_TEMP);
+      Set_Fill_Factor(&pwr_str, PIN9, STEP_VOL, MIN_STEP_TEMP, MAX_STEP_TEMP);
     }
 
   if (Comparator_Arr(btn_minus, data, len))
     {
-          Set_Fill_Factor(&pwr_str, PIN15, STEP_VOL, MIN_STEP_TEMP, MAX_STEP_TEMP);
+      Set_Fill_Factor(&pwr_str, PIN15, STEP_VOL, MIN_STEP_TEMP, MAX_STEP_TEMP);
     }
 
   if (Comparator_Arr(btn_flesh, data, len))
     {
-          Set_Fill_Factor(&pwr_str, PIN8, STEP_VOL, MIN_STEP_TEMP, MAX_STEP_TEMP);
+      Set_Fill_Factor(&pwr_str, PIN8, STEP_VOL, MIN_STEP_TEMP, MAX_STEP_TEMP);
+    }
+		
+	if (Comparator_Arr(btn_on_off, data, len))
+    {
+			pwr_str.pwr_on =! pwr_str.pwr_on;
+			Set_Flag_PWR(pwr_str.pwr_on);
     }
 }
 

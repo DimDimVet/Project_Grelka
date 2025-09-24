@@ -43,8 +43,8 @@
 /*var*/
 
 /*func*/
-void Handler_ADC_PWR(PWR_Structure* pwr, uint16_t adcData);
+void Handler_ADC_PWR(PWR_Structure* pwr, uint16_t adcData, float* rez_temp);
 void Set_Fill_Factor(PWR_Structure* pwr, uint8_t vol, uint8_t step_vol,uint16_t min_temp, uint16_t max_temp);
 void Handler_USART(uint16_t data);
-
+void On_Off_Factor(PWR_Structure* pwr, uint8_t flag);
 #endif
