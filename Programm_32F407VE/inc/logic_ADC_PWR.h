@@ -35,6 +35,8 @@
 #define FLAG_USART_FLASH "Flh"
 /*Признак пакета в USART: заполненость ШИМ*/
 #define FLAG_USART_FILL_PWR "Pwr"
+/*Признак пакета в USART: вкл-выкл ШИМ*/
+#define FLAG_USART_ON_OFF_PWR "Off"
 
 /*structures*/
 
@@ -44,4 +46,5 @@
 void Handler_ADC_PWR(PWR_Structure* pwr, uint16_t adcData);
 void Set_Fill_Factor(PWR_Structure* pwr, uint8_t vol, uint8_t step_vol,uint16_t min_temp, uint16_t max_temp);
 void Handler_USART(uint16_t data);
+
 #endif

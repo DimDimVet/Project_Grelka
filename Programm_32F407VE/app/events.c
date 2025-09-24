@@ -41,3 +41,17 @@ void Start_Event_Write_To_USART(uint16_t vol, char* flag)
 {
 	 event_write_USART(vol,flag);
 }
+
+/*события Buttons_panel вкл-выкл ШИМ*/
+
+event_on_off_PWR_t event_on_off;
+
+void Connect_Event_On_Off_PWR(event_on_off_PWR_t func)
+{
+	event_on_off = func;
+}
+
+void Start_Event_On_Off_PWR(uint8_t flag)
+{
+	event_on_off(flag);
+}

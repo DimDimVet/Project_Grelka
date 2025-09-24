@@ -85,6 +85,18 @@ namespace WPF_COM_Port
 
         public ICommand ButtonFleshClick { get; set; }
 
+        public ICommand ButtonOnOffClick { get; set; }
+        private string _buttonOnOffContent;
+        public string ButtonOnOffContent
+        {
+            get => _buttonOnOffContent;
+            set
+            {
+                if (_buttonOnOffContent == value) return;
+                _buttonOnOffContent = value;
+                OnPropertyChanged();
+            }
+        }
         /*чеки*/
         private bool _rtsCheckClick;
         public bool RtsCheckClick
@@ -277,7 +289,7 @@ namespace WPF_COM_Port
             ButtonPlusClick = new RelayCommand(OnButtonPlusClick, CanButtonPlusClick);
             ButtonMinusClick = new RelayCommand(OnButtonMinusClick, CanButtonMinusClick);
             ButtonFleshClick = new RelayCommand(OnButtonFleshClick, CanButtonFleshClick);
-
+            ButtonOnOffClick = new RelayCommand(OnButtonOnOffClick, CanButtonOnOffClick);
         }
         /*обработка кнопок*/
         public void OnRefreshBtnClick(object parameter)
@@ -321,6 +333,15 @@ namespace WPF_COM_Port
             handlerCOM.ClearBtnClick();
         }
         private bool CanClearBtnClick(object parameter)
+        {
+            return true;
+        }
+
+        public void OnButtonOnOffClick(object parameter)
+        {
+            handlerCOM.BtnComandClick(handlerCOM.btnComandOnOff);
+        }
+        private bool CanButtonOnOffClick(object parameter)
         {
             return true;
         }

@@ -21,7 +21,15 @@ void Init_Tim_PWR(PWR_Structure* pwr)
 
 void Replace_Fill_Factor(PWR_Structure* pwr)
 {
-    Write_REG(pwr->TIMx->CCR1,pwr->fill_Factor); /*Коэффициент заполнения*/
+	if((pwr->pwr_on) == 1)
+	{
+		Write_REG(pwr->TIMx->CCR1,pwr->fill_Factor); /*Коэффициент заполнения*/
+	}
+	else
+	{
+		Write_REG(pwr->TIMx->CCR1,0); /*Коэффициент заполнения*/
+	}
+    
 }
 
 void Enable_Periphery_PWR(PWR_Structure* pwr)

@@ -58,6 +58,10 @@
                 <Button x:Name="ButtonFlesh" Content="Запись в флеш STM32" Command="{Binding ButtonFleshClick}" Width="138" Margin="5,0,5,0" BorderThickness="4,4,4,4" BorderBrush="#FF494949" Background="#FF38D716"/>
             </StackPanel>
 
+            <StackPanel Grid.Row="1" Orientation="Horizontal" Margin="0,0,0,0">
+                <Button x:Name="ButtonOnOff" Content="{Binding ButtonOnOffContent}" Command="{Binding ButtonOnOffClick}" Width="138" Margin="5,0,5,0" BorderThickness="4,4,4,4" BorderBrush="#FF494949" Background="#FF38D716"/>
+            </StackPanel>
+
             <TextBox x:Name="SendBox" Text="{Binding SendBox}" Width="123" Height="28" VerticalContentAlignment="Center"  Grid.Row="1" HorizontalAlignment="Left" Margin="0,35,0,0" Background="#FFE5E5E5"/>
             <Button x:Name="SendBtn" Content="Send" Width="80" IsEnabled="{Binding SendBtnIsEnable}"  Command="{Binding SendBtnClick}" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="0,0,0,15"/>
             <Button x:Name="ClearBtn" Content="Clear" Width="80" IsEnabled="{Binding ClearBtnIsEnable}"  Command="{Binding ClearBtnClick}" VerticalAlignment="Top" HorizontalAlignment="Left"/>

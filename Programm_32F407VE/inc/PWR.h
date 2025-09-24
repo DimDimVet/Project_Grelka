@@ -14,6 +14,7 @@
 /*structures*/
 typedef struct
 {
+	uint8_t pwr_on; /*Указывает состояние вкл-выкл*/
 	TIM_TypeDef* TIMx;  /*Указывает настраиваемые таймер TIM_TypeDef*/
 	uint8_t fill_Factor; /*значение Коэффициента заполнения*/
 	uint16_t step_temp; /*значение ограничения по заполнению*/

@@ -45,6 +45,7 @@
 /*func*/
 
 void Handler_ADC_Event(uint16_t adcData, float adcVoltage);
+void Set_Flag_PWR(uint8_t flag);
 void Write_To_USART(uint16_t vol, char* flag);
 void Read_USART(char ch);
 void Decoder_Usart(char *data,uint16_t leght);

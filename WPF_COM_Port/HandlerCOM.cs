@@ -14,16 +14,20 @@ namespace WPF_COM_Port
         
         private ViewModel vm;
         private bool OneWriteFlag = false;
+        private string OnFlag = "Выкл";
+        private string OffFlag = "Вкл";
 
         private int lengthCode = 3; /*количество символов в коде пакета usart*/
         private char flagStop = '#';  /*символ стоп пакета usart*/
         private string comandButton = "But";
         private string comandFlesh = "Flh";
         private string comandPwr = "Pwr";
+        private string comandOffOn = "Off";
 
         public string btnComandPlus = "BtnPlus";
         public string btnComandMinus = "BtnMinus";
         public string btnComandFlesh = "BtnFlesh";
+        public string btnComandOnOff= "BtnOnOff";
         public HandlerCOM(ViewModel _vm)
         {
             vm = _vm;
@@ -50,6 +54,8 @@ namespace WPF_COM_Port
             vm.RefreshBtnIsEnable = true;
             vm.OpenBtnIsEnable = true;
             vm.ClearBtnIsEnable = true;
+
+            vm.ButtonOnOffContent = OffFlag;
         }
 
         public void SetPort() 
@@ -221,6 +227,19 @@ namespace WPF_COM_Port
             if (commandCodeUSART == comandFlesh)
             {
                 vm.CheckFlash = true;
+            }
+
+            if (commandCodeUSART == comandOffOn)
+            {
+                if (arrDataUSART == "0")
+                {
+                    vm.ButtonOnOffContent = OffFlag;
+                }
+                else 
+                {
+                    vm.ButtonOnOffContent = OnFlag;
+                }
+                
             }
 
             vm.LogText = commandCodeUSART;

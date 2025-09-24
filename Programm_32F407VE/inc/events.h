@@ -19,6 +19,7 @@
 //typedef void (*event_buttons_panel_t)(int vol);
 typedef void (*event_ADC_t)(uint16_t adcData, float adcVoltage);
 typedef void (*event_write_to_USART_t)(uint16_t vol, char* flag);
+typedef void (*event_on_off_PWR_t)(uint8_t flag);
 
 
 /*event func*/
@@ -30,6 +31,9 @@ void Start_Event_ADC(uint16_t adcData, float adcVoltage);
 
 void Connect_Event_Write_To_USART(event_write_to_USART_t func);
 void Start_Event_Write_To_USART(uint16_t vol, char* flag);
+
+void Connect_Event_On_Off_PWR(event_on_off_PWR_t func);
+void Start_Event_On_Off_PWR(uint8_t flag);
 
 /*func*/
 

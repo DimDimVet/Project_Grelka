@@ -1,5 +1,7 @@
 #include "logic_ADC_PWR.h"
 
+uint8_t flag_On_Off = OFF;
+
 void Set_Fill_Factor(PWR_Structure* pwr, uint8_t vol, uint8_t step_vol,uint16_t min_temp, uint16_t max_temp)
 {
 	/*Pin8 Enter, pin15 -10, pin9 +10, pin11 -1, pin13 +1*/
@@ -30,7 +32,16 @@ void Set_Fill_Factor(PWR_Structure* pwr, uint8_t vol, uint8_t step_vol,uint16_t 
 	 
 	 if(vol == PIN11)
 	 {
-		 
+		 if(flag_On_Off == OFF)
+		 {
+			 Start_Event_On_Off_PWR(ON);
+			 flag_On_Off = !flag_On_Off;
+		 }
+		 else
+		 {
+			 Start_Event_On_Off_PWR(OFF);
+			 flag_On_Off = !flag_On_Off;
+		 }
 	 }
 	 
 	 if(vol == PIN13)
@@ -95,17 +106,17 @@ void Handler_ADC_PWR(PWR_Structure* pwr, uint16_t adcData)
 
       if (_RANGE(temp, 20,200))
         {
-          pwr->fill_Factor = 45;
+          pwr->fill_Factor = 15;
         }
 
       if (_RANGE(temp, 10,20))
         {
-          pwr->fill_Factor = 15;
+          pwr->fill_Factor = 10;
         }
 
       if (_RANGE(temp, 5,10))
         {
-          pwr->fill_Factor = 5;
+          pwr->fill_Factor = 3;
         }
 
       if (_RANGE(temp, 2,5))
