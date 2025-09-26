@@ -267,6 +267,18 @@ namespace WPF_COM_Port
             }
         }
 
+        private string _currTemp;
+        public string CurrTemp
+        {
+            get => _currTemp;
+            set
+            {
+                if (_currTemp == value) return;
+                _currTemp = value;
+                OnPropertyChanged();
+            }
+        }
+
         /*вход*/
         public ViewModel()
         {

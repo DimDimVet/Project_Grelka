@@ -23,6 +23,9 @@
 #define MAX_STEP_TEMP 180
 #define MIN_STEP_TEMP 50
 
+/*количество подсчетов в ацп*/
+#define SCORING_ADC 1000
+
 /*Скорость USART*/
 #define BAUND_RATE 9600
 /*Размер буфера USART*/

@@ -5,6 +5,7 @@ using System.IO.Ports;
 using System.Linq;
 using System.Text;
 using System.Windows;
+using System.Windows.Input;
 
 
 namespace WPF_COM_Port
@@ -23,6 +24,7 @@ namespace WPF_COM_Port
         private string comandFlesh = "Flh";
         private string comandPwr = "Pwr";
         private string comandOffOn = "Off";
+        private string comandTemperature = "Tem";
 
         public string btnComandPlus = "BtnPlus";
         public string btnComandMinus = "BtnMinus";
@@ -240,6 +242,11 @@ namespace WPF_COM_Port
                     vm.ButtonOnOffContent = OnFlag;
                 }
                 
+            }
+
+            if (commandCodeUSART == comandTemperature)
+            {
+                vm.CurrTemp = arrDataUSART;
             }
 
             vm.LogText = commandCodeUSART;

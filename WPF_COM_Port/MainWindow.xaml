@@ -39,7 +39,12 @@
 
         <!--Stack2-->
         <StackPanel Orientation="Vertical" Margin="10,10,10,4" Grid.Row="1">
-
+            
+            <StackPanel Grid.Row="1" Orientation="Horizontal" Margin="0,0,0,0">
+                <Label x:Name="NameCurrTemp" Content="Текущая температуры, С" Height="30" Width="194" VerticalContentAlignment="Top" VerticalAlignment="Top"/>
+                <Label x:Name="CurrTemp" Content="{Binding CurrTemp}" Width="40" Height="30" VerticalContentAlignment="Top" VerticalAlignment="Top" Foreground="#FF0032FC"/>
+            </StackPanel>
+            
             <StackPanel Grid.Row="1" Orientation="Horizontal" Margin="0,0,0,0">
                 <Label x:Name="NamePWRStep" Content="Значение порога температуры, С" Height="30" Width="194" VerticalContentAlignment="Top" VerticalAlignment="Top"/>
                 <Label x:Name="PWRStep" Content="{Binding PWRStep}" Width="40" Height="30" VerticalContentAlignment="Top" VerticalAlignment="Top" Foreground="#FFFC2300"/>
