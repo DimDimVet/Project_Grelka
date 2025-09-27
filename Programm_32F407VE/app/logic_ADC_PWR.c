@@ -3,6 +3,9 @@
 uint8_t flag_On_Off = OFF;
 uint8_t queue_data = 0;
 
+uint16_t count_scoring_ADC;
+float rez_tmp[SCORING_ADC];
+
 void On_Off_Factor(PWR_Structure* pwr, uint8_t flag)
 {
   pwr->pwr_on = flag;
@@ -70,46 +73,68 @@ void Set_Fill_Factor(PWR_Structure* pwr, uint8_t vol, uint8_t step_vol, uint16_t
   Start_Event_Write_To_USART(pwr->fill_Factor, FLAG_USART_FILL_PWR);
 }
 
-void Handler_ADC_PWR(PWR_Structure* pwr, uint16_t adcData, float* rez_temp)
+void Handler_ADC_PWR(PWR_Structure* pwr, uint16_t adcData, float* rez_temperature)
 {
   float rez_volt = adcData * 3.0 / 4095;
 
-  //float rez_temp;
-  //{1.52,1.97,2.26,2.4,2.59,2.78,2.86}
-  if (_RANGE(rez_volt, 2.86, 3))
+  if (count_scoring_ADC > SCORING_ADC)
     {
-      rez_temp[0] = 200;
+			float tmp = 0;
+      count_scoring_ADC = 0;
+			
+			for(uint16_t i = 0; i < SCORING_ADC; i++)
+			{
+				tmp = tmp + rez_tmp[i];
+			}
+			
+			rez_temperature[0] = tmp / SCORING_ADC;
+			
+			 Comporator_Termo(pwr,rez_temperature);
     }
-  else if (_RANGE(rez_volt, 2.78, 2.86))
+  else
     {
-      rez_temp[0] = TEMP_151_180(rez_volt);
-    }
-  else if (_RANGE(rez_volt, 2.59, 2.78))
-    {
-      rez_temp[0] = TEMP_121_150(rez_volt);
-    }
-  else if (_RANGE(rez_volt, 2.4, 2.59))
-    {
-      rez_temp[0] = TEMP_101_120(rez_volt);
-    }
-  else if (_RANGE(rez_volt, 2.26, 2.4))
-    {
-      rez_temp[0] = TEMP_81_100(rez_volt);
-    }
-  else if (_RANGE(rez_volt, 1.97, 2.26))
-    {
-      rez_temp[0] = TEMP_51_80(rez_volt);
-    }
-  else if (_RANGE(rez_volt, 1.52, 1.97))
-    {
-      rez_temp[0] = TEMP_23_50(rez_volt);
-    }
-  else if (_RANGE(rez_volt, 0, 1.52))
-    {
-      rez_temp[0] = 10;
+      //{1.52,1.97,2.26,2.4,2.59,2.78,2.86}
+      if (_RANGE(rez_volt, 2.86, 3))
+        {
+          rez_tmp[count_scoring_ADC] = 200;
+        }                                                                                                           
+      else if (_RANGE(rez_volt, 2.78, 2.86))
+        {
+          rez_tmp[count_scoring_ADC] = TEMP_151_180(rez_volt);
+        }
+      else if (_RANGE(rez_volt, 2.59, 2.78))
+        {
+          rez_tmp[count_scoring_ADC] = TEMP_121_150(rez_volt);
+        }
+      else if (_RANGE(rez_volt, 2.4, 2.59))
+        {
+          rez_tmp[count_scoring_ADC] = TEMP_101_120(rez_volt);
+        }
+      else if (_RANGE(rez_volt, 2.26, 2.4))
+        {
+          rez_tmp[count_scoring_ADC] = TEMP_81_100(rez_volt);
+        }
+      else if (_RANGE(rez_volt, 1.97, 2.26))
+        {
+          rez_tmp[count_scoring_ADC] = TEMP_51_80(rez_volt);
+        }
+      else if (_RANGE(rez_volt, 1.52, 1.97))
+        {
+          rez_tmp[count_scoring_ADC] = TEMP_23_50(rez_volt);
+        }
+      else if (_RANGE(rez_volt, 0, 1.52))
+        {
+          rez_tmp[count_scoring_ADC] = 10;
+        }
+
+      count_scoring_ADC++;
     }
 
+}
 
+void Comporator_Termo(PWR_Structure* pwr, float* rez_temp)
+{
+	/*если температура ниже порога*/
   if (pwr->step_temp > rez_temp[0])
     {
       uint16_t temp = pwr->step_temp - rez_temp[0];
@@ -124,26 +149,27 @@ void Handler_ADC_PWR(PWR_Structure* pwr, uint16_t adcData, float* rez_temp)
           pwr->fill_Factor = 3;
         }
 
-      if (_RANGE(temp, 10, 29))
+      if (_RANGE(temp, 5, 29))
         {
           pwr->fill_Factor = 2;
         }
 
-      if (_RANGE(temp, 5, 9))
+      if (_RANGE(temp, 0, 4))
         {
           pwr->fill_Factor = 1;
         }
     }
   else
     {
+		/*если температура выше порога*/
       uint16_t temp = rez_temp[0] - pwr->step_temp;
 
-      if (_RANGE(temp, 5, 9))
-        {
-          pwr->fill_Factor = 1;
-        }
+//      if (_RANGE(temp, 0, 1))
+//        {
+//          pwr->fill_Factor = 1;
+//        }
 
-      if (_RANGE(temp, 4, 200))
+      if (_RANGE(temp, 0, 200))
         {
           pwr->fill_Factor = 0;
         }
@@ -152,8 +178,8 @@ void Handler_ADC_PWR(PWR_Structure* pwr, uint16_t adcData, float* rez_temp)
   Replace_Fill_Factor(pwr);
 
   Push_Queue_To_Usart(pwr, rez_temp[0]);
-
 }
+
 
 void Push_Queue_To_Usart(PWR_Structure* pwr, float rez_temp)
 {

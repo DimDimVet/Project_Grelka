@@ -30,6 +30,9 @@
 #define TEMP_121_150(volt) ((volt*1000-1823)/ 6.379)
 #define TEMP_151_180(volt) ((volt*1000- 2363.414)/ 2.758)
 
+/*количество подсчетов в ацп*/
+#define SCORING_ADC 10
+
 /*Признак пакета в USART: предустановки на момент подключение к usart*/
 //#define FLAG_USART_PRESET "Pst"
 /*Признак пакета в USART: от кнопок*/
@@ -52,6 +55,6 @@ void Handler_ADC_PWR(PWR_Structure* pwr, uint16_t adcData, float* rez_temp);
 void Set_Fill_Factor(PWR_Structure* pwr, uint8_t vol, uint8_t step_vol,uint16_t min_temp, uint16_t max_temp);
 void Handler_USART(uint16_t data);
 void On_Off_Factor(PWR_Structure* pwr, uint8_t flag);
-//void Pre_Set_PWR_To_USART(PWR_Structure* pwr);
+void Comporator_Termo(PWR_Structure* pwr, float* rez_temp);
 void Push_Queue_To_Usart(PWR_Structure* pwr,float rez_temp);
 #endif

@@ -10,7 +10,6 @@ char *buff_str_pwr_on;
 
 /*var для разного*/
 float rez_temp;
-uint16_t count_scoring_ADC;
 
 /*Настройки SSD1306*/
 SSD1306_Structure ssd = {.adress_I2C = SSD1306_I2C_ADDR, .instance = I2C1};
@@ -61,18 +60,8 @@ int main()
 
   while (1)
     {
-
-			if(count_scoring_ADC > SCORING_ADC)
-			{
-				count_scoring_ADC = 0;
-				Enable_ADC();
+      	Enable_ADC();
 				Handler_LED7();
-			}
-			else
-			{
-				count_scoring_ADC++;
-			}
-      
     }
 
   return 0;
@@ -121,7 +110,7 @@ void Handler_ADC_Event(uint16_t adcData, float adcVoltage)
 
   sprintf(buff_str_Step, "Step temp=%d  ", pwr_str.step_temp);
   sprintf(buff_str_PWR, "Fill PWR=%.2d", pwr_str.fill_Factor);
-  sprintf(buff_str_temp, "Curr.Temp=%.1fC", rez_temp);
+  sprintf(buff_str_temp, "Curr.Temp=%.1fC  ", rez_temp);
   //
   //SSD1306_Clear(&ssd);
 
@@ -166,11 +155,11 @@ void Set_Flag_PWR(uint8_t flag)
 
   if (pwr_str.pwr_on == ON)
     {
-      buff_str_pwr_on = "On  ";
+      buff_str_pwr_on = "PWR On  ";
     }
   else
     {
-      buff_str_pwr_on = "Off ";
+      buff_str_pwr_on = "PWR Off ";
     }
 }
 
