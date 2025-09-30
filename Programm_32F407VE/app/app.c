@@ -20,7 +20,7 @@ Screen_Structure current_screen = {};
 I2C_Structure i2c_str = {.I2Cx = I2C1};
 
 /*Настройки Buttons*/
-/*Pin8 Enter, pin15 +10, pin9 -10, pin11 +1, pin13 -1*/
+/*Pin8 Enter = BtnFlesh, pin15 -5 = BtnMinus, pin9 +5 = BtnPlus*/
 GPIO_Structure arr_buttons[5] = {{.GPIOx = GPIOD, .Pin = PIN8}, {.GPIOx = GPIOB, .Pin = PIN15}, {.GPIOx = GPIOD, .Pin = PIN9}, {.GPIOx = GPIOD, .Pin = PIN11}, {.GPIOx = GPIOD, .Pin = PIN13}};
 GPIO_Structure com = {.GPIOx = GPIOD, .Pin = PIN14};
 Butt_Panel_Structure buttons = {.buttons_count = 5, .pin_butt = arr_buttons, .pin_com = &com};
@@ -70,33 +70,11 @@ int main()
 //void Handler_Key0(void)//temp
 //{
 //  Handler_LED7();
-//  pwr_str.fill_Factor += 10;
-
-//  if ((pwr_str.fill_Factor) <= 100)
-//    {
-//      Replace_Fill_Factor(&pwr_str);
-//    }
-//  else
-//    {
-//      pwr_str.fill_Factor = 0;
-//      Replace_Fill_Factor(&pwr_str);
-//    }
 //}
 
 //void Handler_Key1(void)//temp
 //{
 //  Handler_LED7();
-//  pwr_str.fill_Factor -= 10;
-
-//  if ((pwr_str.fill_Factor) >= 0)
-//    {
-//      Replace_Fill_Factor(&pwr_str);
-//    }
-//  else
-//    {
-//      pwr_str.fill_Factor = 0;
-//      Replace_Fill_Factor(&pwr_str);
-//    }
 //}
 
 void Handler_ADC_Event(uint16_t adcData, float adcVoltage)
@@ -111,7 +89,7 @@ void Handler_ADC_Event(uint16_t adcData, float adcVoltage)
   sprintf(buff_str_Step, "Step temp=%d  ", pwr_str.step_temp);
   sprintf(buff_str_PWR, "Fill PWR=%.2d", pwr_str.fill_Factor);
   sprintf(buff_str_temp, "Curr.Temp=%.1fC  ", rez_temp);
-  //
+  
   //SSD1306_Clear(&ssd);
 
   current_screen.str0 = buff_str_temp;

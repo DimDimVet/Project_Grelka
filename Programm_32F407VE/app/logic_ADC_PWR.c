@@ -164,11 +164,6 @@ void Comporator_Termo(PWR_Structure* pwr, float* rez_temp)
 		/*если температура выше порога*/
       uint16_t temp = rez_temp[0] - pwr->step_temp;
 
-//      if (_RANGE(temp, 0, 1))
-//        {
-//          pwr->fill_Factor = 1;
-//        }
-
       if (_RANGE(temp, 0, 200))
         {
           pwr->fill_Factor = 0;
