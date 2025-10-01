@@ -1,0 +1,19 @@
+Added Component: Designator=X1(BH-20R (DS1013-20R) (IDC-20MR))
+Added Pin To Net: NetName=3.3ย Pin=X1-1
+Added Pin To Net: NetName=3.3ย Pin=X1-2
+Added Pin To Net: NetName=TRST Pin=X1-3
+Added Pin To Net: NetName=GND Pin=X1-4
+Added Pin To Net: NetName=TDI Pin=X1-5
+Added Pin To Net: NetName=GND Pin=X1-6
+Added Pin To Net: NetName=TMS Pin=X1-7
+Added Pin To Net: NetName=GND Pin=X1-8
+Added Pin To Net: NetName=TCK Pin=X1-9
+Added Pin To Net: NetName=GND Pin=X1-10
+Added Pin To Net: NetName=GND Pin=X1-12
+Added Pin To Net: NetName=TDO Pin=X1-13
+Added Pin To Net: NetName=GND Pin=X1-14
+Added Pin To Net: NetName=RST Pin=X1-15
+Added Pin To Net: NetName=GND Pin=X1-16
+Added Pin To Net: NetName=GND Pin=X1-18
+Added Pin To Net: NetName=GND Pin=X1-20
+Added Member To Class: ClassName=ศาสั.687281.099Ý3 Member=Component X1 JTAG/SWD

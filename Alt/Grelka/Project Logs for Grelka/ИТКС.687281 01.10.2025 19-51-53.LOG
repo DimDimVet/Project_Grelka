@@ -1,0 +1,388 @@
+Added Component: Designator=C1(KSE-100)
+Added Component: Designator=C1(C 0805)
+Added Component: Designator=C2(C 0805)
+Added Component: Designator=C3(C 0805)
+Added Component: Designator=C4(C 0805)
+Added Component: Designator=C5(C 0805)
+Added Component: Designator=C6(C 0805)
+Added Component: Designator=C7(C 0805)
+Added Component: Designator=C8(C 0805)
+Added Component: Designator=C9(C 0805)
+Added Component: Designator=C10(C 0805)
+Added Component: Designator=C11(C 0805)
+Added Component: Designator=C12(C 0805)
+Added Component: Designator=C13(C 1210)
+Added Component: Designator=C14(C 0805)
+Added Component: Designator=C15(C 0805)
+Added Component: Designator=C16(C 0805)
+Added Component: Designator=D1(50A-40BX)
+Added Component: Designator=D2(LQFP - 100)
+Added Component: Designator=D3(SO16)
+Added Component: Designator=D4(TMR 3WI Series)
+Added Component: Designator=D5(TO-220)
+Added Component: Designator=D6(TMR 3WI Series)
+Added Component: Designator=R1(R 0805)
+Added Component: Designator=R2(R 0805)
+Added Component: Designator=R3(R 0805)
+Added Component: Designator=R4(JBR-3266W)
+Added Component: Designator=R5(R 0805)
+Added Component: Designator=R6(R 0805)
+Added Component: Designator=R7(R 0805)
+Added Component: Designator=R8(R 0805)
+Added Component: Designator=R9(R 0805)
+Added Component: Designator=R10(R 0805)
+Added Component: Designator=R11(R 0805)
+Added Component: Designator=R12(R 0805)
+Added Component: Designator=R13(R 0805)
+Added Component: Designator=R14(R 0805)
+Added Component: Designator=R15(R 0805)
+Added Component: Designator=R16(R 0805)
+Added Component: Designator=R17(R 0805)
+Added Component: Designator=R18(R 0805)
+Added Component: Designator=R19(R 0805)
+Added Component: Designator=R20(R 0805)
+Added Component: Designator=R21(R 0805)
+Added Component: Designator=R22(R 0805)
+Added Component: Designator=R23(R 0805)
+Added Component: Designator=R24(R 0805)
+Added Component: Designator=R25(R 0805)
+Added Component: Designator=R26(R 0805)
+Added Component: Designator=R27(R 0805)
+Added Component: Designator=R28(R 0805)
+Added Component: Designator=R29(RX27-1)
+Added Component: Designator=R30(R 0805)
+Added Component: Designator=R31(R 0805)
+Added Component: Designator=U1(DIP4)
+Added Component: Designator=VD1(BR-10)
+Added Component: Designator=VT1(TO-220)
+Added Component: Designator=VT2(TO-92)
+Added Component: Designator=VT3(TO-92)
+Added Component: Designator=X1(BH-20R (DS1013-20R) (IDC-20MR))
+Added Component: Designator=X2(PLS-2)
+Added Component: Designator=X3(PLS-10)
+Added Component: Designator=X4(1-1123723-3)
+Added Component: Designator=X5(PLS-4)
+Added Component: Designator=X6(1-1123723-3)
+Added Component: Designator=X7(1-1123723-3)
+Added Component: Designator=X8(PLS-2)
+Added Component: Designator=X9(1-1123723-3)
+Added Component: Designator=ZQ1(HC-49S)
+Added Component: Designator=ZQ2(HC-49S)
+Added Pin To Net: NetName=+310ย Pin=C1-1
+Added Pin To Net: NetName=NetC1_1 Pin=C1-1
+Added Pin To Net: NetName=GND_310 Pin=C1-2
+Added Pin To Net: NetName=NetC1_2 Pin=C1-2
+Added Pin To Net: NetName=NetC2_1 Pin=C2-1
+Added Pin To Net: NetName=NetC2_2 Pin=C2-2
+Added Pin To Net: NetName=NetC3_1 Pin=C3-1
+Added Pin To Net: NetName=GND Pin=C3-2
+Added Pin To Net: NetName=NetC4_1 Pin=C4-1
+Added Pin To Net: NetName=GND Pin=C4-2
+Added Pin To Net: NetName=NetC5_1 Pin=C5-1
+Added Pin To Net: NetName=GND Pin=C5-2
+Added Pin To Net: NetName=GND Pin=C6-1
+Added Pin To Net: NetName=NetC6_2 Pin=C6-2
+Added Pin To Net: NetName=GND Pin=C7-1
+Added Pin To Net: NetName=NetC7_2 Pin=C7-2
+Added Pin To Net: NetName=NetC8_1 Pin=C8-1
+Added Pin To Net: NetName=GND Pin=C8-2
+Added Pin To Net: NetName=NetC9_1 Pin=C9-1
+Added Pin To Net: NetName=GND Pin=C9-2
+Added Pin To Net: NetName=3.3ย Pin=C10-1
+Added Pin To Net: NetName=GND Pin=C10-2
+Added Pin To Net: NetName=3.3ย Pin=C11-1
+Added Pin To Net: NetName=GND Pin=C11-2
+Added Pin To Net: NetName=GND Pin=C12-1
+Added Pin To Net: NetName=NetC12_2 Pin=C12-2
+Added Pin To Net: NetName=GND Pin=C13-1
+Added Pin To Net: NetName=NetC13_2 Pin=C13-2
+Added Pin To Net: NetName=RST Pin=C14-1
+Added Pin To Net: NetName=GND Pin=C14-2
+Added Pin To Net: NetName=GND Pin=C15-1
+Added Pin To Net: NetName=3.3ย Pin=C15-2
+Added Pin To Net: NetName=GND Pin=C16-1
+Added Pin To Net: NetName=3.3ย Pin=C16-2
+Added Pin To Net: NetName=GND Pin=D1-1
+Added Pin To Net: NetName=NetC1_2 Pin=D1-2
+Added Pin To Net: NetName=NetC1_1 Pin=D1-3
+Added Pin To Net: NetName=NetC2_2 Pin=D1-4
+Added Pin To Net: NetName=NetC2_1 Pin=D1-5
+Added Pin To Net: NetName=GND Pin=D1-8
+Added Pin To Net: NetName=3.3ย Pin=D1-9
+Added Pin To Net: NetName=GND Pin=D1-10
+Added Pin To Net: NetName=3.3ย Pin=D1-11
+Added Pin To Net: NetName=GND Pin=D1-12
+Added Pin To Net: NetName=GND Pin=D1-13
+Added Pin To Net: NetName=NetC3_1 Pin=D1-14
+Added Pin To Net: NetName=NetD1_15 Pin=D1-15
+Added Pin To Net: NetName=GND Pin=D1-16
+Added Pin To Net: NetName=GND Pin=D1-17
+Added Pin To Net: NetName=SCL Pin=D1-18
+Added Pin To Net: NetName=SDA Pin=D1-19
+Added Pin To Net: NetName=SDA Pin=D1-20
+Added Pin To Net: NetName=GND Pin=D1-21
+Added Pin To Net: NetName=GND Pin=D1-22
+Added Pin To Net: NetName=GND Pin=D1-23
+Added Pin To Net: NetName=GND Pin=D1-24
+Added Pin To Net: NetName=GND Pin=D1-25
+Added Pin To Net: NetName=NetD1_26 Pin=D1-26
+Added Pin To Net: NetName=NetC12_2 Pin=D1-27
+Added Pin To Net: NetName=NetC13_2 Pin=D1-28
+Added Pin To Net: NetName=GND Pin=D1-29
+Added Pin To Net: NetName=GND Pin=D1-30
+Added Pin To Net: NetName=GND Pin=D2-10
+Added Pin To Net: NetName=3.3ย Pin=D2-11
+Added Pin To Net: NetName=NetC6_2 Pin=D2-12
+Added Pin To Net: NetName=NetC7_2 Pin=D2-13
+Added Pin To Net: NetName=RST Pin=D2-14
+Added Pin To Net: NetName=3.3ย Pin=D2-19
+Added Pin To Net: NetName=GND Pin=D2-20
+Added Pin To Net: NetName=3.3ย Pin=D2-21
+Added Pin To Net: NetName=3.3ย Pin=D2-22
+Added Pin To Net: NetName=NetD2_23 Pin=D2-23
+Added Pin To Net: NetName=GND Pin=D2-27
+Added Pin To Net: NetName=3.3ย Pin=D2-28
+Added Pin To Net: NetName=NetD2_31 Pin=D2-31
+Added Pin To Net: NetName=NetD2_37 Pin=D2-37
+Added Pin To Net: NetName=NetC4_1 Pin=D2-49
+Added Pin To Net: NetName=3.3ย Pin=D2-50
+Added Pin To Net: NetName=NetD2_54 Pin=D2-54
+Added Pin To Net: NetName=NetD2_55 Pin=D2-55
+Added Pin To Net: NetName=NetD2_56 Pin=D2-56
+Added Pin To Net: NetName=NetD2_58 Pin=D2-58
+Added Pin To Net: NetName=NetD2_60 Pin=D2-60
+Added Pin To Net: NetName=RxD Pin=D2-68
+Added Pin To Net: NetName=TxD Pin=D2-69
+Added Pin To Net: NetName=TMS Pin=D2-72
+Added Pin To Net: NetName=NetC5_1 Pin=D2-73
+Added Pin To Net: NetName=GND Pin=D2-74
+Added Pin To Net: NetName=3.3ย Pin=D2-75
+Added Pin To Net: NetName=TCK Pin=D2-76
+Added Pin To Net: NetName=TDI Pin=D2-77
+Added Pin To Net: NetName=TDO Pin=D2-89
+Added Pin To Net: NetName=TRST Pin=D2-90
+Added Pin To Net: NetName=SCL Pin=D2-92
+Added Pin To Net: NetName=SDA Pin=D2-93
+Added Pin To Net: NetName=NetD2_94 Pin=D2-94
+Added Pin To Net: NetName=GND Pin=D2-99
+Added Pin To Net: NetName=3.3ย Pin=D2-100
+Added Pin To Net: NetName=GND Pin=D3-1
+Added Pin To Net: NetName=TxD Pin=D3-2
+Added Pin To Net: NetName=RxD Pin=D3-3
+Added Pin To Net: NetName=NetD3_5 Pin=D3-5
+Added Pin To Net: NetName=NetD3_6 Pin=D3-6
+Added Pin To Net: NetName=NetC9_1 Pin=D3-7
+Added Pin To Net: NetName=NetC8_1 Pin=D3-8
+Added Pin To Net: NetName=NetD3_16 Pin=D3-16
+Added Pin To Net: NetName=NetD4_1 Pin=D4-1
+Added Pin To Net: NetName=NetD4_2 Pin=D4-2
+Added Pin To Net: NetName=U15 Pin=D4-6
+Added Pin To Net: NetName=GND Pin=D4-7
+Added Pin To Net: NetName=NetD5_1 Pin=D5-1
+Added Pin To Net: NetName=3.3ย Pin=D5-2
+Added Pin To Net: NetName=U15 Pin=D5-3
+Added Pin To Net: NetName=NetD4_1 Pin=D6-1
+Added Pin To Net: NetName=NetD4_2 Pin=D6-2
+Added Pin To Net: NetName=U๏๓ Pin=D6-6
+Added Pin To Net: NetName=GND_310 Pin=D6-7
+Added Pin To Net: NetName=3.3ย Pin=R1-1
+Added Pin To Net: NetName=TRST Pin=R1-2
+Added Pin To Net: NetName=3.3ย Pin=R2-1
+Added Pin To Net: NetName=TDI Pin=R2-2
+Added Pin To Net: NetName=NetD2_37 Pin=R3-1
+Added Pin To Net: NetName=GND Pin=R3-2
+Added Pin To Net: NetName=GND Pin=R4-1
+Added Pin To Net: NetName=NetD2_23 Pin=R4-2
+Added Pin To Net: NetName=GND Pin=R4-3
+Added Pin To Net: NetName=3.3ย Pin=R5-1
+Added Pin To Net: NetName=TMS Pin=R5-2
+Added Pin To Net: NetName=GND Pin=R6-1
+Added Pin To Net: NetName=TCK Pin=R6-2
+Added Pin To Net: NetName=NetD2_31 Pin=R7-1
+Added Pin To Net: NetName=U๘่์ Pin=R7-2
+Added Pin To Net: NetName=NetD2_54 Pin=R8-1
+Added Pin To Net: NetName=NetR8_2 Pin=R8-2
+Added Pin To Net: NetName=3.3ย Pin=R9-1
+Added Pin To Net: NetName=TDO Pin=R9-2
+Added Pin To Net: NetName=NetD2_55 Pin=R10-1
+Added Pin To Net: NetName=NetR10_2 Pin=R10-2
+Added Pin To Net: NetName=NetD2_56 Pin=R11-1
+Added Pin To Net: NetName=NetR11_2 Pin=R11-2
+Added Pin To Net: NetName=NetC3_1 Pin=R12-1
+Added Pin To Net: NetName=3.3ย Pin=R12-2
+Added Pin To Net: NetName=NetD2_58 Pin=R13-1
+Added Pin To Net: NetName=NetR13_2 Pin=R13-2
+Added Pin To Net: NetName=GND Pin=R14-1
+Added Pin To Net: NetName=NetD1_15 Pin=R14-2
+Added Pin To Net: NetName=NetD1_15 Pin=R15-1
+Added Pin To Net: NetName=3.3ย Pin=R15-2
+Added Pin To Net: NetName=NetD2_60 Pin=R16-1
+Added Pin To Net: NetName=NetR16_2 Pin=R16-2
+Added Pin To Net: NetName=3.3ย Pin=R17-1
+Added Pin To Net: NetName=SDA Pin=R17-2
+Added Pin To Net: NetName=3.3ย Pin=R18-1
+Added Pin To Net: NetName=SCL Pin=R18-2
+Added Pin To Net: NetName=NetC7_2 Pin=R19-1
+Added Pin To Net: NetName=NetC6_2 Pin=R19-2
+Added Pin To Net: NetName=GND Pin=R20-1
+Added Pin To Net: NetName=NetD1_26 Pin=R20-2
+Added Pin To Net: NetName=NetR21_1 Pin=R21-1
+Added Pin To Net: NetName=U๏๓ Pin=R21-2
+Added Pin To Net: NetName=NetR22_1 Pin=R22-1
+Added Pin To Net: NetName=U๏๓ Pin=R22-2
+Added Pin To Net: NetName=NetR23_1 Pin=R23-1
+Added Pin To Net: NetName=U๏๓ Pin=R23-2
+Added Pin To Net: NetName=GND Pin=R24-1
+Added Pin To Net: NetName=NetD2_94 Pin=R24-2
+Added Pin To Net: NetName=3.3ย Pin=R25-1
+Added Pin To Net: NetName=RST Pin=R25-2
+Added Pin To Net: NetName=NetR26_1 Pin=R26-1
+Added Pin To Net: NetName=NetR22_1 Pin=R26-2
+Added Pin To Net: NetName=GND_310 Pin=R27-1
+Added Pin To Net: NetName=NetR27_2 Pin=R27-2
+Added Pin To Net: NetName=GND_310 Pin=R28-1
+Added Pin To Net: NetName=NetR23_1 Pin=R28-2
+Added Pin To Net: NetName=GND_310 Pin=R29-1
+Added Pin To Net: NetName=NetR29_2 Pin=R29-2
+Added Pin To Net: NetName=NetD5_1 Pin=R30-1
+Added Pin To Net: NetName=3.3ย Pin=R30-2
+Added Pin To Net: NetName=GND Pin=R31-1
+Added Pin To Net: NetName=NetD5_1 Pin=R31-2
+Added Pin To Net: NetName=U๘่์ Pin=U1-1
+Added Pin To Net: NetName=GND Pin=U1-2
+Added Pin To Net: NetName=NetR27_2 Pin=U1-3
+Added Pin To Net: NetName=NetR21_1 Pin=U1-4
+Added Pin To Net: NetName=NetVD1_AC1 Pin=VD1-AC1
+Added Pin To Net: NetName=NetVD1_AC2 Pin=VD1-AC2
+Added Pin To Net: NetName=+310ย Pin=VD1-U+
+Added Pin To Net: NetName=GND_310 Pin=VD1-U-
+Added Pin To Net: NetName=NetR23_1 Pin=VT1-1
+Added Pin To Net: NetName=NetVT1_2 Pin=VT1-2
+Added Pin To Net: NetName=NetR29_2 Pin=VT1-3
+Added Pin To Net: NetName=NetR27_2 Pin=VT2-B
+Added Pin To Net: NetName=GND_310 Pin=VT2-E
+Added Pin To Net: NetName=NetR22_1 Pin=VT2-K
+Added Pin To Net: NetName=NetR26_1 Pin=VT3-B
+Added Pin To Net: NetName=GND_310 Pin=VT3-E
+Added Pin To Net: NetName=NetR23_1 Pin=VT3-K
+Added Pin To Net: NetName=3.3ย Pin=X1-1
+Added Pin To Net: NetName=3.3ย Pin=X1-2
+Added Pin To Net: NetName=TRST Pin=X1-3
+Added Pin To Net: NetName=GND Pin=X1-4
+Added Pin To Net: NetName=TDI Pin=X1-5
+Added Pin To Net: NetName=GND Pin=X1-6
+Added Pin To Net: NetName=TMS Pin=X1-7
+Added Pin To Net: NetName=GND Pin=X1-8
+Added Pin To Net: NetName=TCK Pin=X1-9
+Added Pin To Net: NetName=GND Pin=X1-10
+Added Pin To Net: NetName=GND Pin=X1-12
+Added Pin To Net: NetName=TDO Pin=X1-13
+Added Pin To Net: NetName=GND Pin=X1-14
+Added Pin To Net: NetName=RST Pin=X1-15
+Added Pin To Net: NetName=GND Pin=X1-16
+Added Pin To Net: NetName=GND Pin=X1-18
+Added Pin To Net: NetName=GND Pin=X1-20
+Added Pin To Net: NetName=NetD2_23 Pin=X2-1
+Added Pin To Net: NetName=3.3ย Pin=X2-2
+Added Pin To Net: NetName=GND Pin=X3-1
+Added Pin To Net: NetName=NetR16_2 Pin=X3-2
+Added Pin To Net: NetName=GND Pin=X3-3
+Added Pin To Net: NetName=NetR13_2 Pin=X3-4
+Added Pin To Net: NetName=GND Pin=X3-5
+Added Pin To Net: NetName=NetR11_2 Pin=X3-6
+Added Pin To Net: NetName=GND Pin=X3-7
+Added Pin To Net: NetName=NetR10_2 Pin=X3-8
+Added Pin To Net: NetName=GND Pin=X3-9
+Added Pin To Net: NetName=NetR8_2 Pin=X3-10
+Added Pin To Net: NetName=NetVT1_2 Pin=X4-1
+Added Pin To Net: NetName=+310ย Pin=X4-3
+Added Pin To Net: NetName=NetD3_16 Pin=X5-1
+Added Pin To Net: NetName=NetD3_6 Pin=X5-2
+Added Pin To Net: NetName=NetD3_5 Pin=X5-3
+Added Pin To Net: NetName=GND Pin=X5-4
+Added Pin To Net: NetName=NetVD1_AC1 Pin=X6-1
+Added Pin To Net: NetName=NetX6_3 Pin=X6-3
+Added Pin To Net: NetName=NetX6_3 Pin=X7-1
+Added Pin To Net: NetName=NetVD1_AC2 Pin=X7-3
+Added Pin To Net: NetName=NetD4_2 Pin=X8-1
+Added Pin To Net: NetName=NetD4_1 Pin=X8-2
+Added Pin To Net: NetName=NetVD1_AC1 Pin=X9-1
+Added Pin To Net: NetName=NetVD1_AC2 Pin=X9-3
+Added Pin To Net: NetName=NetC7_2 Pin=ZQ1-1
+Added Pin To Net: NetName=NetC6_2 Pin=ZQ1-2
+Added Pin To Net: NetName=NetC8_1 Pin=ZQ2-1
+Added Pin To Net: NetName=NetC9_1 Pin=ZQ2-2
+Added Pin To Net: NetName=GND_set Pin=X4-2
+Added Pin To Net: NetName=GND_set Pin=X6-2
+Added Pin To Net: NetName=GND_set Pin=X9-2
+Added Net: Name=GND_set
+Added Member To Class: ClassName=ศาสั.687281.099Ý3 Member=Component C1 100์๊๔
+Added Member To Class: ClassName=ศาสั.687281.099Ý3 Member=Component C1 0.1์๊๔
+Added Member To Class: ClassName=ศาสั.687281.099Ý3 Member=Component C2 0.1์๊๔
+Added Member To Class: ClassName=ศาสั.687281.099Ý3 Member=Component C3 0.1์๊๔
+Added Member To Class: ClassName=ศาสั.687281.099Ý3 Member=Component C4 0.1์๊๔
+Added Member To Class: ClassName=ศาสั.687281.099Ý3 Member=Component C5 0.1์๊๔
+Added Member To Class: ClassName=ศาสั.687281.099Ý3 Member=Component C6 22๏ิ
+Added Member To Class: ClassName=ศาสั.687281.099Ý3 Member=Component C7 22๏ิ
+Added Member To Class: ClassName=ศาสั.687281.099Ý3 Member=Component C8 22๏ิ
+Added Member To Class: ClassName=ศาสั.687281.099Ý3 Member=Component C9 22๏ิ
+Added Member To Class: ClassName=ศาสั.687281.099Ý3 Member=Component C10 0.1์๊๔
+Added Member To Class: ClassName=ศาสั.687281.099Ý3 Member=Component C11 0.1์๊๔
+Added Member To Class: ClassName=ศาสั.687281.099Ý3 Member=Component C12 4.7์๊๔
+Added Member To Class: ClassName=ศาสั.687281.099Ý3 Member=Component C13 2.2์๊๔
+Added Member To Class: ClassName=ศาสั.687281.099Ý3 Member=Component C14 0.1์๊๔
+Added Member To Class: ClassName=ศาสั.687281.099Ý3 Member=Component C15 0.1์๊๔
+Added Member To Class: ClassName=ศาสั.687281.099Ý3 Member=Component C16 0.1์๊๔
+Added Member To Class: ClassName=ศาสั.687281.099Ý3 Member=Component D1 SSD1306 OLED
+Added Member To Class: ClassName=ศาสั.687281.099Ý3 Member=Component D2 0
+Added Member To Class: ClassName=ศาสั.687281.099Ý3 Member=Component D3 CH340G
+Added Member To Class: ClassName=ศาสั.687281.099Ý3 Member=Component D4 TMR 3-2423WI
+Added Member To Class: ClassName=ศาสั.687281.099Ý3 Member=Component D5 LM317
+Added Member To Class: ClassName=ศาสั.687281.099Ý3 Member=Component D6 TMR 3-2423WI
+Added Member To Class: ClassName=ศาสั.687281.099Ý3 Member=Component R1 10๊
+Added Member To Class: ClassName=ศาสั.687281.099Ý3 Member=Component R2 10๊
+Added Member To Class: ClassName=ศาสั.687281.099Ý3 Member=Component R3 10๊
+Added Member To Class: ClassName=ศาสั.687281.099Ý3 Member=Component R4 20๊
+Added Member To Class: ClassName=ศาสั.687281.099Ý3 Member=Component R5 10๊
+Added Member To Class: ClassName=ศาสั.687281.099Ý3 Member=Component R6 10๊
+Added Member To Class: ClassName=ศาสั.687281.099Ý3 Member=Component R7 360
+Added Member To Class: ClassName=ศาสั.687281.099Ý3 Member=Component R8 10
+Added Member To Class: ClassName=ศาสั.687281.099Ý3 Member=Component R9 10๊
+Added Member To Class: ClassName=ศาสั.687281.099Ý3 Member=Component R10 10
+Added Member To Class: ClassName=ศาสั.687281.099Ý3 Member=Component R11 10
+Added Member To Class: ClassName=ศาสั.687281.099Ý3 Member=Component R12 4.7๊
+Added Member To Class: ClassName=ศาสั.687281.099Ý3 Member=Component R13 10
+Added Member To Class: ClassName=ศาสั.687281.099Ý3 Member=Component R14 100
+Added Member To Class: ClassName=ศาสั.687281.099Ý3 Member=Component R15 10
+Added Member To Class: ClassName=ศาสั.687281.099Ý3 Member=Component R16 10
+Added Member To Class: ClassName=ศาสั.687281.099Ý3 Member=Component R17 4.7๊
+Added Member To Class: ClassName=ศาสั.687281.099Ý3 Member=Component R18 4.7๊
+Added Member To Class: ClassName=ศาสั.687281.099Ý3 Member=Component R19 1ฬ
+Added Member To Class: ClassName=ศาสั.687281.099Ý3 Member=Component R20 430๊
+Added Member To Class: ClassName=ศาสั.687281.099Ý3 Member=Component R21 36๊
+Added Member To Class: ClassName=ศาสั.687281.099Ý3 Member=Component R22 14๊
+Added Member To Class: ClassName=ศาสั.687281.099Ý3 Member=Component R23 14๊
+Added Member To Class: ClassName=ศาสั.687281.099Ý3 Member=Component R24 10๊
+Added Member To Class: ClassName=ศาสั.687281.099Ý3 Member=Component R25 10๊
+Added Member To Class: ClassName=ศาสั.687281.099Ý3 Member=Component R26 20๊
+Added Member To Class: ClassName=ศาสั.687281.099Ý3 Member=Component R27 20๊
+Added Member To Class: ClassName=ศาสั.687281.099Ý3 Member=Component R28 14๊
+Added Member To Class: ClassName=ศาสั.687281.099Ý3 Member=Component R29 1.2
+Added Member To Class: ClassName=ศาสั.687281.099Ý3 Member=Component R30 100
+Added Member To Class: ClassName=ศาสั.687281.099Ý3 Member=Component R31 150
+Added Member To Class: ClassName=ศาสั.687281.099Ý3 Member=Component U1 SFH618A-4X
+Added Member To Class: ClassName=ศาสั.687281.099Ý3 Member=Component VD1 0
+Added Member To Class: ClassName=ศาสั.687281.099Ý3 Member=Component VT1 2SK3569
+Added Member To Class: ClassName=ศาสั.687281.099Ý3 Member=Component VT2 BC548A
+Added Member To Class: ClassName=ศาสั.687281.099Ý3 Member=Component VT3 BC548A
+Added Member To Class: ClassName=ศาสั.687281.099Ý3 Member=Component X1 JTAG/SWD
+Added Member To Class: ClassName=ศาสั.687281.099Ý3 Member=Component X2 B57045-K 103-K
+Added Member To Class: ClassName=ศาสั.687281.099Ý3 Member=Component X3 สํ๎๏๊่
+Added Member To Class: ClassName=ศาสั.687281.099Ý3 Member=Component X4 าๅ๐์๎-ํเใ๐๓็๊เ
+Added Member To Class: ClassName=ศาสั.687281.099Ý3 Member=Component X5 USB
+Added Member To Class: ClassName=ศาสั.687281.099Ý3 Member=Component X6 ัๅ๒ü 220ย
+Added Member To Class: ClassName=ศาสั.687281.099Ý3 Member=Component X7 ฬเ๊๑ 2ภ
+Added Member To Class: ClassName=ศาสั.687281.099Ý3 Member=Component X8 AC/DC: B2L050ESB
+Added Member To Class: ClassName=ศาสั.687281.099Ý3 Member=Component X9 AC/DC: B2L050ESB
+Added Member To Class: ClassName=ศาสั.687281.099Ý3 Member=Component ZQ1 8.000ฬใ๖
+Added Member To Class: ClassName=ศาสั.687281.099Ý3 Member=Component ZQ2 12.000ฬใ๖
