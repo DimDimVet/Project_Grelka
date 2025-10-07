@@ -1,0 +1,83 @@
+﻿<Window x:Class="WPF_COM_Port.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:WPF_COM_Port"
+        mc:Ignorable="d"
+        Title="Project Grelka" Height="380" Width="780">
+    <Window.DataContext>
+        <local:ViewModel/>
+    </Window.DataContext>
+
+    <Grid Margin="0,10,10,0">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="80*"/>
+            <RowDefinition Height="340*"/>
+        </Grid.RowDefinitions>
+        <!--Stack1-->
+        <StackPanel Orientation="Vertical" VerticalAlignment="Top" Grid.Row="0" Height="61" Margin="10,0,10,0">
+
+            <StackPanel Orientation="Horizontal" VerticalAlignment="Top" Grid.Row="0">
+                <ComboBox x:Name="PortCombo" ItemsSource="{Binding PortCombo}" SelectedItem="{Binding PortComboSelectItem}" SelectedIndex="{Binding PortComboSelectIndex}" Width="120" Margin="0,0,6,0"/>
+                <ComboBox x:Name="BaudCombo" ItemsSource="{Binding BaudCombo}" SelectedItem="{Binding BaudComboSelectItem}" Width="100" Margin="0,0,6,0"/>
+                <ComboBox x:Name="ParityCombo" ItemsSource="{Binding ParityCombo}" SelectedItem="{Binding ParityComboSelectItem}" Width="90" Margin="0,0,6,0"/>
+                <ComboBox x:Name="DataBitsCombo" ItemsSource="{Binding DataBitsCombo}" SelectedItem="{Binding DataBitsComboSelectItem}" Width="70" Margin="0,0,6,0"/>
+                <ComboBox x:Name="StopBitsCombo" ItemsSource="{Binding StopBitsCombo}" SelectedItem="{Binding StopBitsComboSelectItem}" Width="90" Margin="0,0,6,0"/>
+                <CheckBox x:Name="RtsCheck" IsChecked="{Binding RtsCheckClick}" Content="RTS" VerticalAlignment="Center" Margin="0,0,6,0"/>
+                <CheckBox x:Name="DtrCheck" IsChecked="{Binding DtrCheckClick}" Content="DTR" VerticalAlignment="Center" Margin="0,0,6,0"/>
+                <ComboBox x:Name="HandshakeCombo" ItemsSource="{Binding HandshakeCombo}" SelectedItem="{Binding HandshakeComboSelectItem}" Width="130" Margin="0,0,6,0"/>
+            </StackPanel>
+
+            <StackPanel Orientation="Horizontal" Grid.Row="0" Margin="0,5,0,0" Height="18">
+                <Button x:Name="RefreshBtn" Content="Refresh" Width="70" IsEnabled="{Binding RefreshBtnIsEnable}"  Command="{Binding RefreshBtnClick}" Margin="0,0,6,0"/>
+                <Button x:Name="OpenBtn" Content="Open" Width="70" IsEnabled="{Binding OpenBtnIsEnable}" Command="{Binding OpenBtnClick}" Margin="0,0,6,0"/>
+                <Button x:Name="CloseBtn" Content="Close" Width="70" IsEnabled="{Binding CloseBtnIsEnable}" Command="{Binding CloseBtnClick}"/>
+            </StackPanel>
+
+        </StackPanel>
+
+        <!--Stack2-->
+        <StackPanel Orientation="Vertical" Margin="10,10,10,4" Grid.Row="1">
+            
+            <StackPanel Grid.Row="1" Orientation="Horizontal" Margin="0,0,0,0">
+                <Label x:Name="NameCurrTemp" Content="Текущая температуры, С" Height="30" Width="194" VerticalContentAlignment="Top" VerticalAlignment="Top"/>
+                <Label x:Name="CurrTemp" Content="{Binding CurrTemp}" Width="40" Height="30" VerticalContentAlignment="Top" VerticalAlignment="Top" Foreground="#FF0032FC"/>
+            </StackPanel>
+            
+            <StackPanel Grid.Row="1" Orientation="Horizontal" Margin="0,0,0,0">
+                <Label x:Name="NamePWRStep" Content="Значение порога температуры, С" Height="30" Width="194" VerticalContentAlignment="Top" VerticalAlignment="Top"/>
+                <Label x:Name="PWRStep" Content="{Binding PWRStep}" Width="40" Height="30" VerticalContentAlignment="Top" VerticalAlignment="Top" Foreground="#FFFC2300"/>
+                <Button x:Name="ButtonPlus" Content="+t" Command="{Binding ButtonPlusClick}" Width="62" Margin="5,0,5,0" BorderThickness="4,4,4,4"/>
+                <Button x:Name="ButtonMinus" Content="-t" Command="{Binding ButtonMinusClick}" Width="62" Margin="5,0,5,0" BorderThickness="4,4,4,4"/>
+            </StackPanel>
+
+            <StackPanel Grid.Row="1" Orientation="Horizontal" Margin="0,0,0,0">
+                <Label x:Name="NamePWRFill" Content="Значение уровня заполения ШИМ, %" Height="30" Width="217" VerticalAlignment="Top"/>
+                <Label x:Name="PWRFill" Content="{Binding PWRFill}" Width="44" Height="30" VerticalContentAlignment="Top" VerticalAlignment="Top" Foreground="#FF2AF408"/>
+            </StackPanel>
+
+            <StackPanel Grid.Row="1" Orientation="Horizontal" Margin="0,0,0,0">
+                <Label x:Name="NameCheckFlash" Content="Запись в флеш устройства" Height="30" Width="213" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+                <CheckBox x:Name="CheckFlash" IsChecked="{Binding CheckFlash}" VerticalAlignment="Center" HorizontalAlignment="Center" IsEnabled="False"/>
+                <Button x:Name="ButtonFlesh" Content="Запись в флеш STM32" Command="{Binding ButtonFleshClick}" Width="138" Margin="5,0,5,0" BorderThickness="4,4,4,4" BorderBrush="#FF494949" Background="#FF38D716"/>
+            </StackPanel>
+
+            <StackPanel Grid.Row="1" Orientation="Horizontal" Margin="0,15,0,-3">
+                <Button x:Name="ButtonOnOff" Content="{Binding ButtonOnOffContent}" Command="{Binding ButtonOnOffClick}" Width="138" Margin="5,0,5,0" BorderThickness="4,4,4,4" BorderBrush="#FF494949" Background="#FFD8900A"/>
+            </StackPanel>
+
+            <StackPanel Grid.Row="1" Orientation="Horizontal" Margin="0,35,0,0">
+                <TextBox x:Name="SendBox" Text="{Binding SendBox}" Width="130" Height="20" VerticalContentAlignment="Center"  Grid.Row="1" HorizontalAlignment="Left" Background="#FFE5E5E5"/>
+                <Button x:Name="SendBtn" Content="Send" Width="70" IsEnabled="{Binding SendBtnIsEnable}"  Command="{Binding SendBtnClick}" HorizontalAlignment="Left" VerticalAlignment="Top" Height="20"/>
+            </StackPanel>
+
+            <StackPanel Grid.Row="1" Orientation="Horizontal" Margin="0,5,0,0">
+                <Button x:Name="ClearBtn" Content="Clear" Width="70" IsEnabled="{Binding ClearBtnIsEnable}"  Command="{Binding ClearBtnClick}" VerticalAlignment="Top" Height="20"/>
+                <TextBox x:Name="LogBox" Text="{Binding LogText}" VerticalScrollBarVisibility="Auto" AcceptsReturn="True" IsReadOnly="True" TextWrapping="WrapWithOverflow" FontFamily="Consolas" Margin="0,0,0,5" Grid.Row="1" Width="130" Height="20" Background="#FF9CA894"/>
+            </StackPanel>
+
+        </StackPanel>
+
+    </Grid>
+</Window>

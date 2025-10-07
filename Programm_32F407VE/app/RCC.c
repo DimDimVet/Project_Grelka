@@ -1,0 +1,98 @@
+#include "RCC.h"
+
+/*includes*/
+
+/*defaines*/
+
+/*structures*/
+
+/*var*/
+int count = 0;
+
+/*func*/
+
+void RCC_Init(RCC_Structure* rcc)
+{
+    int countStartHSE;
+
+    ENABLE_BIT(RCC->CR,RCC_CR_HSEON);/*запуск HSE*/
+
+    for (countStartHSE = 0;; countStartHSE++)
+    {
+        if (Read_BIT(RCC->CR,RCC_CR_HSERDY))/*проверяем готовность HSE*/
+        {
+            Config_PLL(rcc);/*PLLM=(HSE/8),PLLN=(HSE * 192),PLLP = 6*/
+            ENABLE_BIT(RCC->CR,RCC_CR_PLLON);/*запуск PLL*/
+
+            if(Read_BIT(RCC->CR,RCC_CR_PLLRDY))/*опросим RCC_CR_PLLRDY,проверяем готовность PLL*/
+            {
+                ENABLE_BIT(RCC->CFGR,RCC_CFGR_SW_PLL);/*Установить свитч в PLL как системный такт*/
+
+                if(Read_BIT(RCC->CFGR,RCC_CFGR_SWS_PLL))/*опросим RCC_CFGR_SWS_PLL,Проверяем свитч в PLL*/
+                {
+                    break;
+                }
+            }
+        }
+        /*переполнение счетчика countStartHSE*/
+        if (countStartHSE > 0x1000)/*возврат на HSI*/
+        {
+            DISABLE_BIT(RCC->CR,RCC_CR_HSEON);/*Останавливаем HSE*/
+            break;
+        }
+    }
+}
+
+void Config_PLL(RCC_Structure* rcc)
+{
+    Clear_REG(RCC->PLLCFGR);/*Сброс настроек PLL*/
+    ENABLE_BIT(RCC->PLLCFGR,(rcc->mDivider_PLLM << RCC_PLLCFGR_PLLM_Pos));/*M-Делитель PLLM=(HSE/y)*/
+    ENABLE_BIT(RCC->PLLCFGR,(rcc->nMultiplier_PLLN << RCC_PLLCFGR_PLLN_Pos));/*N-Умножение PLLN=(HSE * x)*/
+    ENABLE_BIT(RCC->PLLCFGR,(rcc->pDivider_PLLP << RCC_PLLCFGR_PLLP_Pos));/*P-Делить PLLP=z*/
+    ENABLE_BIT(RCC->PLLCFGR,RCC_PLLCFGR_PLLSRC_HSE);/*Источник PLL = HSE*/
+}
+
+/*для задержки*/
+void delay_us(int us)
+{
+  if (us > US_MAX_VALUE || us == 0)
+    {
+      return;
+    }
+  SysTick->CTRL |= SysTick_CTRL_TICKINT_Msk; /*разрешить прерывания по достижении 0*/
+  // SysTick->CTRL &= ~SysTick_CTRL_TICKINT_Msk; /*запретить прерывания по достижении 0*/
+
+  SysTick->CTRL |= SysTick_CTRL_CLKSOURCE_Msk; /*ставим тактирование от процессора*/
+  SysTick->LOAD = (US * us - 1);               /*устанавливаем в регистр число от которого считать*/
+  SysTick->VAL = 0;                            /*обнуляем текущее значение регистра SYST_CVR*/
+  SysTick->CTRL |= SysTick_CTRL_ENABLE_Msk;    /*запускаем счетчик*/
+
+  while (!(SysTick->CTRL & SysTick_CTRL_COUNTFLAG_Msk)) /*ждем установку флага COUNFLAG в регистре SYST_CSR*/
+    {
+    }
+
+  SysTick->CTRL &= ~SysTick_CTRL_COUNTFLAG_Msk; /*скидываем бит COUNTFLAG*/
+  SysTick->CTRL &= ~SysTick_CTRL_ENABLE_Msk;    /*выключаем счетчик*/
+}
+
+void delay_ms(int ms)
+{
+  for (int i = 0; i < ms; i++)
+    {
+      delay_us(1000);
+    }
+}
+
+void delay_s(int s)
+{
+  for (int i = 0; i < s; i++)
+    {
+      delay_ms(1000);
+    }
+}
+
+void SysTick_Handler(void)
+{
+  // count++;
+}
+

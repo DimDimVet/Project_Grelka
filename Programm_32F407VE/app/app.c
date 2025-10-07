@@ -1,0 +1,204 @@
+#include "app.h"
+
+/*структура для RCC*/
+RCC_Structure rcc_str = {.mDivider_PLLM = 8, .nMultiplier_PLLN = 192, .pDivider_PLLP = 6}; /*структура для RCC*/
+
+/*структура для ШИМ*/
+PWR_Structure pwr_str = {.pwr_on = OFF, .TIMx = TIM3, .fill_Factor = 50, .step_temp = MIN_STEP_TEMP};
+char buff_str_pwr_on_[50];
+char *buff_str_pwr_on;
+
+/*var для разного*/
+float rez_temp;
+
+/*Настройки SSD1306*/
+SSD1306_Structure ssd = {.adress_I2C = SSD1306_I2C_ADDR, .instance = I2C1};
+Screen_Structure main_screen = {.str0 = "*Project:*", .x0 = 10, .str2 = "GRELKA", .x2 = 30};
+Screen_Structure current_screen = {};
+
+/*Настройки I2C*/
+I2C_Structure i2c_str = {.I2Cx = I2C1};
+
+/*Настройки Buttons*/
+/*Pin8 Enter = BtnFlesh, pin15 -5 = BtnMinus, pin9 +5 = BtnPlus*/
+GPIO_Structure arr_buttons[5] = {{.GPIOx = GPIOD, .Pin = PIN8}, {.GPIOx = GPIOB, .Pin = PIN15}, {.GPIOx = GPIOD, .Pin = PIN9}, {.GPIOx = GPIOD, .Pin = PIN11}, {.GPIOx = GPIOD, .Pin = PIN13}};
+GPIO_Structure com = {.GPIOx = GPIOD, .Pin = PIN14};
+Butt_Panel_Structure buttons = {.buttons_count = 5, .pin_butt = arr_buttons, .pin_com = &com};
+
+/*Настройки кода входящего пакета Uart*/
+uint8_t count_size_buf;
+char btn_plus[SIZE_BUF_USART] = BTN_PLUS_FLAG_USART;
+char btn_minus[SIZE_BUF_USART] = BTN_MINUS_FLAG_USART;
+char btn_flesh[SIZE_BUF_USART] = BTN_FLESH_FLAG_USART;
+char btn_on_off[SIZE_BUF_USART] = BTN_ON_OFF_FLAG_USART;
+
+char rezultReadUsart[SIZE_BUF_USART];
+
+/*main*/
+int main()
+{
+  Connect_Event_ADC(Handler_ADC_Event);
+  Connect_Event_Write_To_USART(Write_To_USART);
+  Connect_Event_Read_USART(Read_USART);
+  Connect_Event_On_Off_PWR(Set_Flag_PWR);
+
+  RCC_Init(&rcc_str);
+  Init_USART1(BAUND_RATE);
+  Init_Tim_PWR(&pwr_str);
+  Set_Flag_PWR(OFF);
+  Init_App_Pin();
+  Init_I2C(&i2c_str);
+  SSD1306_Init(&ssd);
+  Buttons_Init(&buttons);
+  Get_Flash_Data(&pwr_str);
+
+  Main_Screen(&ssd, &main_screen, 1);
+
+  /*------------*/
+  ADC_Init(ADC1);
+  /*------------*/
+
+  while (1)
+    {
+      	Enable_ADC();
+				Handler_LED7();
+    }
+
+  return 0;
+}
+
+//void Handler_Key0(void)//temp
+//{
+//  Handler_LED7();
+//}
+
+//void Handler_Key1(void)//temp
+//{
+//  Handler_LED7();
+//}
+
+void Handler_ADC_Event(uint16_t adcData, float adcVoltage)
+{
+
+  char buff_str_temp[50];
+  char buff_str_PWR[50];
+  char buff_str_Step[50];
+
+  //sprintf(buff_str_temp, "Volt=%.2fV", adcVoltage);
+
+  sprintf(buff_str_Step, "Step temp=%d  ", pwr_str.step_temp);
+  sprintf(buff_str_PWR, "Fill PWR=%.2d", pwr_str.fill_Factor);
+  sprintf(buff_str_temp, "Curr.Temp=%.1fC  ", rez_temp);
+  
+  //SSD1306_Clear(&ssd);
+
+  current_screen.str0 = buff_str_temp;
+  current_screen.x0 = 10;
+
+//  current_screen.str1 = buff_str_temp;
+//  current_screen.x1 = 10;
+
+  current_screen.str2 = buff_str_pwr_on;
+  current_screen.x2 = 10;
+
+//  current_screen.str3 = rezultReadUsart;
+//  current_screen.x3 = 10;
+
+  current_screen.str4 = buff_str_Step;
+  current_screen.x4 = 10;
+
+  current_screen.str5 = buff_str_PWR;
+  current_screen.x5 = 10;
+
+  Work_Screen(&ssd, &current_screen);
+
+  Handler_ADC_PWR(&pwr_str, adcData, &rez_temp);
+}
+
+/*передаем значение с кнопок в ПК для обновления в окне*/
+void Write_To_USART(uint16_t vol, char* flag)
+{
+  char buff_str[SIZE_BUFF_USART];
+
+  //USART1_SetString(NEW_STRING_CONSOLE);
+
+  sprintf(buff_str, "%s%d%c", flag, vol, STOP_FLAG_USART);
+
+  USART1_SetString(buff_str);
+}
+
+void Set_Flag_PWR(uint8_t flag)
+{
+  On_Off_Factor(&pwr_str, flag);
+
+  if (pwr_str.pwr_on == ON)
+    {
+      buff_str_pwr_on = "PWR On  ";
+    }
+  else
+    {
+      buff_str_pwr_on = "PWR Off ";
+    }
+}
+
+/*меняем шим по кнопке*/
+void Event_Buttons_panel(uint8_t pin)
+{
+  Set_Fill_Factor(&pwr_str, pin, STEP_VOL, MIN_STEP_TEMP, MAX_STEP_TEMP);
+}
+
+/*читаем usart по прерыванию*/
+void Read_USART(char ch)
+{
+
+  if (ch != STOP_FLAG_USART)
+    {
+      rezultReadUsart[count_size_buf] = ch;
+      count_size_buf++;
+    }
+  else
+    {
+      Decoder_Usart(rezultReadUsart, count_size_buf);
+      count_size_buf = 0;
+    }
+}
+
+void Decoder_Usart(char *data, uint16_t len)
+{
+  /*Pin8 Enter = BtnFlesh, pin15 -5 = BtnMinus, pin9 +5 = BtnPlus*/
+
+  if (Comparator_Arr(btn_plus, data, len))
+    {
+      Set_Fill_Factor(&pwr_str, PIN9, STEP_VOL, MIN_STEP_TEMP, MAX_STEP_TEMP);
+    }
+
+  if (Comparator_Arr(btn_minus, data, len))
+    {
+      Set_Fill_Factor(&pwr_str, PIN15, STEP_VOL, MIN_STEP_TEMP, MAX_STEP_TEMP);
+    }
+
+  if (Comparator_Arr(btn_flesh, data, len))
+    {
+      Set_Fill_Factor(&pwr_str, PIN8, STEP_VOL, MIN_STEP_TEMP, MAX_STEP_TEMP);
+    }
+
+  if (Comparator_Arr(btn_on_off, data, len))
+    {
+      pwr_str.pwr_on = ! pwr_str.pwr_on;
+      Set_Flag_PWR(pwr_str.pwr_on);
+    }
+}
+
+uint16_t Comparator_Arr(char* arr1, char* arr2, uint16_t len)
+{
+  for (uint16_t i = 0; i < len; i++)
+    {
+
+      if (arr1[i] != arr2[i])
+        {
+          return 0;
+        }
+    }
+
+  return 1;
+}

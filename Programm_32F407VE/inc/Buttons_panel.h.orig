@@ -1,0 +1,33 @@
+#ifndef BUTTONS_PANEL_H_
+#define BUTTONS_PANEL_H_
+
+/*includes*/
+#include "stm32f407xx.h"
+#include "stm32f4xx.h"
+#include "HEHAL.h"
+#include "GPIO.h"
+#include "RCC.h"
+#include "ADC.h"
+
+/*defaines*/
+
+
+/*structures*/
+typedef struct
+{
+	uint8_t buttons_count;
+	GPIO_Structure* pin_butt; /*кнопки вход*/
+	GPIO_Structure* pin_com; /*пин выход притянутый*/
+
+} Butt_Panel_Structure;
+
+/*var*/
+
+/*func*/
+void Buttons_Init(Butt_Panel_Structure* buttons);
+void Enable_Periphery_Button(GPIO_Structure *GPIO_Str);
+/*настройки прерывания*/
+void Enable_EXTI_Button(GPIO_Structure *GPIO_Str);
+void Enable_Buttons_NVIC(GPIO_Structure *GPIO_Str);
+	
+#endif
